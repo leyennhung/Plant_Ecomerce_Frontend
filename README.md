@@ -23,9 +23,8 @@ Dự án Frontend mô phỏng **website bán cây cảnh** được xây dựng 
 
   ## 📦 Cài đặt & Chạy dự án
   ### 1️⃣ Clone project
-- bash
 - git clone https://github.com/your-username/plant-shop.git
-- cd plant-shop
+- cd plantshop
 
   ### 2️⃣ Cài đặt thư viện
   - npm install    ( sinh ra node_modules/)
