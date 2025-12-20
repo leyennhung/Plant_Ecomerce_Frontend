@@ -1,4 +1,5 @@
-[
+{
+"products":[
   {
     "id": 1,
     "name": "Monstera Deliciosa",
@@ -19,6 +20,14 @@
     "price": 450000,
     "image": "https://tse4.mm.bing.net/th/id/OIP.oEnTyzBv9zjqIkSGWfVGYQHaE8?pid=Api&P=0&h=220",
     "category": "Indoor"
+  },
+  {
+    "id": 4,
+    "name": "Fiddle Leaf Fig",
+    "price": 450000,
+    "image": "https://tse4.mm.bing.net/th/id/OIP.oEnTyzBv9zjqIkSGWfVGYQHaE8?pid=Api&P=0&h=220",
+    "category": "Indoor"
   }
 ]
 
+}
