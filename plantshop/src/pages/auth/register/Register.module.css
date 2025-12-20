@@ -7,7 +7,7 @@
 }
 
 .form {
-    width: 480px;
+    width: 520px;
     background-color: #ffffff;
     padding: 48px 56px;
     border-radius: 10px;
@@ -24,7 +24,7 @@
 .field {
     display: flex;
     flex-direction: column;
-    margin-bottom: 24px;
+    margin-bottom: 22px;
 }
 
 .field label {
@@ -47,7 +47,7 @@
 }
 
 .button {
-    margin-top: 12px;
+    margin-top: 18px;
     height: 48px;
     width: 100%;
     background-color: #3b823e;
