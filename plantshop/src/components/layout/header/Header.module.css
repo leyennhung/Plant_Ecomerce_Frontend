@@ -99,13 +99,18 @@ body {
 
 .column a {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     cursor: pointer;
     color: #343434;
+    gap: 10px;
 }
 
 .column a:hover {
     color: #1f4d2b;
+}
+.column a i {
+    font-size: 13px;
+    margin-right: 10px;
 }
 
 /* IMAGE */

@@ -2,14 +2,23 @@ import { useEffect, useRef, useState } from "react";
 import styles from "./Header.module.css";
 import menuplant1 from "../../../assets/images/plantmenu1.png";
 import logo from "../../../assets/images/Logo.png";
+import {categoryService} from "../../../services/category.service";
+import type {Category} from "../../../types/category.type";
 
 const Header = () => {
-    const [openMenu, setOpenMenu] = useState(false);
+    const [openMenu, setOpenMenu] = useState<number | null>(null); // id category đang mở
     const [openUser, setOpenUser] = useState(false);
+    const [categories, setCategories] = useState<Category[]>([]);
 
     // ref bao cả menu trigger + mega menu
     const menuRef = useRef<HTMLDivElement>(null);
     const userRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        categoryService.getAll().then(setCategories); // load categories từ API
+    }, []);
+
+    // Click ra ngoài
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
             if (
@@ -18,7 +27,7 @@ const Header = () => {
                 userRef.current &&
                 !userRef.current.contains(e.target as Node)
             ) {
-                setOpenMenu(false);
+                setOpenMenu(null);
                 setOpenUser(false);
             }
         };
@@ -27,6 +36,10 @@ const Header = () => {
         return () =>
             document.removeEventListener("mousedown", handleClickOutside);
     }, []);
+
+    const handleMenuClick = (id: number) => {
+        setOpenMenu(prev => (prev === id ? null : id));
+    };
 
     return (
         <>
@@ -39,33 +52,35 @@ const Header = () => {
 
                     {/* 2. MENU */}
                     <div className={styles.menu} ref={menuRef}>
+                        {categories.map(cat => (
                         <div
+                            key={cat.id}
                             className={`${styles.menuItem} ${
-                                openMenu ? styles.active : ""
+                                openMenu === cat.id ? styles.active : ""
                             }`}
-                            onClick={() => setOpenMenu(prev => !prev)}
+                            onClick={() => handleMenuClick(cat.id)}
                         >
-                            <span>Cây trong nhà</span>
+                            <span>{cat.name}</span>
                             <i
                                 className={`fa-solid ${
-                                    openMenu
+                                    openMenu === cat.id
                                         ? "fa-angle-up"
                                         : "fa-angle-down"
                                 }`}
                             />
                         </div>
+                        ))}
+                        {/*<div className={styles.menuItem}>*/}
+                        {/*    <span>Cây ngoài trời</span>*/}
+                        {/*</div>*/}
+
+                        {/*<div className={styles.menuItem}>*/}
+                        {/*    <span>Chậu cây</span>*/}
+                        {/*    <i className="fa-solid fa-angle-down" />*/}
+                        {/*</div>*/}
 
                         <div className={styles.menuItem}>
-                            <span>Cây ngoài trời</span>
-                        </div>
-
-                        <div className={styles.menuItem}>
-                            <span>Chậu cây</span>
-                            <i className="fa-solid fa-angle-down" />
-                        </div>
-
-                        <div className={styles.menuItem}>
-                            <span>Phụ kiện</span>
+                            <span>Vật tư</span>
                             <i className="fa-solid fa-angle-down" />
                         </div>
 
@@ -114,29 +129,21 @@ const Header = () => {
             {openMenu && (
                 <div className={styles.megaMenu}>
                     <div className={styles.megaContent}>
-                        <div className={styles.column}>
-                            <h4>Theo kiểu dáng</h4>
-                            <a>Cây Cao & Lớn</a>
-                            <a>Cây Mini</a>
-                            <a>Cây Treo</a>
-                            <a>Cây Nhiệt Đới</a>
-                        </div>
-
-                        <div className={styles.column}>
-                            <h4>Theo vị trí</h4>
-                            <a>Cây Để Bàn</a>
-                            <a>Cây Văn Phòng</a>
-                            <a>Cây Nhà Tắm</a>
-                            <a>Cây Ban Công</a>
-                        </div>
-
-                        <div className={styles.column}>
-                            <h4>Theo chức năng</h4>
-                            <a>Lọc Không Khí</a>
-                            <a>Dễ Trồng</a>
-                            <a>Ít Ánh Sáng</a>
-                            <a>Phong Thủy</a>
-                        </div>
+                        {categories
+                            .filter(cat => cat.id === openMenu)
+                            .map(cat =>
+                                cat.attribute_groups.map(group => (
+                                    <div key={group.group.id} className={styles.column}>
+                                        <h4>Theo {group.group.name}</h4>
+                                        {group.attributes.map(attr => (
+                                            <a key={attr.id} className={styles.attrLink}>
+                                                <i className="fa-solid fa-leaf" aria-hidden="true" />
+                                                <span className={styles.attrText}>{attr.name}</span>
+                                            </a>
+                                        ))}
+                                    </div>
+                                ))
+                            )}
 
                         <div className={styles.image}>
                             <img src={menuplant1} alt="plant" />
