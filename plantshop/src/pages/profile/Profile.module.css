@@ -1,0 +1,181 @@
+/* Layout chính */
+.container {
+    background-color: #F0F5F0; /* Màu nền yêu cầu */
+    min-height: 100vh; /* Chiếm full chiều cao nếu nội dung ít */
+    padding: 40px 20px;
+    font-family: 'Inter', sans-serif; /* Font body cơ bản */
+    color: #333;
+}
+
+.contentWrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Tiêu đề trang - Style giống trang Home */
+.pageTitle {
+    font-family: 'Playfair Display', serif; /* Giả lập font serif trong ảnh */
+    font-size: 2.5rem;
+    text-align: center;
+    color: #1a3c1e; /* Màu xanh đen đậm cho chữ */
+    margin-bottom: 40px;
+    font-weight: 700;
+}
+
+/* Thanh Tab điều hướng (Profile, Orders...) */
+.tabs {
+    display: flex;
+    gap: 30px;
+    border-bottom: 1px solid #d1d9d1;
+    margin-bottom: 40px;
+}
+
+.tabItem {
+    padding-bottom: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #666;
+    font-weight: 500;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.tabItem:hover {
+    color: #3B823E;
+}
+
+.activeTab {
+    color: #1a1a1a;
+    border-bottom-color: #3B823E; /* Gạch chân màu xanh chủ đạo */
+}
+
+/* Bố cục Form (Chia 2 cột: Form trái, Ảnh phải) */
+.profileLayout {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* Form chiếm 2 phần, Ảnh 1 phần */
+    gap: 50px;
+    align-items: start;
+}
+
+/* Form inputs */
+.formGroup {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.label {
+    display: block;
+    margin-bottom: 8px;
+    margin-left: 5px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    background-color: transparent; /* Để nền hòa vào background chung */
+    border-radius: 4px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.input:focus {
+    border-color: #3B823E;
+}
+
+.avatarWrapper {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.uploadBtn {
+    background-color: transparent;
+    border: 1px solid #333;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.uploadBtn:hover {
+    background-color: #333;
+    color: #fff;
+}
+
+/* --- THÊM MỚI VÀO CUỐI FILE HOẶC CHỖ FORM --- */
+
+/* Bao quanh 2 nút để xếp ngang */
+.buttonGroup {
+    display: flex;
+    gap: 15px; /* Khoảng cách giữa 2 nút */
+    margin-top: 20px;
+}
+
+/* Style cho nút Đăng xuất (Viền đỏ) */
+.logoutBtn {
+    flex: 1; /* Chiếm 50% diện tích */
+    background-color: transparent;
+    border: 1px solid #333; /* Màu đỏ cảnh báo */
+    padding: 15px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+.logoutBtn:hover {
+    background-color: #333;
+    color: white;
+}
+
+/* --- SỬA LẠI NÚT SAVE BTN --- */
+/* Tìm class .saveBtn cũ và thay bằng đoạn này */
+.saveBtn {
+    flex: 1; /* Chiếm 50% diện tích còn lại */
+    background-color: #3B823E;
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    /* margin-top: 20px; -> XÓA DÒNG NÀY (vì đã có margin ở buttonGroup) */
+    /* width: 100%; -> XÓA DÒNG NÀY (để dùng flex) */
+}
+
+.saveBtn:hover {
+    background-color: #2e6631;
+}
+
+/* Responsive cho mobile */
+@media (max-width: 768px) {
+    .profileLayout {
+        grid-template-columns: 1fr; /* Xuống 1 cột */
+        display: flex;
+        flex-direction: column-reverse; /* Đưa ảnh lên đầu */
+    }
+
+    .avatarWrapper {
+        margin: 0 auto 20px;
+    }
+
+    .photoSection {
+        width: 100%;
+        margin-bottom: 30px;
+    }
+}
