@@ -6,7 +6,7 @@ const MainLayout = () => {
     return (
         <>
             <Header />
-            <main style={{ marginTop: "130px" }}>
+            <main style={{ marginTop: "124px" }}>
                 <Outlet />
             </main>
         </>

@@ -11,21 +11,21 @@
     "id": 2,
     "name": "Snake Plant",
     "price": 250000,
-    "image": "https://tse4.mm.bing.net/th/id/OIP.oEnTyzBv9zjqIkSGWfVGYQHaE8?pid=Api&P=0&h=220",
+    "image": "https://mowgarden.com/wp-content/uploads/2022/12/cay-trau-ba-thanh-xuan-chau-da-mai.jpg",
     "category": "Indoor"
   },
   {
     "id": 3,
     "name": "Fiddle Leaf Fig",
     "price": 450000,
-    "image": "https://tse4.mm.bing.net/th/id/OIP.oEnTyzBv9zjqIkSGWfVGYQHaE8?pid=Api&P=0&h=220",
+    "image": "https://mowgarden.com/wp-content/uploads/2021/04/cay-da-bup-do-de-ban-3-than.jpg",
     "category": "Indoor"
   },
   {
     "id": 4,
     "name": "Fiddle Leaf Fig",
     "price": 450000,
-    "image": "https://tse4.mm.bing.net/th/id/OIP.oEnTyzBv9zjqIkSGWfVGYQHaE8?pid=Api&P=0&h=220",
+    "image": "https://mowgarden.com/wp-content/uploads/2021/04/cay-thuong-xuan-xanh-treo-english-ivy.jpg",
     "category": "Indoor"
   }
 ]
