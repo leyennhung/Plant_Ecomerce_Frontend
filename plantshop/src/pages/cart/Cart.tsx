@@ -1,50 +1,46 @@
 import { useEffect, useState } from "react";
 import styles from "./Cart.module.css";
-import { cartService } from "../../services/cart.service";
-import type { CartItem } from "../../types/cart.type";
-import { formatPrice } from "../../utils/formatPrice";
 import Button from "../../components/common/Button";
+
+type CartItem = {
+    id: number;
+    name: string;
+    price: number;
+    quantity: number;
+    image: string;
+};
 
 const Cart = () => {
     const [items, setItems] = useState<CartItem[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        cartService.getAll()
-            .then(data => setItems(data))
-            .finally(() => setLoading(false));
+        fetch("/plant/products")
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error("Failed to fetch products");
+                }
+                return res.json();
+            })
+            .then(data => {
+                setItems(data); // data = products array từ MSW
+            })
+            .catch(err => {
+                console.error("Fetch error:", err);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     }, []);
-
-    const increaseQty = (id: number) => {
-        setItems(prev =>
-            prev.map(item =>
-                item.id === id
-                    ? { ...item, quantity: item.quantity + 1 }
-                    : item
-            )
-        );
-    };
-
-    const decreaseQty = (id: number) => {
-        setItems(prev =>
-            prev.map(item =>
-                item.id === id && item.quantity > 1
-                    ? { ...item, quantity: item.quantity - 1 }
-                    : item
-            )
-        );
-    };
-
-    const removeItem = (id: number) => {
-        setItems(prev => prev.filter(item => item.id !== id));
-    };
 
     const subtotal = items.reduce(
         (sum, item) => sum + item.price * item.quantity,
         0
     );
 
-    if (loading) return <p>Đang tải giỏ hàng...</p>;
+    if (loading) {
+        return <p style={{ textAlign: "center" }}>Đang tải giỏ hàng...</p>;
+    }
 
     return (
         <div className={styles.container}>
@@ -61,22 +57,20 @@ const Cart = () => {
 
                                 <div className={styles.info}>
                                     <h3>{item.name}</h3>
-                                    <p>{formatPrice(item.price)}</p>
+                                    <p>{item.price.toLocaleString()}₫</p>
 
                                     <div className={styles.quantity}>
-                                        <Button variant="outline" onClick={() => decreaseQty(item.id)}>-</Button>
+                                        <Button variant="outline">-</Button>
                                         <span>{item.quantity}</span>
-                                        <Button variant="outline" onClick={() => increaseQty(item.id)}>+</Button>
+                                        <Button variant="outline">+</Button>
                                     </div>
                                 </div>
 
                                 <div className={styles.actions}>
                                     <p className={styles.total}>
-                                        {formatPrice(item.price * item.quantity)}
+                                        {(item.price * item.quantity).toLocaleString()}₫
                                     </p>
-                                    <Button variant="outline" onClick={() => removeItem(item.id)}>
-                                        Xóa
-                                    </Button>
+                                    <Button variant="outline">Xóa</Button>
                                 </div>
                             </div>
                         ))}
@@ -85,7 +79,9 @@ const Cart = () => {
                     <div className={styles.summary}>
                         <div>
                             <h3>Tạm tính</h3>
-                            <p className={styles.subtotal}>{formatPrice(subtotal)}</p>
+                            <p className={styles.subtotal}>
+                                {subtotal.toLocaleString()}₫
+                            </p>
                         </div>
                         <Button>Thanh toán</Button>
                     </div>
