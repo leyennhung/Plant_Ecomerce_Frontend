@@ -1,0 +1,276 @@
+{
+  "categories":[
+    {
+      "id": 2,
+      "name": "Cây ăn quả",
+      "slug": "cay-an-qua",
+      "attribute_groups": [
+        {
+          "group": {
+            "id": 1,
+            "name": "Theo Phương Pháp",
+            "slug": "theo-phuong-phap"
+          },
+          "attributes": [
+            { "id": 1, "name": "Cây Giống Ghép", "slug": "ghep" },
+            { "id": 2, "name": "Cây Chiết Cành", "slug": "chiet-canh" },
+            { "id": 3, "name": "Cây Nuôi Cấy Mô", "slug": "nuoi-cay-mo" },
+            { "id": 4, "name": "Cây Gieo Hạt", "slug": "gieo-hat" },
+            { "id": 5, "name": "Cây Giống Nhập Khẩu", "slug": "nhap-khau" }
+          ]
+        },
+        {
+          "group": {
+            "id": 2,
+            "name": "Theo Đặc Tính",
+            "slug": "theo-dac-tinh"
+          },
+          "attributes": [
+            { "id": 6, "name": "Chịu Hạn & Mặn", "slug": "chiu-han-man" },
+            { "id": 7, "name": "Ngắn Ngày", "slug": "ngan-ngay" },
+            { "id": 8, "name": "Ưa Nắng Toàn Phần", "slug": "ua-nang" },
+            { "id": 9, "name": "Giống Lùn", "slug": "lun" },
+            { "id": 10, "name": "Giống F1", "slug": "f1" }
+          ]
+        },
+        {
+          "group": {
+            "id": 3,
+            "name": "Theo Công Dụng",
+            "slug": "theo-cong-dung"
+          },
+          "attributes": [
+            { "id": 11, "name": "Cây Kinh Tế Chủ Lực", "slug": "kinh-te" },
+            { "id": 12, "name": "Cây Trồng Lấy Quả Sớm", "slug": "lay-qua-som" },
+            { "id": 13, "name": "Cây Trồng Chậu", "slug": "trong-chau" }
+          ]
+        }
+      ]
+    }
+  ,
+    {
+      "id": 3,
+      "name": "Cây lâm nghiệp",
+      "slug": "cay-lam-nghiep",
+      "attribute_groups": [
+        {
+          "group": {
+            "id": 4,
+            "name": "Theo Mục Đích",
+            "slug": "theo-muc-dich"
+          },
+          "attributes": [
+            { "id": 14, "name": "Cây Lấy Gỗ", "slug": "lay-go" },
+            { "id": 15, "name": "Cây Phòng Hộ", "slug": "phong-ho" },
+            { "id": 16, "name": "Cây Chắn Gió", "slug": "chan-gio" }
+          ]
+        },
+        {
+          "group": {
+            "id": 5,
+            "name": "Theo Chu Kỳ",
+            "slug": "theo-chu-ky"
+          },
+          "attributes": [
+            { "id": 17, "name": "Chu Kỳ Ngắn", "slug": "chu-ky-ngan" },
+            { "id": 18, "name": "Chu Kỳ Trung Bình", "slug": "chu-ky-trung" },
+            { "id": 19, "name": "Chu Kỳ Dài", "slug": "chu-ky-dai" }
+          ]
+        },
+        {
+          "group": {
+            "id": 6,
+            "name": "Theo Điều Kiện Sinh Thái",
+            "slug": "theo-sinh-thai"
+          },
+          "attributes": [
+            { "id": 20, "name": "Chịu Hạn", "slug": "chiu-han" },
+            { "id": 21, "name": "Chịu Ngập", "slug": "chiu-ngap" },
+            { "id": 22, "name": "Phù Hợp Đồi Núi", "slug": "doi-nui" }
+          ]
+        }
+      ]
+    }
+  ,
+    {
+      "id": 4,
+      "name": "Cây cảnh",
+      "slug": "cay-canh",
+      "attribute_groups": [
+        {
+          "group": {
+            "id": 7,
+            "name": "Theo Kiểu dáng",
+            "slug": "theo-kieu-dang"
+          },
+          "attributes": [
+            { "id": 23, "name": "Tầm cao", "slug": "tam-cao" },
+            { "id": 24, "name": "Tầm trung", "slug": "tam-trung" },
+            { "id": 25, "name": "Tầm thấp", "slug": "tam-thap" },
+            { "id": 26, "name": "Tán hình tròn", "slug": "tan-hinh-tron" },
+            { "id": 27, "name": "Cây cảnh mini", "slug": "canh-mini" },
+            { "id": 28, "name": "Cây treo trong nhà", "slug": "cay-treo-trong-nha" },
+            { "id": 29, "name": "Cây nhiệt đới", "slug": "nhiet-doi" },
+            { "id": 30, "name": "Cây kiểng lá", "slug": "kieng-la" }
+          ]
+        },
+        {
+          "group": {
+            "id": 8,
+            "name": "Theo Đặc điểm",
+            "slug": "theo-dac-diem"
+          },
+          "attributes": [
+            { "id": 31, "name": "Cây thường xanh", "slug": "cay-thuong-xanh" },
+            { "id": 32, "name": "Cây lá màu", "slug": "cay-la-mau" },
+            { "id": 33, "name": "Cây dạng bụi", "slug": "cay-dang-bui" },
+            { "id": 34, "name": "Cây leo dàn", "slug": "cay-leo-dan" },
+            { "id": 35, "name": "Cây thân đốt", "slug": "cay-than-dot" }
+          ]
+        },
+        {
+          "group": {
+            "id": 9,
+            "name": "Theo Chức năng",
+            "slug": "theo-chuc-nang"
+          },
+          "attributes": [
+            { "id": 36, "name": "Cây lọc không khí", "slug": "loc-khong-khi" },
+            { "id": 37, "name": "Cây bóng mát", "slug": "bong-mat" },
+            { "id": 38, "name": "Cây có hoa", "slug": "co-hoa" },
+            { "id": 39, "name": "Cây hàng rào", "slug": "hang-rao" },
+            { "id": 40, "name": "Cỏ nền", "slug": "co-nen" },
+            { "id": 41, "name": "Cây phong thuỷ", "slug": "phong-thuy" },
+            { "id": 42, "name": "Cây thuỷ sinh", "slug": "thuy-sinh" }
+          ]
+        }
+      ]
+    }
+,
+    {
+      "id": 5,
+      "name": "Rau và hạt giống",
+      "slug": "rau-va-hat-giong",
+      "attribute_groups": [
+        {
+          "group": {
+            "id": 10,
+            "name": "Theo Loại Rau",
+            "slug": "theo-loai-rau"
+          },
+          "attributes": [
+            { "id": 51, "name": "Rau Ăn Lá", "slug": "rau-an-la" },
+            { "id": 52, "name": "Rau Ăn Củ", "slug": "rau-an-cu" },
+            { "id": 53, "name": "Rau Ăn Quả", "slug": "rau-an-qua" }
+          ]
+        },
+        {
+          "group": {
+            "id": 11,
+            "name": "Theo Hình Thức",
+            "slug": "theo-hinh-thuc"
+          },
+          "attributes": [
+            { "id": 54, "name": "Hạt Giống", "slug": "hat-giong" },
+            { "id": 55, "name": "Cây Con", "slug": "cay-con" }
+          ]
+        },
+        {
+          "group": {
+            "id": 12,
+            "name": "Theo Thời Gian Thu Hoạch",
+            "slug": "theo-thoi-gian"
+          },
+          "attributes": [
+            { "id": 56, "name": "Ngắn Ngày (20-30 ngày)", "slug": "rau-ngan-ngay" },
+            { "id": 57, "name": "Trung Ngày", "slug": "trung-ngay" },
+            { "id": 58, "name": "Dài Ngày", "slug": "dai-ngay" }
+          ]
+        }
+      ]
+    }
+    ,
+    {
+      "id": 9,
+      "name": "Chậu cây",
+      "slug": "chau-cay",
+      "attribute_groups": [
+        {
+          "group": {
+            "id": 7,
+            "name": "Theo Kiểu dáng",
+            "slug": "theo-kieu-dang"
+          },
+          "attributes": [
+            { "id": 67, "name": "Chậu Hình Vuông", "slug": "chau-hinh-vuong" },
+            { "id": 68, "name": "Chậu Chữ Nhật", "slug": "chau-chu-nhat" },
+            { "id": 69, "name": "Hình Tròn Bầu", "slug": "hinh-tron-bau" },
+            { "id": 70, "name": "Trụ Tròn Đứng", "slug": "tru-tron-dung" },
+            { "id": 71, "name": "Chậu Treo", "slug": "chau-treo" }
+          ]
+        },
+        {
+          "group": {
+            "id": 15,
+            "name": "Theo Chất liệu",
+            "slug": "theo-chat-lieu"
+          },
+          "attributes": [
+            { "id": 72, "name": "Chậu Nhựa", "slug": "chau-nhua" },
+            { "id": 73, "name": "Chậu Xi Măng", "slug": "chau-xi-mang" },
+            { "id": 74, "name": "Chậu Đất Nung", "slug": "chau-dat-nung" },
+            { "id": 75, "name": "Chậu Gốm Sứ", "slug": "chau-gom-su" },
+            { "id": 76, "name": "Chậu Gỗ", "slug": "chau-go" }
+          ]
+        },
+        {
+          "group": {
+            "id": 16,
+            "name": "Theo Kích thước",
+            "slug": "theo-kich-thuoc"
+          },
+          "attributes": [
+            { "id": 77, "name": "Chậu Nhỏ Để Bàn", "slug": "chau-nho-de-ban" },
+            { "id": 78, "name": "Chậu Cỡ Trung", "slug": "chau-co-trung" },
+            { "id": 79, "name": "Chậu Cỡ Lớn", "slug": "chau-co-lon" },
+            { "id": 80, "name": "Chậu Dáng Cao", "slug": "chau-dang-cao" }
+          ]
+        }
+      ]
+    }
+,
+    {
+      "id": 6,
+      "name": "Vật tư",
+      "slug": "vat-tu",
+      "attribute_groups": [
+        {
+          "group": {
+            "id": 13,
+            "name": "Theo Nhóm Sản Phẩm",
+            "slug": "theo-nhom-san-pham"
+          },
+          "attributes": [
+            { "id": 59, "name": "Phân Bón", "slug": "phan-bon" },
+            { "id": 60, "name": "Thuốc BVTV", "slug": "thuoc-bvtv" },
+            { "id": 61, "name": "Giá Thể - Đất Trồng", "slug": "gia-the" },
+            { "id": 62, "name": "Dụng Cụ Làm Vườn", "slug": "dung-cu" }
+          ]
+        },
+        {
+          "group": {
+            "id": 14,
+            "name": "Theo Công Dụng Vật Tư",
+            "slug": "theo-cong-dung-vat-tu"
+          },
+          "attributes": [
+            { "id": 63, "name": "Kích Rễ", "slug": "kich-re" },
+            { "id": 64, "name": "Kích Hoa", "slug": "kich-hoa" },
+            { "id": 65, "name": "Dưỡng Trái", "slug": "duong-trai" },
+            { "id": 66, "name": "Phòng Trừ Sâu Bệnh", "slug": "phong-sau-benh" }
+          ]
+        }
+      ]
+    }
+  ]
+}
