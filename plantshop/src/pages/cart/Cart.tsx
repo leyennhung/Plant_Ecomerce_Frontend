@@ -44,7 +44,7 @@ const Cart = () => {
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}>🛒 Giỏ hàng</h1>
+            <h1 className={styles.title}>Giỏ hàng</h1>
 
             {items.length === 0 ? (
                 <p>Giỏ hàng trống</p>

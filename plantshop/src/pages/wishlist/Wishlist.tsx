@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import styles from "./Wishlist.module.css";
-import ProductCard from "../../components/common/product/ProductCard";
-import type { Product } from "../../types/product.type";
+import type {Product} from "../../types/product.type";
 
 type WishlistItem = {
     id: number;
@@ -14,7 +13,6 @@ const Wishlist = () => {
     const [items, setItems] = useState<WishlistItem[]>([]);
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         Promise.all([
@@ -25,54 +23,70 @@ const Wishlist = () => {
                 setItems(wishlistData);
                 setProducts(productData);
             })
-            .catch(() => setError("Không thể tải danh sách yêu thích"))
             .finally(() => setLoading(false));
     }, []);
 
     const handleRemove = async (productId: number) => {
-        await fetch(`/plant/wishlist/${productId}`, { method: "DELETE" });
-        setItems(prev => prev.filter(item => item.product_id !== productId));
+        await fetch(`/plant/wishlist/${productId}`, {method: "DELETE"});
+        setItems(prev => prev.filter(i => i.product_id !== productId));
     };
 
     if (loading) {
-        return <div className={styles.container}>Đang tải danh sách yêu thích...</div>;
-    }
-
-    if (error) {
-        return <div className={styles.container}>{error}</div>;
+        return <div className={styles.container}>Đang tải...</div>;
     }
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}>🌱 Sản phẩm yêu thích</h1>
+            <h1 className={styles.title}>My wishlist</h1>
 
             {items.length === 0 ? (
-                <p className={styles.emptyMessage}>
-                    Danh sách yêu thích của bạn đang trống.
-                </p>
+                <p className={styles.empty}>Danh sách yêu thích trống</p>
             ) : (
-                <div className={styles.list}>
-                    {items.map(item => {
-                        const product = products.find(
-                            p => p.id === item.product_id
-                        );
+                <div className={styles.tableWrapper}>
+                    <div className={styles.table}>
 
-                        if (!product) return null;
+                        {/* HEADER */}
+                        <div className={`${styles.row} ${styles.header}`}>
+                            <div className={styles.headerRemove}></div>
+                            <div>PRODUCT NAME</div>
+                            <div>UNIT PRICE</div>
+                            <div>STOCK STATUS</div>
+                            <div></div>
+                        </div>
 
-                        return (
-                            <div key={item.id} className={styles.itemWrapper}>
-                                <ProductCard product={product} />
+                        {/* ITEMS */}
+                        {items.map(item => {
+                            const product = products.find(p => p.id === item.product_id);
+                            if (!product) return null;
 
-                                <button
-                                    className={styles.removeButton}
-                                    onClick={() => handleRemove(item.product_id)}
-                                >
-                                    Xóa khỏi danh sách
-                                </button>
-                            </div>
-                        );
-                    })}
+                            return (
+                                <div key={item.id} className={styles.row}>
+                                    <button
+                                        className={styles.removeBtn}
+                                        onClick={() => handleRemove(item.product_id)}
+                                    >
+                                        ✕
+                                    </button>
+
+                                    <div className={styles.product}>
+                                        <img src={product.image} alt={product.name} />
+                                        <span>{product.name}</span>
+                                    </div>
+
+                                    <div className={styles.price}>
+                                        {product.price.toLocaleString()}đ
+                                    </div>
+
+                                    <div className={styles.stock}>In Stock</div>
+
+                                    <div className={styles.addCart}>Add to cart</div>
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
+
+
             )}
         </div>
     );
