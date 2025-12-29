@@ -90,7 +90,7 @@ const Checkout = () => {
                         <p style={{color: "red", fontSize: 13}}>{couponError}</p>
                     )}
 
-                    <h2 className={styles.sectionTitle}>BILLING & SHIPPING</h2>
+                    <h2 className={styles.sectionTitle}>THANH TOÁN & VẬN CHUYỂN</h2>
 
                     <div className={styles.formGrid}>
                         <input placeholder="Họ và tên *"/>

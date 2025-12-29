@@ -7,7 +7,7 @@ export interface Cart {
     updated_at: string;
 }
 
-export interface CartItem {
+export interface CartItemEntity {
     id: number;
     cart_id: number;
     product_id: number;
@@ -16,13 +16,15 @@ export interface CartItem {
     created_at: string;
     updated_at: string;
 }
+
 export interface CartResponse {
     carts: Cart[];
 }
 
 export interface CartItemResponse {
-    cart_items: CartItem[];
+    cart_items: CartItemEntity[];
 }
+
 export interface CartViewItem {
     id: number;
     productId: number;

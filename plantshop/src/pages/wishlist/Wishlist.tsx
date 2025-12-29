@@ -1,13 +1,7 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import styles from "./Wishlist.module.css";
-import type {Product} from "../../types/product.type";
-
-type WishlistItem = {
-    id: number;
-    user_id: number;
-    product_id: number;
-    created_at: string;
-};
+import type { Product } from "../../types/product.type";
+import type { WishlistItem } from "../../types/wishlist.type";
 
 const Wishlist = () => {
     const [items, setItems] = useState<WishlistItem[]>([]);
@@ -20,14 +14,14 @@ const Wishlist = () => {
             fetch("/plant/products").then(res => res.json())
         ])
             .then(([wishlistData, productData]) => {
-                setItems(wishlistData);
+                setItems(wishlistData.wishlist);
                 setProducts(productData);
             })
             .finally(() => setLoading(false));
     }, []);
 
     const handleRemove = async (productId: number) => {
-        await fetch(`/plant/wishlist/${productId}`, {method: "DELETE"});
+        await fetch(`/plant/wishlist/${productId}`, { method: "DELETE" });
         setItems(prev => prev.filter(i => i.product_id !== productId));
     };
 
@@ -48,15 +42,17 @@ const Wishlist = () => {
                         {/* HEADER */}
                         <div className={`${styles.row} ${styles.header}`}>
                             <div className={styles.headerRemove}></div>
-                            <div>PRODUCT NAME</div>
-                            <div>UNIT PRICE</div>
-                            <div>STOCK STATUS</div>
+                            <div>TÊN SẢN PHẨM</div>
+                            <div>GIÁ TIỀN</div>
+                            <div>TÌNH TRẠNG HÀNG</div>
                             <div></div>
                         </div>
 
                         {/* ITEMS */}
                         {items.map(item => {
-                            const product = products.find(p => p.id === item.product_id);
+                            const product = products.find(
+                                p => p.id === item.product_id
+                            );
                             if (!product) return null;
 
                             return (
@@ -69,7 +65,10 @@ const Wishlist = () => {
                                     </button>
 
                                     <div className={styles.product}>
-                                        <img src={product.image} alt={product.name} />
+                                        <img
+                                            src={product.image}
+                                            alt={product.name}
+                                        />
                                         <span>{product.name}</span>
                                     </div>
 
@@ -77,16 +76,29 @@ const Wishlist = () => {
                                         {product.price.toLocaleString()}đ
                                     </div>
 
-                                    <div className={styles.stock}>In Stock</div>
+                                    <div
+                                        className={
+                                            product.stock > 0
+                                                ? styles.inStock
+                                                : styles.outOfStock
+                                        }
+                                    >
+                                        {product.stock > 0
+                                            ? "Còn hàng"
+                                            : "Hết hàng"}
+                                    </div>
 
-                                    <div className={styles.addCart}>Add to cart</div>
+                                    <button
+                                        className={styles.addCart}
+                                        disabled={product.stock === 0}
+                                    >
+                                        Thêm vào giỏ hàng
+                                    </button>
                                 </div>
                             );
                         })}
                     </div>
                 </div>
-
-
             )}
         </div>
     );
