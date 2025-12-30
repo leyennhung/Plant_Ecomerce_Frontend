@@ -2,8 +2,10 @@
     background: #fff;
     border-radius: 15px;
     padding: 15px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
     text-align: center;
+    display: flex;
+    flex-direction: column;
 }
 
 .image {
@@ -13,27 +15,85 @@
     border-radius: 12px;
 }
 
+/* Wrapper cho phần text */
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 6px;
+    flex: 1;
+}
+
 .name {
     font-size: 20px;
     font-weight: 600;
-    margin: 12px 0 4px;
+    margin-top: 10px;
+    line-height: 1;
+    height: 48px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;         /* giới hạn 2 dòng */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    position: relative;
+    padding-bottom: 20px;
+}
+
+/* Gạch trang trí ngay dưới tên */
+.name::after {
+    content: "";
+    display: block;
+    width: 70px;
+    height: 4px;
+    background: #9fc73b;
+    border-radius: 2px;
+    margin: 20px auto 0;
 }
 
 .price {
     font-size: 18px;
     color: #444;
-    margin-bottom: 12px;
+    margin: 0;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.originalPrice {
+    text-decoration: line-through;
+    color: #999;
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+/* Giá khuyến mãi  */
+.salePrice {
+    color: #e53935;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+/* Khi chỉ có 1 giá */
+.onlyPrice {
+    color: #444;
+    font-weight: 600;
 }
 
 .buyBtn {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border-radius: 10px;
     border: none;
     background: #3c7d3e;
     color: white;
     font-weight: 600;
     cursor: pointer;
+    margin-top: 12px;
 }
 
 .buyBtn:hover {

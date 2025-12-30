@@ -2,32 +2,711 @@
 "products":[
   {
     "id": 1,
-    "name": "Monstera Deliciosa",
-    "price": 350000,
-    "image": "https://tse4.mm.bing.net/th/id/OIP.oEnTyzBv9zjqIkSGWfVGYQHaE8?pid=Api&P=0&h=220",
-    "category": "Indoor"
+    "name": "Cây lựu ta đỏ chậu ươm FRUI020",
+    "price": 160000,
+    "image": "https://mowgarden.com/wp-content/uploads/2022/09/luutadomowgarden.jpg",
+    "type": "plant",
+    "categoryId": 2,
+    "attributeIds": [2, 6, 8, 12, 13]
   },
   {
     "id": 2,
-    "name": "Snake Plant",
+    "name": "Cây chanh cẩm thạch chậu ươm FRUI005",
     "price": 250000,
-    "image": "https://mowgarden.com/wp-content/uploads/2022/12/cay-trau-ba-thanh-xuan-chau-da-mai.jpg",
-    "category": "Indoor"
+    "image": "https://mowgarden.com/wp-content/uploads/2022/09/cay-chanh-cam-thach-1.jpg",
+    "type": "plant",
+
+    "categoryId": 2,
+    "attributeIds": [2, 6, 8, 12, 13]
   },
   {
     "id": 3,
-    "name": "Fiddle Leaf Fig",
-    "price": 450000,
-    "image": "https://mowgarden.com/wp-content/uploads/2021/04/cay-da-bup-do-de-ban-3-than.jpg",
-    "category": "Indoor"
+    "name": "Chuối Tiêu Hồng",
+    "price": 15000,
+    "image": "https://tse3.mm.bing.net/th/id/OIP.18LeEcUGZpH9ZFBqPEk5DQHaHa?pid=Api&P=0&h=220",
+    "type": "plant",
+    "categoryId": 2,
+    "attributeIds": [3, 7, 8, 11, 12]
   },
   {
     "id": 4,
-    "name": "Fiddle Leaf Fig",
+    "name": "Cà Chua Bi Đỏ",
+    "price": 25000,
+    "image": "https://ivila.vn/public/uploads/media/image/ca-chua-bi-lun-do21_1.jpg",
+    "type": "plant",
+    "categoryId": 2,
+    "attributeIds": [4, 7, 8, 10, 13]
+  },
+  {
+    "id": 5,
+    "name": "Cây Bạch Đàn Uro",
+    "price": 12000,
+    "image": "https://bizweb.dktcdn.net/100/277/395/files/cay-bach-dan-decor-dep.jpg?v=1726718156275",
+    "type": "plant",
+    "categoryId": 3,
+    "attributeIds": [14, 18, 20, 22]
+  },
+  {
+    "id": 6,
+    "name": "Ổi Ruby Lùn",
+    "price": 180000,
+    "image": "https://kimbiofarm.com/wp-content/uploads/2025/06/cay-giong-oi-ruby-5.webp",
+    "type": "plant",
+    "categoryId": 2,
+    "attributeIds": [2, 8, 9, 12, 13]
+  },
+  {
+    "id": 7,
+    "name": "Cây Keo Lai Nuôi Cấy Mô",
+    "price": 15000,
+    "image": "https://inkythuatso.com/uploads/thumbnails/800/2023/03/1-hinh-anh-cay-keo-dau-inkythuatso-31-09-07-26.jpg",
+    "type": "plant",
+    "categoryId": 3,
+    "attributeIds": [14, 15, 18, 20, 22]
+  },
+  {
+    "id": 8,
+    "name": "Cây Bồ Đề",
+    "price": 50000,
+    "image": "https://phuongtrunggreen.com/resource/gellary/images/Cay-Cong-Trinh/cay-bo-de-6a.jpg",
+    "type": "plant",
+    "categoryId": 3,
+    "attributeIds": [14, 17, 20]
+  },
+  {
+    "id": 9,
+    "name": "Cây Lim Xanh",
+    "price": 100000,
+    "image": "https://giongcaytrong.com/wp-content/uploads/2017/06/cay-lim-xanh.jpg",
+    "type": "plant",
+    "categoryId": 3,
+    "attributeIds": [14, 19, 22]
+  },
+  {
+    "id": 10,
+    "name": "Cây Keo Tai Tượng",
+    "price": 25000,
+    "image": "https://hoa4mua.vn/wp-content/uploads/2020/11/keo-tai-tuong-2.jpg",
+    "type": "plant",
+    "categoryId": 3,
+    "attributeIds": [15, 18, 20]
+  },
+  {
+    "id": 11,
+    "name": "Cây Phi Lao",
+    "price": 22000,
+    "image": "https://caybamien.vn/wp-content/uploads/2022/07/y-nghia-cay-phi-lao-768x960.jpg",
+    "type": "plant",
+    "categoryId": 3,
+    "attributeIds": [16, 18, 20]
+  },
+  {
+    "id": 12,
+    "name": "Cây Tràm Gió",
+    "price": 120000,
+    "image": "https://nguyentuanhung.vn/wp-content/uploads/2020/07/loi-ich-suc-khoe-cua-tinh-dau-tram-gio-o9jniums8cd0jcxb2faqdziju7rsb7ycl0e7o7reec.jpg",
+    "type": "plant",
+    "categoryId": 3,
+    "attributeIds": [15, 18, 21]
+  },
+  {
+    "id": 13,
+    "name": "Cây bàng Singapore",
+    "price": 550000,
+    "image": "https://mowgarden.com/wp-content/uploads/2021/11/cay-bang-singapore-lon-chau-xi-mang-da-mai.jpg",
+    "type": "plant",
+    "categoryId": 4,
+    "attributeIds": [23, 31, 36, 41]
+  },
+  {
+    "id": 14,
+    "name": "Cây Hải đường",
+    "price": 800000,
+    "image": "https://mowgarden.com/wp-content/uploads/2023/01/haiduongmowgarden.jpg",
+    "type": "plant",
+    "categoryId": 4,
+    "attributeIds": [24, 38, 41]
+  },
+  {
+    "id": 15,
+    "name": "Cây cô tòng lá mít ‘Croton Petra’",
+    "price": 160000,
+    "image": "https://mowgarden.com/wp-content/uploads/2022/10/cay-tong-la-mit-nho-1.jpg",
+    "type": "plant",
+    "categoryId": 4,
+    "attributeIds": [25, 32, 33, 41]
+  },
+  {
+    "id": 16,
+    "name": "Cây Chuông Vàng",
+    "price": 1650000,
+    "image": "https://mowgarden.com/wp-content/uploads/2021/04/cay-chuong-vang-1.jpg",
+    "type": "plant",
+    "categoryId": 4,
+    "attributeIds": [24, 26, 31, 37, 38]
+  },
+  {
+    "id": 17,
+    "name": "Cây ngũ gia bì xanh",
+    "price": 165000,
+    "image": "https://mowgarden.com/wp-content/uploads/2022/09/cay-ngu-gia-bi-xanh-de-ban-chau-men-su.jpg",
+    "type": "plant",
+    "categoryId": 4,
+    "attributeIds": [27, 36, 41, 42]
+  },
+  {
+    "id": 18,
+    "name": "Cây Ổ Rồng treo tường Staghorn Fern",
     "price": 450000,
-    "image": "https://mowgarden.com/wp-content/uploads/2021/04/cay-thuong-xuan-xanh-treo-english-ivy.jpg",
-    "category": "Indoor"
+    "image": "https://mowgarden.com/wp-content/uploads/2022/08/cay-o-rong-treo-tuong.jpg",
+    "type": "plant",
+    "categoryId": 4,
+    "attributeIds": [28, 29, 30, 31, 36]
+  },
+  {
+    "id": 19,
+    "name": "Cây bao thanh thiên ‘Aglaonema Sumatra’",
+    "price": 380000,
+    "image": "https://mowgarden.com/wp-content/uploads/2022/12/cay-bao-thanh-thien-co-lon-chau-dat-nung-1.jpg",
+    "type": "plant",
+    "categoryId": 4,
+    "attributeIds": [24, 29, 31, 32, 33, 36, 41]
+  },
+  {
+    "id": 20,
+    "name": "Cây trúc mặt trời ‘Compacta’",
+    "price": 200000,
+    "image": "https://mowgarden.com/wp-content/uploads/2023/03/cay-phat-tai-bup-de-ban-chau-su-1.jpg",
+    "type": "plant",
+    "categoryId": 4,
+    "attributeIds": [29, 30, 31, 36, 41]
+  },
+  {
+    "id": 21,
+    "name": "Cây hoa hồng phụng",
+    "price": 220000,
+    "image": "https://mowgarden.com/wp-content/uploads/2023/03/cay-hoa-hong-phung-chau-uom-1.jpg",
+    "type": "plant",
+    "categoryId": 4,
+    "attributeIds": [24, 33, 34, 38, 39]
+  },
+  {
+    "id": 22,
+    "name": "Cây Trúc Quân Tử Bambusa multiplex",
+    "price": 160000,
+    "image": "https://mowgarden.com/wp-content/uploads/2021/04/ban-cay-truc-quan-tu-1-1.jpg",
+    "type": "plant",
+    "categoryId": 4,
+    "attributeIds": [23, 31, 35, 37, 39, 41]
+  },
+  {
+    "id": 23,
+    "name": "Cỏ đậu ‘Arachis pintoi’",
+    "price": 15000,
+    "image": "https://trungtamthuoc.com/images/item/co-lac-2.jpg",
+    "type": "plant",
+    "categoryId": 4,
+    "attributeIds": [38, 40]
+  },
+  {
+    "id": 24,
+    "name": "Cỏ Nhung Nhật",
+    "price": 60000,
+    "image": "https://caygianghuong.net/wp-content/uploads/2021/01/unnamed-2.jpg",
+    "type": "plant",
+    "categoryId": 4,
+    "attributeIds": [38, 40]
+  },
+  {
+    "id": 25,
+    "name": "Rau cải xanh",
+    "price": 15000,
+    "image": "https://tse3.mm.bing.net/th/id/OIP.4ejnwelmOHhsEcbArd7zowHaFS?pid=Api&P=0&h=220",
+    "type": "seed",
+    "categoryId": 5,
+    "attributeIds": [51, 54, 56]
+  },
+  {
+    "id": 26,
+    "name": "Rau muống",
+    "price": 12000,
+    "image": "https://down-vn.img.susercontent.com/file/7e7ff5da322c59e5494af93f17848547",
+    "type": "seed",
+    "categoryId": 5,
+    "attributeIds": [51, 54, 56]
+  },
+  {
+    "id": 27,
+    "name": "Rau xà lách",
+    "price": 10000,
+    "image": "https://bizweb.dktcdn.net/thumb/1024x1024/100/521/346/products/hat-giong-rau-xa-lach-1.png?v=1723089261877",
+    "type": "seed",
+    "categoryId": 5,
+    "attributeIds": [51, 54, 56]
+  },
+  {
+    "id": 28,
+    "name": "Cà rốt",
+    "price": 20000,
+    "image": "https://trucvufarm.com.vn/wp-content/uploads/2025/10/carot-kuroda-1.png",
+    "type": "seed",
+    "categoryId": 5,
+    "attributeIds": [52, 54, 57]
+  },
+  {
+    "id": 29,
+    "name": "Củ dền",
+    "price": 22000,
+    "image": "https://tse1.mm.bing.net/th/id/OIP.XZKF3Wt5iyUKZ1u0AUs4lwHaHa?pid=Api&P=0&h=220",
+    "type": "seed",
+    "categoryId": 5,
+    "attributeIds": [52, 54, 57]
+  },
+  {
+    "id": 30,
+    "name": "Ớt chuông",
+    "price": 25000,
+    "image": "https://nongsandungha.com/wp-content/uploads/2024/08/hat-giong-ot-chuong.png",
+    "type": "seed",
+    "categoryId": 5,
+    "attributeIds": [53, 54, 58]
+  },
+  {
+    "id": 31,
+    "name": "Cây con rau cải xanh",
+    "price": 5000,
+    "image": "http://hatgionglamson.com/asset/editor/ResponsiveFilemanager-master/source/c%C3%A1ch-tr%E1%BB%93ng-c%E1%BA%A3i-ng%E1%BB%8Dt.jpg",
+    "type": "seed",
+    "categoryId": 5,
+    "attributeIds": [51, 55, 56]
+  },
+  {
+    "id": 32,
+    "name": "Cây con cà chua dài ngày",
+    "price": 15000,
+    "image": "https://baokhuyennong.com/wp-content/uploads/2021/02/ca-chua-4.jpg",
+    "type": "seed",
+    "categoryId": 5,
+    "attributeIds": [53, 55, 58]
+  },
+  {
+    "id": 33,
+    "name": "Chậu gốm sứ hình trụ họa tiết Geometric",
+    "price": 0,
+    "image": "https://mowgarden.com/wp-content/uploads/2023/04/chau-su-hinh-tru-hoa-tiet-geo-1.jpg",
+    "type": "pot",
+    "categoryId": 9,
+    "attributeIds": [69, 75, 78]
+  },
+  {
+    "id": 34,
+    "name": "Chậu Xi Măng Đá Mài Vuông Trọng Lượng Nhẹ",
+    "price": 0,
+    "image": "https://mowgarden.com/wp-content/uploads/2022/02/chau-xi-mang-da-mai-vuong-2.jpg",
+    "type": "pot",
+    "categoryId": 9,
+    "attributeIds": [67, 73, 79]
+  },
+  {
+    "id": 35,
+    "name": "Chậu gốm trụ tròn ghép Mosaic ‘nhiệt đới’",
+    "price": 0,
+    "image": "https://mowgarden.com/wp-content/uploads/2022/11/chau-som-su-hoa-tiet-nhiet-doi-1.jpg",
+    "type": "pot",
+    "categoryId": 9,
+    "attributeIds": [70, 75, 78]
+  },
+  {
+    "id": 36,
+    "name": "Chậu Nhựa Treo Monrovia Size L Màu Xanh",
+    "price": 0,
+    "image": "https://mowgarden.com/wp-content/uploads/2022/02/gio-treo-hoa-monrovia-2.jpg",
+    "type": "pot",
+    "categoryId": 9,
+    "attributeIds": [71, 72, 78]
+  },
+  {
+    "id": 37,
+    "name": "Chậu đất nung wax xám họa tiết hoa",
+    "price": 0,
+    "image": "https://mowgarden.com/wp-content/uploads/2023/03/chau-dat-nung-son-wax-1.jpg",
+    "type": "pot",
+    "categoryId": 9,
+    "attributeIds": [70, 74, 78]
+  },
+  {
+    "id": 39,
+    "name": "Chậu đất nung quả bóng sơn nhám",
+    "price": 0,
+    "image": "https://mowgarden.com/wp-content/uploads/2022/11/chau-dat-nung-son-den-nham.jpg",
+    "type": "pot",
+    "categoryId": 9,
+    "attributeIds": [69, 74, 77]
+  },
+  {
+    "id": 40,
+    "name": "Chậu đất nung để bàn gân sọc sơn bóng",
+    "price": 0,
+    "image": "https://mowgarden.com/wp-content/uploads/2022/09/chau-dat-nung-de-ban-son-den-1.jpg",
+    "type": "pot",
+    "categoryId": 9,
+    "attributeIds": [70, 74, 77]
+  },
+  {
+    "id": 41,
+    "name": "Chậu gốm tráng men vân giả đá",
+    "price": 0,
+    "image": "https://mowgarden.com/wp-content/uploads/2022/10/chau-gom-su-trang-goc-doc-3.jpg",
+    "type": "pot",
+    "categoryId": 9,
+    "attributeIds": [70, 75, 80]
+  },
+  {
+    "id": 42,
+    "name": "Phân rơm ủ hoai hữu cơ",
+    "price": 250000,
+    "image": "https://mowgarden.com/wp-content/uploads/2021/05/phan-rom-hoai-muc-1.jpg",
+    "type": "seed",
+    "categoryId": 8,
+    "attributeIds": [59]
+  },
+  {
+    "id": 43,
+    "name": "Xẻng đào đất cán gỗ",
+    "price": 180000,
+    "image": "https://qgtechno.com.vn/wp-content/uploads/2018/07/X%E1%BA%BBng-l%C3%A0m-v%C6%B0%E1%BB%9Dn-c%C3%A1n-g%E1%BB%97-Bosi-BS561349-125cm.jpg",
+    "type": "supplies",
+    "categoryId": 10,
+    "attributeIds": [62]
+  },
+  {
+    "id": 44,
+    "name": "Đất trồng cây hữu cơ cao cấp",
+    "price": 180000,
+    "image": "https://tse2.mm.bing.net/th/id/OIP.EMLMqm006Pub-W9zolm6cwHaHa?pid=Api&P=0&h=220",
+    "type": "supplies",
+    "categoryId": 7,
+    "attributeIds": [61]
+  },
+  {
+    "id": 45,
+    "name": "Thuốc trừ sâu sinh học Neem",
+    "price": 66000,
+    "image": "https://skyfarm.vn/uploads/Thuy-canh/thuoc-tru-sau-sinh-hoc-neem-nano-chinh-hang-1.jpg",
+    "type": "supplies",
+    "categoryId": 6,
+    "attributeIds": [60, 66]
   }
-]
+],
+  "new_products":[
+    {
+      "id": 7,
+      "name": "Cây Keo Lai Nuôi Cấy Mô",
+      "price": 15000,
+      "image": "https://inkythuatso.com/uploads/thumbnails/800/2023/03/1-hinh-anh-cay-keo-dau-inkythuatso-31-09-07-26.jpg",
+      "type": "plant",
+      "categoryId": 3,
+      "attributeIds": [14, 15, 18, 20, 22]
+    },
+    {
+      "id": 20,
+      "name": "Cây trúc mặt trời ‘Compacta’",
+      "price": 200000,
+      "image": "https://mowgarden.com/wp-content/uploads/2023/03/cay-phat-tai-bup-de-ban-chau-su-1.jpg",
+      "type": "plant",
+      "categoryId": 4,
+      "attributeIds": [29, 30, 31, 36, 41]
+    },
+    {
+      "id": 23,
+      "name": "Cỏ đậu ‘Arachis pintoi’",
+      "price": 15000,
+      "image": "https://trungtamthuoc.com/images/item/co-lac-2.jpg",
+      "type": "plant",
+      "categoryId": 4,
+      "attributeIds": [38, 40]
+    },
+    {
+      "id": 15,
+      "name": "Cây cô tòng lá mít ‘Croton Petra’",
+      "price": 160000,
+      "image": "https://mowgarden.com/wp-content/uploads/2022/10/cay-tong-la-mit-nho-1.jpg",
+      "type": "plant",
+      "categoryId": 4,
+      "attributeIds": [25, 32, 33, 41]
+    },
+    {
+      "id": 16,
+      "name": "Cây Chuông Vàng",
+      "price": 1650000,
+      "image": "https://mowgarden.com/wp-content/uploads/2021/04/cay-chuong-vang-1.jpg",
+      "type": "plant",
+      "categoryId": 4,
+      "attributeIds": [24, 26, 31, 37, 38]
+    },
+    {
+      "id": 39,
+      "name": "Chậu đất nung quả bóng sơn nhám",
+      "price": 0,
+      "image": "https://mowgarden.com/wp-content/uploads/2022/11/chau-dat-nung-son-den-nham.jpg",
+      "type": "pot",
+      "categoryId": 9,
+      "attributeIds": [69, 74, 77]
+    },
+    {
+      "id": 22,
+      "name": "Cây Trúc Quân Tử Bambusa multiplex",
+      "price": 160000,
+      "image": "https://mowgarden.com/wp-content/uploads/2021/04/ban-cay-truc-quan-tu-1-1.jpg",
+      "type": "plant",
+      "categoryId": 4,
+      "attributeIds": [23, 31, 35, 37, 39, 41]
+    },
+    {
+      "id": 27,
+      "name": "Rau xà lách",
+      "price": 10000,
+      "image": "https://bizweb.dktcdn.net/thumb/1024x1024/100/521/346/products/hat-giong-rau-xa-lach-1.png?v=1723089261877",
+      "type": "seed",
+      "categoryId": 5,
+      "attributeIds": [51, 54, 56]
+    }
+  ],
+  "trending_products": [
+    {
+      "id": 4,
+      "name": "Cà Chua Bi Đỏ",
+      "price": 25000,
+      "image": "https://ivila.vn/public/uploads/media/image/ca-chua-bi-lun-do21_1.jpg",
+      "type": "plant",
 
+      "categoryId": 2,
+      "attributeIds": [4, 7, 8, 10, 13]
+    },
+    {
+      "id": 18,
+      "name": "Cây Ổ Rồng treo tường Staghorn Fern",
+      "price": 450000,
+      "image": "https://mowgarden.com/wp-content/uploads/2022/08/cay-o-rong-treo-tuong.jpg",
+      "type": "plant",
+      "categoryId": 4,
+      "attributeIds": [28, 29, 30, 31, 36]
+    },
+    {
+      "id": 24,
+      "name": "Cỏ Nhung Nhật",
+      "price": 60000,
+      "image": "https://caygianghuong.net/wp-content/uploads/2021/01/unnamed-2.jpg",
+      "type": "plant",
+      "categoryId": 4,
+      "attributeIds": [38, 40]
+    },
+    {
+      "id": 25,
+      "name": "Rau cải xanh",
+      "price": 15000,
+      "image": "https://tse3.mm.bing.net/th/id/OIP.4ejnwelmOHhsEcbArd7zowHaFS?pid=Api&P=0&h=220",
+      "type": "seed",
+      "categoryId": 5,
+      "attributeIds": [51, 54, 56]
+    },
+    {
+      "id": 6,
+      "name": "Ổi Ruby Lùn",
+      "price": 180000,
+      "image": "https://kimbiofarm.com/wp-content/uploads/2025/06/cay-giong-oi-ruby-5.webp",
+      "type": "plant",
+      "categoryId": 2,
+      "attributeIds": [2, 8, 9, 12, 13]
+    },
+    {
+      "id": 30,
+      "name": "Ớt chuông",
+      "price": 25000,
+      "image": "https://nongsandungha.com/wp-content/uploads/2024/08/hat-giong-ot-chuong.png",
+      "type": "seed",
+      "categoryId": 5,
+      "attributeIds": [53, 54, 58]
+    },
+    {
+      "id": 32,
+      "name": "Cây con cà chua dài ngày",
+      "price": 15000,
+      "image": "https://baokhuyennong.com/wp-content/uploads/2021/02/ca-chua-4.jpg",
+      "type": "seed",
+      "categoryId": 5,
+      "attributeIds": [53, 55, 58]
+    },
+    {
+      "id": 17,
+      "name": "Cây ngũ gia bì xanh",
+      "price": 165000,
+      "image": "https://mowgarden.com/wp-content/uploads/2022/09/cay-ngu-gia-bi-xanh-de-ban-chau-men-su.jpg",
+      "type": "plant",
+      "categoryId": 4,
+      "attributeIds": [27, 36, 41, 42]
+    }
+  ],
+  "sale_products": [
+    {
+      "id": 1,
+      "name": "Cây lựu ta đỏ chậu ươm FRUI020",
+      "price": 160000,
+      "salePrice": 140000,
+      "image": "https://mowgarden.com/wp-content/uploads/2022/09/luutadomowgarden.jpg",
+      "type": "plant",
+      "categoryId": 2,
+      "attributeIds": [2, 6, 8, 12, 13]
+    },
+    {
+      "id": 6,
+      "name": "Ổi Ruby Lùn",
+      "price": 180000,
+      "salePrice": 150000,
+      "image": "https://kimbiofarm.com/wp-content/uploads/2025/06/cay-giong-oi-ruby-5.webp",
+      "type": "plant",
+      "categoryId": 2,
+      "attributeIds": [2, 8, 9, 12, 13]
+    },
+    {
+      "id": 18,
+      "name": "Cây Ổ Rồng treo tường Staghorn Fern",
+      "price": 450000,
+      "salePrice": 380000,
+      "image": "https://mowgarden.com/wp-content/uploads/2022/08/cay-o-rong-treo-tuong.jpg",
+      "type": "plant",
+      "categoryId": 4,
+      "attributeIds": [28, 29, 30, 31, 36]
+    },
+    {
+      "id": 21,
+      "name": "Cây hoa hồng phụng",
+      "price": 220000,
+      "salePrice": 180000,
+      "image": "https://mowgarden.com/wp-content/uploads/2023/03/cay-hoa-hong-phung-chau-uom-1.jpg",
+      "type": "plant",
+      "categoryId": 4,
+      "attributeIds": [24, 33, 34, 38, 39]
+    },
+    {
+      "id": 23,
+      "name": "Cỏ đậu ‘Arachis pintoi’",
+      "price": 15000,
+      "salePrice": 10000,
+      "image": "https://trungtamthuoc.com/images/item/co-lac-2.jpg",
+      "type": "plant",
+      "categoryId": 4,
+      "attributeIds": [38, 40]
+    },
+    {
+      "id": 42,
+      "name": "Phân rơm ủ hoai hữu cơ",
+      "price": 250000,
+      "salePrice": 200000,
+      "image": "https://mowgarden.com/wp-content/uploads/2021/05/phan-rom-hoai-muc-1.jpg",
+      "type": "seed",
+      "categoryId": 8,
+      "attributeIds": [59]
+    },
+    {
+      "id": 44,
+      "name": "Đất trồng cây hữu cơ cao cấp",
+      "price": 180000,
+      "salePrice": 150000,
+      "image": "https://tse2.mm.bing.net/th/id/OIP.EMLMqm006Pub-W9zolm6cwHaHa?pid=Api&P=0&h=220",
+      "type": "supplies",
+      "categoryId": 7,
+      "attributeIds": [61]
+    },
+    {
+      "id": 26,
+      "name": "Rau muống",
+      "price": 12000,
+      "salePrice": 10000,
+      "image": "https://down-vn.img.susercontent.com/file/7e7ff5da322c59e5494af93f17848547",
+      "type": "seed",
+      "categoryId": 5,
+      "attributeIds": [51, 54, 56]
+    }
+  ],
+  "wholesale_products": [
+    {
+      "id": 1,
+      "name": "Cây lựu ta đỏ chậu ươm FRUI020",
+      "price": 160000,
+      "image": "https://mowgarden.com/wp-content/uploads/2022/09/luutadomowgarden.jpg",
+      "type": "plant",
+
+      "categoryId": 2,
+      "attributeIds": [2, 6, 8, 12, 13]
+    },
+    {
+      "id": 2,
+      "name": "Cây chanh cẩm thạch chậu ươm FRUI005",
+      "price": 250000,
+      "image": "https://mowgarden.com/wp-content/uploads/2022/09/cay-chanh-cam-thach-1.jpg",
+      "type": "plant",
+
+      "categoryId": 2,
+      "attributeIds": [2, 6, 8, 12, 13]
+    },
+    {
+      "id": 3,
+      "name": "Chuối Tiêu Hồng",
+      "price": 15000,
+      "image": "https://tse3.mm.bing.net/th/id/OIP.18LeEcUGZpH9ZFBqPEk5DQHaHa?pid=Api&P=0&h=220",
+      "type": "plant",
+
+      "categoryId": 2,
+      "attributeIds": [3, 7, 8, 11, 12]
+    },
+    {
+      "id": 4,
+      "name": "Cà Chua Bi Đỏ",
+      "price": 25000,
+      "image": "https://ivila.vn/public/uploads/media/image/ca-chua-bi-lun-do21_1.jpg",
+      "type": "plant",
+
+      "categoryId": 2,
+      "attributeIds": [4, 7, 8, 10, 13]
+    }
+  ],
+  "supplies_products": [
+    {
+      "id": 42,
+      "name": "Phân rơm ủ hoai hữu cơ",
+      "price": 250000,
+      "image": "https://mowgarden.com/wp-content/uploads/2021/05/phan-rom-hoai-muc-1.jpg",
+      "type": "seed",
+      "categoryId": 8,
+      "attributeIds": [59]
+    },
+    {
+      "id": 43,
+      "name": "Xẻng đào đất cán gỗ",
+      "price": 180000,
+      "image": "https://qgtechno.com.vn/wp-content/uploads/2018/07/X%E1%BA%BBng-l%C3%A0m-v%C6%B0%E1%BB%9Dn-c%C3%A1n-g%E1%BB%97-Bosi-BS561349-125cm.jpg",
+      "type": "supplies",
+      "categoryId": 10,
+      "attributeIds": [62]
+    },
+    {
+      "id": 44,
+      "name": "Đất trồng cây hữu cơ cao cấp",
+      "price": 180000,
+      "image": "https://tse2.mm.bing.net/th/id/OIP.EMLMqm006Pub-W9zolm6cwHaHa?pid=Api&P=0&h=220",
+      "type": "supplies",
+      "categoryId": 7,
+      "attributeIds": [61]
+    },
+    {
+      "id": 45,
+      "name": "Thuốc trừ sâu sinh học Neem",
+      "price": 66000,
+      "image": "https://skyfarm.vn/uploads/Thuy-canh/thuoc-tru-sau-sinh-hoc-neem-nano-chinh-hang-1.jpg",
+      "type": "supplies",
+      "categoryId": 6,
+      "attributeIds": [60, 66]
+    }
+  ]
 }
