@@ -89,4 +89,60 @@ body {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
+    align-items: stretch;
+}
+/*3.GIỚI THIỆU*/
+.introSection {
+    padding: 50px 0;
+    background-color: #ffffff;
+}
+
+.introContainer {
+    display: flex;
+    gap: 50px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.introImage img {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.introContent h2 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: #1a3c24;
+}
+
+.introList {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 40px;
+}
+
+.introItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.introItem .icon {
+    font-size: 3rem;
+}
+
+.introItem h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1a3c24;
+}
+
+.introItem p {
+    margin: 5px 0 0;
+    font-size: 1.1rem;
+    color: #4b4b4b;
 }

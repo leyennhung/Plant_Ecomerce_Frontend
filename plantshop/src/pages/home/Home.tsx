@@ -10,6 +10,7 @@ import ChauCayImg from "../../assets/images/ChauCayDatNung.jpg";
 import ComboImg from "../../assets/images/CayPhuQuy.jpg";
 import HatGiongImg from "../../assets/images/HatGiong.jpg";
 import GiaSiImg from "../../assets/images/CayGiongGiaSi.png";
+import vuonImg from "../../assets/images/vuon.jpg";
 
 //Function component Home (khai báo, tạo)
 const Home = () => {
@@ -19,15 +20,35 @@ const Home = () => {
     // setProducts: hàm cập nhật danh sách
     // Product[]: mảng các sản phẩm
     // Giá trị ban đầu: [] (mảng rỗng)
-    const [products, setProducts] = useState<Product[]>([]);
+
+    // const [products, setProducts] = useState<Product[]>([]);
+    const [newProducts, setNewProducts] = useState<Product[]>([]);
+    const [trendingProducts, setTrendingProducts] = useState<Product[]>([]);
+    const [saleProducts, setSaleProducts] = useState<Product[]>([]);
+    const [wholesaleProducts, setWholesaleProducts] = useState<Product[]>([]);
+    const [suppliesProducts, setSuppliesProducts] = useState<Product[]>([]);
+
     // loading: trạng thái đang tải dữ liệu
     // Ban đầu là true → đang load
     const [loading, setLoading] = useState(true);
 
     //useEffect – gọi API khi component được render lần đầu
     useEffect(() => {
-        productService.getAll()  // gọi hàm trong service để gọi api
-            .then(data => setProducts(data)) // API trả về json sẽ lưu ds spham vào state products đã khai báo trước đó
+        Promise.all([
+            productService.getNewProduct(),
+            productService.getTrendingProducts(),
+            productService.getSaleProducts(),
+            productService.getWholesaleProducts(),
+            productService.getSuppliesProducts(),
+        ])
+            // API trả về json sẽ lưu ds spham vào state products đã khai báo trước đó
+            .then(([newProds, trendingProds, salePros, wholesaleProds, suppliesProds]) => {
+                setNewProducts(newProds);
+                setTrendingProducts(trendingProds);
+                setSaleProducts(salePros);
+                setWholesaleProducts(wholesaleProds);
+                setSuppliesProducts(suppliesProds);
+            })
             .finally(() => setLoading(false));  // dù api thành công hay thất bại thì quá trình load phải = false
     }, []);  // kết thúc quá trình loading
 
@@ -73,13 +94,13 @@ const Home = () => {
                 </section>
                     {/*2.2 SẢN PHẨM MỚI*/}
                 <section className={styles.productSection}>
-                    <h2 className={styles.title}>🌱 Sản phẩm mới nhất</h2>
+                    <h2 className={styles.title}> Sản phẩm mới nhất</h2>
                     <div className={styles.divider}></div>
                     <div className={styles.productList}>
 
                         {/*Duyệt qua từng sản phẩm trong products
                             map → render nhiều card*/}
-                        {products.map(product => (
+                        {newProducts.map(np => (
                             // Mỗi sp là 1 card
                             // <div key={product.id} className={styles.card}>
                             //     <img
@@ -92,22 +113,134 @@ const Home = () => {
                             //         {formatPrice(product.price)}
                             //     </p>
                             // </div>
-                            <ProductCard key={product.id} product={product} />
+                            <ProductCard key={np.id} product={np} />
                         ))}
                     </div>
                 </section>
                 {/*2.3 SẢN PHẨM TRENDING*/}
                 <section className={styles.productSection}>
+                    <h2 className={styles.title}>🌱 Sản phẩm Trending</h2>
+                    <div className={styles.divider}></div>
+                    <div className={styles.productList}>
 
+                        {/*Duyệt qua từng sản phẩm trong products
+                            map → render nhiều card*/}
+                        {trendingProducts.map(tp => (
+                            // Mỗi sp là 1 card
+                            <ProductCard key={tp.id} product={tp} />
+                        ))}
+                    </div>
                 </section>
                 {/*2.4 SẢN PHẨM GIẢM GIÁ*/}
                 <section className={styles.productSection}>
+                    <h2 className={styles.title}>🌱 Sản phẩm khuyến mãi</h2>
+                    <div className={styles.divider}></div>
+                    <div className={styles.productList}>
 
+                        {/*Duyệt qua từng sản phẩm trong products
+                            map → render nhiều card*/}
+                        {saleProducts.map(sp => (
+                            // Mỗi sp là 1 card
+                            <ProductCard key={sp.id} product={sp} />
+                        ))}
+                    </div>
                 </section>
-                {/*2.5 GIỚI THIỆU*/}
+                {/*2.5 COMBO HẤP DẪN*/}
                 <section>
 
                 </section>
+                {/*2.6 CÂY GIỐNG*/}
+                <section>
+                    <h2 className={styles.title}>Ưu đãi giá sĩ cây giống</h2>
+                    <div className={styles.divider}></div>
+                    <div className={styles.productList}>
+
+                        {/*Duyệt qua từng sản phẩm trong products
+                            map → render nhiều card*/}
+                        {wholesaleProducts.map(wsp => (
+                            // Mỗi sp là 1 card
+                            <ProductCard key={wsp.id} product={wsp} />
+                        ))}
+                    </div>
+                </section>
+                {/*2.7 DỤNG CỤ */}
+                <section>
+                    <h2 className={styles.title}>Vật tư cây trồng</h2>
+                    <div className={styles.divider}></div>
+                    <div className={styles.productList}>
+
+                        {/*Duyệt qua từng sản phẩm trong products
+                            map → render nhiều card*/}
+                        {suppliesProducts.map(slp => (
+                            // Mỗi sp là 1 card
+                            <ProductCard key={slp.id} product={slp} />
+                        ))}
+                    </div>
+                </section>
+            </div>
+            {/* 3. GIỚI THIỆU */}
+            <section className={styles.introSection}>
+                <div className={styles.introContainer}>
+                    {/* Ảnh bên trái */}
+                    <div className={styles.introImage}>
+                        <img src={vuonImg} alt="Garden"/>
+                    </div>
+
+                    {/* Nội dung bên phải */}
+                    <div className={styles.introContent}>
+                        <h2>Lý do chọn PLAN A PLAN?</h2>
+                        <div className={styles.introList}>
+                            <div className={styles.introItem}>
+                                <span className={styles.icon}>🌱</span>
+                                <div>
+                                    <h3>Tuyển chọn</h3>
+                                    <p>Mọi cây xanh đều phải được chọn lọc kỹ lưỡng</p>
+                                </div>
+                            </div>
+                            <div className={styles.introItem}>
+                                <span className={styles.icon}>🪴</span>
+                                <div>
+                                    <h3>Đa dạng</h3>
+                                    <p>Dễ dàng tìm được sản phẩm mà bạn mong muốn</p>
+                                </div>
+                            </div>
+                            <div className={styles.introItem}>
+                                <span className={styles.icon}>🤝</span>
+                                <div>
+                                    <h3>Đồng hành</h3>
+                                    <p>Luôn đồng hành và giúp đỡ bạn về mặt kỹ thuật</p>
+                                </div>
+                            </div>
+                            <div className={styles.introItem}>
+                                <span className={styles.icon}>📸</span>
+                                <div>
+                                    <h3>Đúng chuẩn</h3>
+                                    <p>Sử dụng hình ảnh chụp thực tế giúp dễ hình dung</p>
+                                </div>
+                            </div>
+                            <div className={styles.introItem}>
+                                <span className={styles.icon}>✅</span>
+                                <div>
+                                    <h3>Tin cậy</h3>
+                                    <p>Gửi ảnh thực tế và cụ thể trước khi giao hàng</p>
+                                </div>
+                            </div>
+                            <div className={styles.introItem}>
+                                <span className={styles.icon}>💰</span>
+                                <div>
+                                    <h3>Cạnh tranh</h3>
+                                    <p>Tối ưu hóa ngân sách nhờ mức giá cực kì cạnh tranh</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+                {/*4.  BLOG*/}
+            <div>
+
+            </div>
                 {/*<Button onClick={() => alert("Clicked!")}>*/}
                 {/*    Thêm vào giỏ hàng*/}
                 {/*</Button>*/}
@@ -115,7 +248,6 @@ const Home = () => {
                 {/*<Button variant="outline">*/}
                 {/*    Xem chi tiết*/}
                 {/*</Button>*/}
-            </div>
         </div>
     );
 };
