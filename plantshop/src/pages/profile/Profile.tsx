@@ -19,6 +19,7 @@ const Profile: React.FC = () => {
         phone: '0989 895 433',
     });
 
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
             ...formData,
@@ -124,7 +125,7 @@ const Profile: React.FC = () => {
 
                         {/* Cột Phải: Ảnh đại diện */}
                         <div className={styles.photoSection}>
-                            <p className={styles.label} style={{ marginBottom: '15px' }}></p>
+                            <p className={styles.label} style={{marginBottom: '15px'}}></p>
                             <div className={styles.avatarWrapper}>
                                 <img
                                     //src="https://i.pinimg.com/736x/fa/88/c2/fa88c242e9d0511f0976baaeb288a7a2.jpg"
@@ -134,7 +135,7 @@ const Profile: React.FC = () => {
                                 />
                             </div>
                             <label className={styles.userName}>
-                               Bảo An
+                                Bảo An
                             </label>
                         </div>
                     </div>
@@ -142,57 +143,104 @@ const Profile: React.FC = () => {
 
                 {activeTab === 'orders' && (
                     <div className={styles.ordersTab}>
+
+                        {/* HEADER */}
+                        <div className={styles.headerBlock}>
+                            <div className={styles.colProductsHeader}>Sản phẩm</div>
+                            <div className={styles.colDateHeader}>Ngày Đặt</div>
+                            <div className={styles.colStatusHeader}>Trạng Thái</div>
+                            <div className={styles.colPriceHeader}>Tổng Tiền</div>
+                            <div className={styles.colActionHeader}></div>
+                        </div>
+
+                        {/*DANH SÁCH ĐƠN HÀNG*/}
                         <div className={styles.orderList}>
-
-                            {/* Item 1 */}
-                            <div className={styles.orderCard}>
-                                <div className={styles.orderHeader}>
-                                    <span className={styles.orderId}>#ORD-2023-1108</span>
-                                    <span className={styles.orderDate}>26/12/2025</span>
-                                </div>
-                                <div className={styles.orderBody}>
-                                    <div className={styles.orderInfo}>
-                                        <span className={styles.infoLabel}>Tổng tiền:</span>
-                                        <span className={styles.orderPrice}>890,000đ</span>
+                            <div className={styles.orderBlock}>
+                                {/* CỘT 1: DANH SÁCH SẢN PHẨM */}
+                                <div className={styles.colProducts}>
+                                    <div className={styles.productItem}>
+                                        <img
+                                            src="https://mowgarden.com/wp-content/uploads/2022/09/cay-ngu-gia-bi-xanh-de-ban-chau-men-su-768x768.jpg"
+                                            alt="Cây ngũ gia bì xanh"
+                                            className={styles.thumb}
+                                        />
+                                        <div className={styles.productMeta}>
+                                            <span className={styles.prodName}>Cây ngũ gia bì xanh</span>
+                                            <span className={styles.prodQty}>x1</span>
+                                        </div>
                                     </div>
-                                    <span className={`${styles.orderStatus} ${styles['status-pending']}`}>
-                                        Chờ xác nhận
-                                    </span>
+                                    <div className={styles.productItem}>
+                                        <img
+                                            src="https://mowgarden.com/wp-content/uploads/2022/10/cay-bang-singapore-mini-uyen-uong-768x768.jpg"
+                                            alt="Cây bàng Singapore"
+                                            className={styles.thumb}
+                                        />
+                                        <div className={styles.productMeta}>
+                                            <span className={styles.prodName}>Cây bàng Singapore</span>
+                                            <span className={styles.prodQty}>x2</span>
+                                        </div>
+                                    </div>
                                 </div>
+
+                                {/* CỘT 2: NGÀY ĐẶT */}
+                                <div className={styles.colDate}>
+                                    <span className={styles.textData}>31/12/2025</span>
+                                </div>
+
+                                {/* CỘT 3: TRẠNG THÁI */}
+                                <div className={styles.colStatus}>
+           <span className={`${styles.badge} ${styles.badgeProcessing}`}>
+             Đang xử lý
+           </span>
+                                </div>
+
+                                {/* CỘT 4: TỔNG TIỀN */}
+                                <div className={styles.colPrice}>
+                                    <span className={styles.priceData}>4.500.000đ</span>
+                                </div>
+
+                                {/* CỘT 5: BUTTON */}
+                                <div className={styles.colAction}>
+                                    <button className={styles.btnDetail}>Xem chi tiết</button>
+                                </div>
+
                             </div>
-
-                            {/* Item 2 */}
-                            <div className={styles.orderCard}>
-                                <div className={styles.orderHeader}>
-                                    <span className={styles.orderId}>#ORD-2023-1105</span>
-                                    <span className={styles.orderDate}>25/12/2025</span>
-                                </div>
-                                <div className={styles.orderBody}>
-                                    <div className={styles.orderInfo}>
-                                        <span className={styles.infoLabel}>Tổng tiền:</span>
-                                        <span className={styles.orderPrice}>560,000đ</span>
+                            <div className={styles.orderBlock}>
+                                {/* CỘT 1 */}
+                                <div className={styles.colProducts}>
+                                    <div className={styles.productItem}>
+                                        <img
+                                            src="https://mowgarden.com/wp-content/uploads/2022/08/cay-rong-bac-de-ban-mowgarden-768x768.jpg"
+                                            alt="Cây Rồng Bạc"
+                                            className={styles.thumb}
+                                        />
+                                        <div className={styles.productMeta}>
+                                            <span className={styles.prodName}>Cây Rồng Bạc</span>
+                                            <span className={styles.prodQty}>x1</span>
+                                        </div>
                                     </div>
-                                    <span className={`${styles.orderStatus} ${styles['status-shipping']}`}>
-                                        Đang vận chuyển
-                                    </span>
                                 </div>
-                            </div>
 
-                            {/* Item 3 */}
-                            <div className={styles.orderCard}>
-                                <div className={styles.orderHeader}>
-                                    <span className={styles.orderId}>#ORD-2023-1102</span>
-                                    <span className={styles.orderDate}>20/12/2023</span>
+                                {/* CỘT 2 */}
+                                <div className={styles.colDate}>
+                                    <span className={styles.textData}>30/12/2025</span>
                                 </div>
-                                <div className={styles.orderBody}>
-                                    <div className={styles.orderInfo}>
-                                        <span className={styles.infoLabel}>Tổng tiền:</span>
-                                        <span className={styles.orderPrice}>1,250,000đ</span>
-                                    </div>
-                                    <span className={`${styles.orderStatus} ${styles['status-completed']}`}>
-                                        Giao thành công
-                                    </span>
+
+                                {/* CỘT 3 */}
+                                <div className={styles.colStatus}>
+                                    <span className={`${styles.badge} ${styles.badgeSuccess}`}>Đã giao</span>
                                 </div>
+
+                                {/* CỘT 4 */}
+                                <div className={styles.colPrice}>
+                                    <span className={styles.priceData}>150.000đ</span>
+                                </div>
+
+                                {/* CỘT 5 */}
+                                <div className={styles.colAction}>
+                                    <button className={styles.btnDetail}>Xem chi tiết</button>
+                                </div>
+
                             </div>
 
                         </div>
