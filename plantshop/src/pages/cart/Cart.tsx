@@ -9,10 +9,20 @@ const Cart = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        cartService
-            .getAll()
-            .then(setItems)
-            .finally(() => setLoading(false));
+        async function loadCart() {
+            const cart = await cartService.getActiveCart();
+            if (!cart) {
+                setItems([]);
+                setLoading(false);
+                return;
+            }
+
+            const items = await cartService.getCartItems(cart.id);
+            setItems(items);
+            setLoading(false);
+        }
+
+        loadCart();
     }, []);
 
     const subtotal = items.reduce(

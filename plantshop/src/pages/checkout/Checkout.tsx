@@ -81,9 +81,9 @@ const Checkout = () => {
                         <input
                             value={couponInput}
                             onChange={e => setCouponInput(e.target.value)}
-                            placeholder="Coupon code"
+                            placeholder="Mã giảm giá"
                         />
-                        <button onClick={applyCoupon}>APPLY COUPON</button>
+                        <button onClick={applyCoupon}>Áp dụng mã giảm giá</button>
                     </div>
 
                     {couponError && (
@@ -230,7 +230,7 @@ const Checkout = () => {
                     </label>
 
                     <button className={styles.orderBtn} disabled={!agree}>
-                        PLACE ORDER
+                        ĐẶT HÀNG
                     </button>
 
                     <div className={styles.freeshipInfo}>
@@ -243,7 +243,7 @@ const Checkout = () => {
                             <li>Chúng tôi thu thập, lưu trữ và xử lý thông tin của bạn cho quá trình thực hiện giao
                                 dịch, cho những thông báo sau này, hoặc để cung cấp dịch vụ. <br/>
                                 <a href="/privacy-policy" target="_blank" rel="noopener noreferrer">
-                                    privacy policy
+                                    chính sách bảo mật
                                 </a></li>
                         </ul>
                     </div>

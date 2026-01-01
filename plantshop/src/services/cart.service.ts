@@ -1,17 +1,35 @@
 import { api } from "./api";
 import type {
-    CartItemEntity,
     CartItemResponse,
     CartViewItem,
 } from "../types/cart.type";
 import type { Product } from "../types/product.type";
+import type {CartResponse} from "../types/cart.type";
+import { getCurrentUser, getSessionId } from "../utils/auth";
 
 export const cartService = {
-    async getAll(): Promise<CartViewItem[]> {
-        const cartRes = await api.get<CartItemResponse>("/cart_items");
-        const productRes = await api.get<Product[]>("/products");
+    // Lấy cart active của user / guest
+    async getActiveCart() {
+        const user = getCurrentUser();
+        const sessionId = getSessionId();
 
-        return cartRes.data.cart_items.map((item: CartItemEntity) => {
+        const params = user
+            ? { user_id: user.id, status: "active" }
+            : { session_id: sessionId, status: "active" };
+
+        const res = await api.get<CartResponse>("/carts", { params });
+        return res.data.carts[0] ?? null;
+    },
+    // Lấy cart items + join product
+    async getCartItems(cartId: number): Promise<CartViewItem[]> {
+        const [itemsRes, productRes] = await Promise.all([
+            api.get<CartItemResponse>("/cart_items", {
+                params: { cart_id: cartId },
+            }),
+            api.get<Product[]>("/products"),
+        ]);
+
+        return itemsRes.data.cart_items.map(item => {
             const product = productRes.data.find(
                 p => p.id === item.product_id
             );
@@ -27,3 +45,4 @@ export const cartService = {
         });
     },
 };
+

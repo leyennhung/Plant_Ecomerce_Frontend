@@ -11,7 +11,7 @@ const AppRoutes = () => (
     <Routes>
         <Route element={<MainLayout/>}>
             <Route path="/" element={<Home/>}/>
-            <Route path="/cart" element={<Cart/>}/>
+            <Route path="/carts" element={<Cart/>}/>
             <Route path="/wishlist" element={<Wishlist/>}/>
             <Route path="/checkout" element={<Checkout/>}/>
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />

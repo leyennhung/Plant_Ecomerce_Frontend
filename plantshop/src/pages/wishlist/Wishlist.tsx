@@ -31,7 +31,7 @@ const Wishlist = () => {
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}>My wishlist</h1>
+            <h1 className={styles.title}>Sản phẩm yêu thích</h1>
 
             {items.length === 0 ? (
                 <p className={styles.empty}>Danh sách yêu thích trống</p>
