@@ -1,0 +1,35 @@
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.container {
+    width: 100%;
+    padding: 0px;
+    min-width: 1200px;
+    background-color: #f4fbf6;
+}
+/*1.BANNER*/
+.banner {
+    width: 100%;
+}
+.imgbanner {
+    width: 100%;
+    height: auto;
+}
+/*2.*/
+.wrapper {
+    display: flex;
+    gap: 24px;
+    padding: 24px;
+}
+
+.content {
+    flex: 1;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}

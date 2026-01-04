@@ -1,0 +1,137 @@
+.sidebar {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 0;
+    background: transparent;
+}
+.filterbox {
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+.title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    text-align: center;
+    border-bottom: none !important;
+    color: #01370C;
+}
+.title::after {
+    display: none !important;
+}
+
+.category {
+    margin-bottom: 10px;
+}
+
+/*Tên category*/
+.categoryHeader {
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    font-weight: 500;
+    padding: 6px 0;
+}
+.categoryHeader:hover {
+    color: #3b7f3a;
+    font-weight: 500;
+}
+.active {
+    color: #3b7f3a;
+}
+.arrow {
+    font-size: 16px;
+}
+/*attribute*/
+.group {
+    padding-left: 12px;
+    margin-top: 6px;
+}
+.groupTitle {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 5px;
+}
+.attribute {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+.attribute:hover {
+    color: #3b7f3a;
+    font-weight: 500;
+}
+.checked {
+    color: #3b7f3a;
+}
+input[type="radio"],
+input[type="range"] {
+    accent-color: #3b7f3a;
+}
+/*PRICE*/
+.priceBox {
+    padding: 12px;
+    border-radius: 10px;
+}
+
+.priceHeader {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.priceValues {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    color: #01370C;
+    margin-bottom: 10px;
+}
+
+
+/* SLIDER price */
+.sliderRoot {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 30px;
+    margin-top: 10px;
+}
+
+.sliderTrack {
+    background-color: #dfeee3;
+    position: relative;
+    flex-grow: 1;
+    height: 4px;
+    border-radius: 999px;
+}
+
+.sliderRange {
+    position: absolute;
+    background-color: #3b7f3a;
+    height: 100%;
+    border-radius: 999px;
+}
+
+.sliderThumb {
+    display: block;
+    width: 16px;
+    height: 16px;
+    background-color: #3b7f3a;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.sliderThumb:hover {
+    background-color: #2f6b30;
+}
