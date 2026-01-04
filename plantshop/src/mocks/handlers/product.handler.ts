@@ -3,9 +3,9 @@ import { http, HttpResponse } from "msw"; //hàm có sẵn của thư viện MSW
 
 export const productHandlers = [
     //GET API
-    // http.get("/plant/products", () => {
-    //     return HttpResponse.json(data.products); //Trả về response dạng JSON
-    // }),
+    http.get("/plant/products", () => {
+        return HttpResponse.json(data.products); //Trả về response dạng JSON
+    }),
     // GET /plant/new_products      => trả mảng sp moi
     http.get("/plant/new_products", () => {
         return HttpResponse.json(data.new_products);
