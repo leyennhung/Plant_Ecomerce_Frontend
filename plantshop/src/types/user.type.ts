@@ -12,3 +12,4 @@ export interface User {
 }
 
 export type RegisterRequest = Pick<User, 'username' | 'email' | 'password'>;
+export type LoginRequest = Pick<User, 'email' | 'password'>;
