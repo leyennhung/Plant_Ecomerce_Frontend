@@ -27,8 +27,8 @@ Dự án Frontend mô phỏng **website bán cây cảnh** được xây dựng 
 - cd plantshop
 
   ### 2️⃣ Cài đặt thư viện
-  - npm install    ( sinh ra node_modules/)
-  - npm run build  ( sẽ sinh ra dist/, gồm assets/ và index.html)
+  - npm install    ( tạo ra node_modules/)
+  - npm run build  ( sẽ tạo ra dist/, gồm assets/ và index.html)
 
   ### 3️⃣ Chạy môi trường development
   - npm run dev
