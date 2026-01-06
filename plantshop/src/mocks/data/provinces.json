@@ -1,7 +1,174 @@
 {
   "provinces": [
-    { "id": 1, "name": "TP. Hồ Chí Minh", "code": "HCM" },
-    { "id": 2, "name": "Hà Nội", "code": "HN" },
-    { "id": 3, "name": "Đà Nẵng", "code": "DN" }
+    {
+      "id": 1,
+      "name": "An Giang",
+      "code": "91"
+    },
+    {
+      "id": 2,
+      "name": "Bắc Ninh",
+      "code": "24"
+    },
+    {
+      "id": 3,
+      "name": "Cao Bằng",
+      "code": "04"
+    },
+    {
+      "id": 4,
+      "name": "Cà Mau",
+      "code": "96"
+    },
+    {
+      "id": 5,
+      "name": "Gia Lai",
+      "code": "52"
+    },
+    {
+      "id": 6,
+      "name": "Hà Tĩnh",
+      "code": "42"
+    },
+    {
+      "id": 7,
+      "name": "Hưng Yên",
+      "code": "33"
+    },
+    {
+      "id": 8,
+      "name": "Khánh Hòa",
+      "code": "56"
+    },
+    {
+      "id": 9,
+      "name": "Lai Châu",
+      "code": "12"
+    },
+    {
+      "id": 10,
+      "name": "Lào Cai",
+      "code": "15"
+    },
+    {
+      "id": 11,
+      "name": "Lâm Đồng",
+      "code": "68"
+    },
+    {
+      "id": 12,
+      "name": "Lạng Sơn",
+      "code": "20"
+    },
+    {
+      "id": 13,
+      "name": "Nghệ An",
+      "code": "40"
+    },
+    {
+      "id": 14,
+      "name": "Ninh Bình",
+      "code": "37"
+    },
+    {
+      "id": 15,
+      "name": "Phú Thọ",
+      "code": "25"
+    },
+    {
+      "id": 16,
+      "name": "Quảng Ngãi",
+      "code": "51"
+    },
+    {
+      "id": 17,
+      "name": "Quảng Ninh",
+      "code": "22"
+    },
+    {
+      "id": 18,
+      "name": "Quảng Trị",
+      "code": "44"
+    },
+    {
+      "id": 19,
+      "name": "Sơn La",
+      "code": "14"
+    },
+    {
+      "id": 20,
+      "name": "Thanh Hóa",
+      "code": "38"
+    },
+    {
+      "id": 21,
+      "name": "Thành phố Cần Thơ",
+      "code": "92"
+    },
+    {
+      "id": 22,
+      "name": "Thành phố Huế",
+      "code": "46"
+    },
+    {
+      "id": 23,
+      "name": "Thành phố Hà Nội",
+      "code": "01"
+    },
+    {
+      "id": 24,
+      "name": "Thành phố Hải Phòng",
+      "code": "31"
+    },
+    {
+      "id": 25,
+      "name": "Thành phố Hồ Chí Minh",
+      "code": "79"
+    },
+    {
+      "id": 26,
+      "name": "Thành phố Đà Nẵng",
+      "code": "48"
+    },
+    {
+      "id": 27,
+      "name": "Thái Nguyên",
+      "code": "19"
+    },
+    {
+      "id": 28,
+      "name": "Tuyên Quang",
+      "code": "08"
+    },
+    {
+      "id": 29,
+      "name": "Tây Ninh",
+      "code": "80"
+    },
+    {
+      "id": 30,
+      "name": "Vĩnh Long",
+      "code": "86"
+    },
+    {
+      "id": 31,
+      "name": "Điện Biên",
+      "code": "11"
+    },
+    {
+      "id": 32,
+      "name": "Đắk Lắk",
+      "code": "66"
+    },
+    {
+      "id": 33,
+      "name": "Đồng Nai",
+      "code": "75"
+    },
+    {
+      "id": 34,
+      "name": "Đồng Tháp",
+      "code": "82"
+    }
   ]
 }
