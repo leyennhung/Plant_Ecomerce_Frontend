@@ -1,9 +1,9 @@
-import type { Product } from "../../../../types/product.type.ts";
+import type { ProductDetail } from "../../../../types/productdetail.type.ts";
 import { formatPrice } from "../../../../utils/formatPrice.ts";
 import styles from "./ProductCard.module.css";
 import {Link} from "react-router-dom";
 
-type Props = { product: Product;
+type Props = { product: ProductDetail;
                 isNew?: boolean;     //Đánh dấu sp new
                 isSale?: boolean;
                 isTrending?: boolean;}; // Đánh dấu sp sale
@@ -18,7 +18,7 @@ const ProductCard = ({ product, isNew, isSale, isTrending }: Props) => {
             {isNew && <span className={styles.newBadge}>NEW</span>}
             {isSale && hasSale && <span className={styles.saleBadge}>SALE</span>}
             {isTrending && <span className={styles.trendingBadge}>TRENDING</span>}
-            <Link to={`/products/${product.id}`}>
+            <Link to={`/products/${product.slug}`}>
             <img src={product.image}
                 alt={product.name}
                 className={styles.image}/>
