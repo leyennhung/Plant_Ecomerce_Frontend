@@ -1,6 +1,7 @@
 import type { Product } from "../../../../types/product.type.ts";
 import { formatPrice } from "../../../../utils/formatPrice.ts";
 import styles from "./ProductCardCombo.module.css";
+import {useState} from "react";
 
 type Props = { product: Product; };
 
@@ -15,10 +16,39 @@ const ProductCardCombo = ({ product }: Props) => {
             ?.map(item => item.image)
             .filter((img): img is string => !!img)
             .slice(0, 2) || [];
+    // sp yêu thích
+    const [isFavorite, setIsFavorite] = useState(false);
+    /* load favorite từ localStorage */
 
+    // lưu sp yêu thích vào local storage
+    const toggleFavorite = (e: React.MouseEvent) => {
+        e.preventDefault(); //chặn click link sp
+        e.stopPropagation();
+
+        setIsFavorite(prev => {
+            const next = !prev;
+
+            if (next) {
+                localStorage.setItem(`favorite-${product.slug}`, "1");
+            } else {
+                localStorage.removeItem(`favorite-${product.slug}`);
+            }
+            return next;
+        });
+    };
     return (
         <div className={styles.comboCard}>
             <div className={styles.imageWrapper}>
+                {/* ❤️ FAVORITE */}
+                <button className={`${styles.favoriteBtn} 
+            ${isFavorite ? styles.active : ""}`} onClick={toggleFavorite}>
+                    <i className="fa-solid fa-heart"></i>
+                </button>
+
+                {/* ADD TO CART */}
+                <button className={styles.cartBtn}>
+                    <i className="fa-solid fa-cart-plus"></i>
+                </button>
                 {hasMainImage ? (
                     // Có image → dùng image
                     <img

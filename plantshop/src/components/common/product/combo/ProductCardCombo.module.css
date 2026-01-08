@@ -147,3 +147,70 @@
 .singleImage:hover {
     transform: scale(1.3);
 }
+/*icon trên ảnh*/
+.favoriteBtn,
+.cartBtn {
+    position: absolute;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background: rgba(255, 255, 255, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transform: scale(0.6);
+    transition: all 0.3s ease;
+    z-index: 20;
+}
+
+/* ❤️ góc phải trên */
+.favoriteBtn {
+    top: 5px;
+    right: 5px;
+    color: #e74c3c;
+    border: none;
+}
+
+/* 🛒 góc trái dưới */
+.cartBtn {
+    top: 170px ;
+    left: 10px;
+    color: #2f6331;
+}
+
+/* hover card thì hiện icon */
+.comboCard:hover .favoriteBtn,
+.comboCard:hover .cartBtn {
+    opacity: 1;
+    transform: scale(1);
+}
+
+
+/* hover icon */
+.favoriteBtn:hover {
+    background: #e74c3c;
+    color: #fff;
+}
+
+.cartBtn:hover {
+    background: #2f6331;
+    color: #fff;
+}
+/* đã chọn yêu thích*/
+.favoriteBtn.active {
+    background: #e74c3c;
+    color: #fff;
+}
+.favoriteBtn:focus,
+.favoriteBtn:active,
+.cartBtn:focus,
+.cartBtn:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+

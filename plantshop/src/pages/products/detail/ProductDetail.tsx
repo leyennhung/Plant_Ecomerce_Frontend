@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams} from "react-router-dom";
 import { productService } from "../../../services/product.service";
-import type { ProductDetail, ProductImage } from "../../../types/productdetail.type";
+import type { ProductDetail, ProductImage } from "../../../types/product.type";
 import styles from "./ProductDetail.module.css";
 import { formatPrice } from "../../../utils/formatPrice";
 import ReactMarkdown from "react-markdown";
@@ -325,7 +325,7 @@ const Productdetail = () => {
                         <div className={styles.divider}></div>
                         <div className={styles.productList}>
                             {suggestSupplies.map(s => (
-                                <ProductCard key={s.id} product={s} />
+                                <ProductCard  key={s.id} product={s} />
                             ))}
                         </div>
                     </div>
