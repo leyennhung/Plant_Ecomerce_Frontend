@@ -4,7 +4,7 @@ export type OrderStatus =
     | "packing"
     | "shipping"
     | "done"
-    | "paid"; // thêm nếu backend có
+    | "paid";
 
 export type Order = {
     id: string;

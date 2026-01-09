@@ -12,7 +12,8 @@ export interface CartItemEntity {
     cart_id: number;
     product_id: number;
     quantity: number;
-    price: number;
+    price: number;            // giá đã áp sale
+    original_price?: number;  // giá gốc (optional)
     created_at: string;
     updated_at: string;
 }
@@ -30,6 +31,7 @@ export interface CartViewItem {
     productId: number;
     name: string;
     image: string;
-    price: number;
+    price: number;            // giá đã áp sale
+    original_price?: number;  // giá gốc (optional)
     quantity: number;
 }
