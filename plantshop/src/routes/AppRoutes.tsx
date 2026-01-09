@@ -1,4 +1,4 @@
-import {Routes, Route} from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import MainLayout from "../components/layout/main/MainLayout";
 import Home from "../pages/home/Home";
 import Login from "../pages/auth/login/Login";
@@ -11,6 +11,7 @@ import PrivacyPolicy from "../pages/privacy/PrivacyPolicy";
 import Orders from "../pages/order/Orders";
 import OrderDetails from "../pages/order/OrderDetails";
 
+import OrderSuccess from "../pages/order/OrderSuccess";
 const AppRoutes = () => (
     <Routes>
         <Route element={<MainLayout />}>
@@ -18,10 +19,11 @@ const AppRoutes = () => (
             <Route path="/login" element={<Login/>}/>
             <Route path="/register" element={<Register/>}/>
             <Route path="/profile" element={<Profile/>}/>
-            <Route path="/cart" element={<Cart/>}/>
+            <Route path="/carts" element={<Cart/>}/>
             <Route path="/wishlist" element={<Wishlist/>}/>
             <Route path="/checkout" element={<Checkout/>}/>
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/order_success" element={< OrderSuccess />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/order/:id" element={<OrderDetails />} />
         </Route>

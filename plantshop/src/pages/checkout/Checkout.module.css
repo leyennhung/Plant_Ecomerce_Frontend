@@ -1,5 +1,5 @@
 .page {
-    background: #F0F5F0;
+    background: #f4fbf6;
     padding: 32px 0;
 }
 
@@ -21,12 +21,9 @@
     display: grid;
     grid-template-columns: 1.2fr 0.8fr;
     gap: 32px;
-    padding: 0 20px;
+    padding: 24px 20px 0;
 }
 
-.left {
-    padding: 24px;
-}
 
 .right {
     padding: 24px;
@@ -51,13 +48,28 @@
     border: none;
     padding: 0 18px;
     cursor: pointer;
-    border-radius: 0px;
+    border-radius: 0;
+    outline: none;
+}
+
+.coupon button:hover {
+    background-color: #2f6331;
+}
+
+/*tắt border mặc định khi bấm nút */
+.coupon button:focus,
+.coupon button:active,
+.orderBtn:focus,
+.orderBtn:active {
+    outline: none;
+    box-shadow: none;
 }
 
 .sectionTitle {
     font-size: 18px;
     margin-bottom: 16px;
     color: #214738;
+    margin-top: 0;
 }
 
 .formGrid {
@@ -189,6 +201,110 @@
     color: #3B823E;
     text-decoration: underline;
 }
+
 .privacy a:hover {
     color: #336F38
+}
+
+
+.shippingInfo {
+    font-size: 13px;
+    color: #555;
+    margin-top: 6px;
+}
+
+.shippingInfo.needContact {
+    color: red;
+    font-weight: bold;
+}
+
+.shippingInfo.truck {
+    font-style: italic;
+}
+
+.rowDiscount button {
+    background: none;
+    border: none;
+    color: #214738;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 0;
+}
+
+.rowDiscount button:hover {
+    text-decoration: underline;
+}
+
+.payment p {
+    margin-top: 4px;
+    font-size: 13px;
+    color: #555;
+}
+
+.couponNote {
+    background: #f0f9f4;
+    border-left: 4px solid #3B823E;
+    padding: 0 16px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: #2f6331;
+    line-height: 1.5;
+}
+
+.couponNote ul {
+    padding-left: 18px;
+    margin: 4px 0;
+}
+
+.couponNote li {
+    margin-bottom: 4px;
+}
+
+.couponNote b {
+    color: #214738;
+}
+
+.cartPreview {
+    background: #fff;
+    border: 2px dashed #213547;
+    padding: 16px;
+    margin-bottom: 24px;
+}
+
+.cartItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.cartItem:last-child {
+    border-bottom: none;
+}
+
+.cartInfo b {
+    font-size: 14px;
+    color: #213547;
+}
+
+.cartInfo p {
+    margin: 4px 0 0;
+    font-size: 13px;
+    color: #666;
+}
+
+.cartPrice {
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.cartTotalRow {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 2px solid #213547;
+    font-weight: bold;
 }

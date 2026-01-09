@@ -1,19 +1,32 @@
 import { http, HttpResponse } from "msw";
-import data from "../data/wishlist.json";
+import wishlistData from "../data/wishlist.json";
+import type { WishlistItem } from "../../types/wishlist.type";
+
+const STORAGE_KEY = "wishlist_db";
+
+const loadDB = (): WishlistItem[] => {
+    const data = localStorage.getItem(STORAGE_KEY);
+    return data ? JSON.parse(data) : wishlistData.wishlist;
+};
+
+const saveDB = (db: WishlistItem[]) => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+};
 
 export const wishlistHandlers = [
-    // GET wishlist
     http.get("/plant/wishlist", () => {
-        return HttpResponse.json({
-            wishlist: data.wishlist
-        });
+        const db = loadDB();
+        return HttpResponse.json({ wishlist: db });
     }),
-
-    // DELETE wishlist item
+    // xóa product
     http.delete("/plant/wishlist/:productId", ({ params }) => {
-        const { productId } = params;
-        return HttpResponse.json({
-            message: `Removed product ${productId} from wishlist`
-        });
-    })
+        const productId = Number(params.productId);
+        const db = loadDB().filter(
+            item => item.product_id !== productId
+        );
+
+        saveDB(db);
+
+        return HttpResponse.json({ success: true });
+    }),
 ];

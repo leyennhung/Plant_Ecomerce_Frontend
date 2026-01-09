@@ -1,0 +1,12 @@
+{
+  "vnpay": {
+    "bank_name": "Vietcombank",
+    "account_number": "123456789012",
+    "payment_url": "https://classic.vn/wp-content/uploads/2022/10/vietcombank-qr.webp"
+  },
+  "momo": {
+    "wallet_name": "MoMo",
+    "account_number": "0987654321",
+    "qr_code_url": "https://classic.vn/wp-content/uploads/2022/10/momo-qr-2.webp"
+  }
+}

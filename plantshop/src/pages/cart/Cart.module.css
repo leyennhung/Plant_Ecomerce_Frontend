@@ -1,5 +1,5 @@
 body {
-    background: #F0F5F0;
+    background:  #f4fbf6;
     margin: 0;
 }
 
@@ -76,7 +76,7 @@ body {
     border-color: #000;
     color: #000;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
-    background: #F0F5F0;
+    background:  #f4fbf6;
 }
 
 .product {
@@ -100,7 +100,6 @@ body {
 .price {
     font-size: 18px;
     font-weight: 600;
-    color: #3B823E;
 }
 
 .quantity {
@@ -110,8 +109,8 @@ body {
 }
 
 .total {
+    font-size: 18px;
     font-weight: 600;
-    color: #2e7d32;
 }
 
 
@@ -139,6 +138,6 @@ Button{
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
 }
 Button:hover{
-    background: #336F38;
+    background: #2f6331;
     color: #fff;
 }

@@ -4,6 +4,9 @@ import menuplant1 from "../../../assets/images/plantmenu1.png";
 import logo from "../../../assets/images/Logo.png";
 import {categoryService} from "../../../services/category.service";
 import type {Category} from "../../../types/category.type";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../../store";
+import { Link } from "react-router-dom";
 
 const Header = () => {
     const [openMenu, setOpenMenu] = useState<number | null>(null); // id category đang mở
@@ -13,7 +16,12 @@ const Header = () => {
     // ref bao cả menu trigger + mega menu
     const menuRef = useRef<HTMLDivElement>(null);
     const userRef = useRef<HTMLDivElement>(null);
+    const cartItems = useSelector((state: RootState) => state.cart.items);
 
+    const cartCount = cartItems.reduce(
+        (sum, item) => sum + item.quantity,
+        0
+    );
     useEffect(() => {
         categoryService.getAll().then(setCategories); // load categories từ API
     }, []);
@@ -53,7 +61,11 @@ const Header = () => {
                     {/* 3. ACTION */}
                     <div className={styles.action}>
                         <i className="fa-solid fa-magnifying-glass" />
-                        <i className="fa-solid fa-cart-shopping" />
+                        <Link to="/carts" className={styles.cartWrapper}>
+                            <i className="fa-solid fa-cart-shopping" />
+                            {cartCount > 0 && (<span className={styles.cartBadge}>{cartCount}</span>)}
+                        </Link>
+
                         <div className={styles.userWrapper}
                             ref={userRef}
                             onClick={() => setOpenUser(prev => !prev)}>

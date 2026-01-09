@@ -1,33 +1,185 @@
 {
-"products":[
-  {
-    "id": 1,
-    "name": "Monstera Deliciosa",
-    "price": 350000,
-    "image": "https://tse4.mm.bing.net/th/id/OIP.oEnTyzBv9zjqIkSGWfVGYQHaE8?pid=Api&P=0&h=220",
-    "category": "Indoor"
-  },
-  {
-    "id": 2,
-    "name": "Snake Plant",
-    "price": 250000,
-    "image": "https://mowgarden.com/wp-content/uploads/2022/12/cay-trau-ba-thanh-xuan-chau-da-mai.jpg",
-    "category": "Indoor"
-  },
-  {
-    "id": 3,
-    "name": "Fiddle Leaf Fig",
-    "price": 450000,
-    "image": "https://mowgarden.com/wp-content/uploads/2021/04/cay-da-bup-do-de-ban-3-than.jpg",
-    "category": "Indoor"
-  },
-  {
-    "id": 4,
-    "name": "Fiddle Leaf Fig",
-    "price": 450000,
-    "image": "https://mowgarden.com/wp-content/uploads/2021/04/cay-thuong-xuan-xanh-treo-english-ivy.jpg",
-    "category": "Indoor"
-  }
-]
+  "products": [
+    {
+      "id": 1,
+      "slug": "cay-luu-ta-do",
+      "name": "Cây lựu ta đỏ chậu ươm",
+      "sku": "FRUI020",
+      "type": "plant",
+      "price": 160000,
+      "sale_price": 140000,
+      "stock": 50,
+      "status": "active",
 
+      "category": {
+        "id": 2,
+        "name": "Cây ăn quả"
+      },
+
+      "attributes": [
+        { "group": "Theo Phương Pháp", "id": 2, "name": "Cây Chiết Cành" },
+        { "group": "Theo Đặc Tính", "id": 6, "name": "Chịu Hạn & Mặn" },
+        { "group": "Theo Đặc Tính", "id": 8, "name": "Ưa Nắng Toàn Phần" }
+      ],
+
+      "dimensions": {
+        "weight": "1.5 kg",
+        "pot_width": "25 cm",
+        "pot_height": "22 cm",
+        "total_height": "80–100 cm",
+        "canopy_width": "40–50 cm"
+      },
+
+      "images": [
+        {
+          "id": 40,
+          "url": "https://mowgarden.com/wp-content/uploads/2022/09/luutadomowgarden1.jpg",
+          "is_main": true,
+          "order": 0
+        },
+        {
+          "id": 41,
+          "url": "https://mowgarden.com/wp-content/uploads/2022/09/luutadomowgarden2.jpg",
+          "is_main": false,
+          "order": 1
+        }
+      ],
+
+      "wholesale_prices": [
+        { "min": 1, "max": 9, "price": 160000 },
+        { "min": 10, "max": 49, "price": 140000 },
+        { "min": 50, "max": null, "price": 110000 }
+      ],
+
+      "plant_detail": {
+        "common_name": "Lựu ta đỏ",
+        "scientific_name": "Punica granatum L.",
+        "difficulty": "easy",
+        "light": "Nắng trực tiếp",
+        "water": "Tưới nước 1 lần/ngày"
+      },
+
+      "content": {
+        "description_markdown": "## Cây lựu ta đỏ\n\nCây lựu ta đỏ là giống cây ăn trái truyền thống, được trồng phổ biến tại Việt Nam.",
+        "features_markdown": "- 🌿 Dễ trồng\n- 🍎 Trái đỏ, nhiều nước",
+        "care_guide_markdown": "- Ưa nắng\n- Tưới nước đều"
+      }
+    },
+
+    {
+      "id": 2,
+      "slug": "cay-oi-nu-hoang",
+      "name": "Cây ổi nữ hoàng",
+      "sku": "FRUI021",
+      "type": "plant",
+      "price": 180000,
+      "sale_price": null,
+      "stock": 30,
+      "status": "active",
+
+      "category": {
+        "id": 2,
+        "name": "Cây ăn quả"
+      },
+
+      "attributes": [
+        { "group": "Theo Đặc Tính", "id": 8, "name": "Ưa Nắng Toàn Phần" },
+        { "group": "Theo Công Dụng", "id": 12, "name": "Cây Trồng Lấy Quả" }
+      ],
+
+      "dimensions": {
+        "weight": "1.6 kg",
+        "pot_width": "26 cm",
+        "pot_height": "23 cm",
+        "total_height": "90–110 cm",
+        "canopy_width": "45–55 cm"
+      },
+
+      "images": [
+        {
+          "id": 50,
+          "url": "https://example.com/images/oi-nu-hoang.jpg",
+          "is_main": true,
+          "order": 0
+        }
+      ],
+
+      "wholesale_prices": [
+        { "min": 1, "max": 9, "price": 180000 },
+        { "min": 10, "max": null, "price": 155000 }
+      ],
+
+      "plant_detail": {
+        "common_name": "Ổi nữ hoàng",
+        "scientific_name": "Psidium guajava",
+        "difficulty": "easy",
+        "light": "Nắng toàn phần",
+        "water": "Tưới 1–2 lần/ngày"
+      },
+
+      "content": {
+        "description_markdown": "## Cây ổi nữ hoàng\n\nGiống ổi cao sản, trái to, ruột hồng.",
+        "features_markdown": "- 🍐 Trái lớn\n- ⏱️ Cho trái sớm",
+        "care_guide_markdown": "- Bón phân định kỳ\n- Cắt tỉa cành"
+      }
+    },
+
+    {
+      "id": 3,
+      "slug": "cay-chanh-tu-quy",
+      "name": "Cây chanh tứ quý",
+      "sku": "FRUI022",
+      "type": "plant",
+      "price": 150000,
+      "sale_price": 130000,
+      "stock": 40,
+      "status": "active",
+
+      "category": {
+        "id": 2,
+        "name": "Cây ăn quả"
+      },
+
+      "attributes": [
+        { "group": "Theo Đặc Tính", "id": 8, "name": "Ưa Nắng Toàn Phần" },
+        { "group": "Theo Công Dụng", "id": 12, "name": "Cây Trồng Lấy Quả Quanh Năm" }
+      ],
+
+      "dimensions": {
+        "weight": "1.4 kg",
+        "pot_width": "24 cm",
+        "pot_height": "21 cm",
+        "total_height": "85–100 cm",
+        "canopy_width": "40–50 cm"
+      },
+
+      "images": [
+        {
+          "id": 60,
+          "url": "https://example.com/images/chanh-tu-quy.jpg",
+          "is_main": true,
+          "order": 0
+        }
+      ],
+
+      "wholesale_prices": [
+        { "min": 1, "max": 9, "price": 150000 },
+        { "min": 10, "max": null, "price": 125000 }
+      ],
+
+      "plant_detail": {
+        "common_name": "Chanh tứ quý",
+        "scientific_name": "Citrus limon",
+        "difficulty": "easy",
+        "light": "Nắng trực tiếp",
+        "water": "Tưới mỗi ngày"
+      },
+
+      "content": {
+        "description_markdown": "## Cây chanh tứ quý\n\nCây cho trái quanh năm, dễ trồng.",
+        "features_markdown": "- 🍋 Trái sai\n- 🌿 Ít sâu bệnh",
+        "care_guide_markdown": "- Tưới nước đều\n- Bón phân hữu cơ"
+      }
+    }
+  ]
 }
