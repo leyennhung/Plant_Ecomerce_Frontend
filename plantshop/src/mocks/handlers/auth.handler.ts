@@ -1,24 +1,12 @@
 import { http, HttpResponse } from 'msw';
-import type {User, RegisterRequest} from '../../types/user.type';
+import type {User, RegisterRequest, LoginRequest} from '../../types/user.type';
 
 const STORAGE_KEY = 'plant_shop_users';
 
-// Dữ liệu mẫu khởi tạo (Thay thế cho file users.json)
+// Dữ liệu mẫu khởi tạo
 const initialUsers: User[] = [
     {
         id: 1,
-        username: "admin",
-        email: "admin@gmail.com",
-        password: "123", // Demo thì để plain text
-        first_name: "Admin",
-        last_name: "User",
-        phone: "0909123456",
-        role: "admin",
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-    },
-    {
-        id: 2,
         username: "user",
         email: "user@gmail.com",
         password: "123",
@@ -86,10 +74,12 @@ export const authHandlers = [
 
     // --- API ĐĂNG NHẬP ---
     http.post('/api/auth/login', async ({ request }) => {
-        const { email, password } = await request.json() as any;
+        // 2. SỬA LỖI ANY: Dùng LoginRequest
+        const { email, password } = await request.json() as LoginRequest;
+
         const users = getUsersFromStorage();
 
-        // Tìm user khớp email và password
+        // Tìm user
         const user = users.find(u => u.email === email && u.password === password);
 
         if (!user) {
@@ -99,7 +89,7 @@ export const authHandlers = [
             );
         }
 
-        // Trả về thông tin user (kèm token giả nếu cần)
+        // Trả về user + token
         return HttpResponse.json({
             user: user,
             token: 'mock-token-jwt-123456789'

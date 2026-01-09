@@ -1,6 +1,6 @@
 // src/services/auth.service.ts
 import axios from 'axios';
-import type {RegisterRequest} from '../types/user.type'; // Import type đã tạo
+import type {LoginRequest, RegisterRequest} from '../types/user.type'; // Import type đã tạo
 // Import type đã tạo
 
 // Cấu hình base URL (khớp với MSW)
@@ -12,7 +12,7 @@ const register = async (userData: RegisterRequest) => {
     return response.data;
 };
 
-const login = async (credentials: any) => {
+const login = async (credentials: LoginRequest) => {
     const response = await axios.post(`${API_URL}/login`, credentials);
     if (response.data.token) {
         localStorage.setItem('user', JSON.stringify(response.data));

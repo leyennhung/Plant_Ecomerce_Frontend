@@ -204,10 +204,10 @@ const Profile: React.FC = () => {
                     </div>
                 )}
 
-                {/* Tab là Đơn hàng */}
+                 Tab là Đơn hàng
                 {activeTab === 'orders' && (
                     <div className={styles.ordersTab}>
-                        {/* HEADER */}
+                         HEADER
                         <div className={styles.headerBlock}>
                             <div className={styles.colProductsHeader}>Sản phẩm</div>
                             <div className={styles.colDateHeader}>Ngày Đặt</div>
@@ -216,7 +216,7 @@ const Profile: React.FC = () => {
                             <div className={styles.colActionHeader}></div>
                         </div>
 
-                        {/*DANH SÁCH ĐƠN HÀNG*/}
+                        DANH SÁCH ĐƠN HÀNG
                         <div className={styles.orderList}>
                             <div className={styles.orderBlock}>
                                 <div className={styles.colProducts}>

@@ -1,203 +1,280 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Orders.module.css';
+import { initLocalStorageData } from '../../utils/seedData';
+import type {Order, OrderItem, OrderStatus} from '../../types/order.type';
+import type {Product} from '../../types/product.type';
 
-// Kiểu dữ liệu cho trạng thái đơn hàng
-type OrderStatus = 'processing' | 'shipping' | 'completed' | 'cancelled';
+const ITEMS_PER_PAGE = 3;
 
-// Kiểu dữ liệu cho 1 sản phẩm trong đơn
-interface ProductItem {
-    name: string;
-    img: string;
-    qty: number;
+type TabStatus = 'processing' | 'shipping' | 'completed' | 'cancelled';
+
+interface OrderDisplay extends Order {
+    itemsDetail: Array<OrderItem & { productInfo?: Product }>;
 }
 
-// Kiểu dữ liệu cho 1 đơn hàng
-interface Order {
-    id: string;
-    date: string;
-    status: OrderStatus;
-    totalPrice: string;
-    items: ProductItem[];
-}
+const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+};
 
-// DỮ LIỆU MẪU
-const mockOrders: Order[] = [
-    {
-        id: '#ORD10231',
-        date: '12/09/2024',
-        status: 'processing',
-        totalPrice: '1.050.000',
-        items: [
-            {
-                name: 'Ficus Benjamina',
-                img: 'https://bizweb.dktcdn.net/100/344/686/products/oi-ruby-ruot-do-nhieu-trai-1.jpg',
-                qty: 1
-            },
-            {
-                name: 'Jade Terrarium',
-                img: 'https://im.binhthuan.gov.vn/kbnnbinhthuan/dulieu/News/2021/6/15/saurieng_1562021.jpg',
-                qty: 1
-            }
-        ]
-    },
-    {
-        id: '#ORD10230',
-        date: '10/09/2024',
-        status: 'processing',
-        totalPrice: '350.000',
-        items: [
-            {
-                name: 'Jade Terrarium',
-                img: 'https://im.binhthuan.gov.vn/kbnnbinhthuan/dulieu/News/2021/6/15/saurieng_1562021.jpg',
-                qty: 1
-            }
-        ]
-    },
-    {
-        id: '#ORD10229',
-        date: '08/09/2024',
-        status: 'shipping',
-        totalPrice: '560.000',
-        items: [
-            {
-                name: 'Cỏ Lan Chi',
-                img: 'https://upload.wikimedia.org/wikipedia/commons/e/ea/Chlorophytum_comosum_Ampel.jpg',
-                qty: 2
-            }
-        ]
-    },
-    {
-        id: '#ORD10225',
-        date: '01/09/2024',
-        status: 'completed',
-        totalPrice: '1.200.000',
-        items: [
-            {
-                name: 'Cây Lưỡi Hổ',
-                img: 'https://bizweb.dktcdn.net/100/344/686/products/oi-ruby-ruot-do-nhieu-trai-1.jpg',
-                qty: 3
-            }
-        ]
-    },
-    {
-        id: '#ORD10220',
-        date: '25/08/2024',
-        status: 'cancelled',
-        totalPrice: '150.000',
-        items: [
-            {
-                name: 'Sen Đá Nâu',
-                img: 'https://im.binhthuan.gov.vn/kbnnbinhthuan/dulieu/News/2021/6/15/saurieng_1562021.jpg',
-                qty: 1
-            }
-        ]
-    },
-];
+const mapBackendStatusToTab = (status: string): TabStatus => {
+    switch (status) {
+        case 'pending': case 'confirmed': case 'packing': case 'unpaid': return 'processing';
+        case 'shipping': return 'shipping';
+        case 'done': case 'paid': case 'success': return 'completed';
+        case 'cancelled': case 'failed': case 'refunded': return 'cancelled';
+        default: return 'processing';
+    }
+};
 
 const OrdersPage: React.FC = () => {
-    const [activeTab, setActiveTab] = useState<OrderStatus>('processing');
+    const [activeTab, setActiveTab] = useState<TabStatus>('processing');
+    const [orders, setOrders] = useState<OrderDisplay[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [currentPage, setCurrentPage] = useState<number>(1);
 
-    // Hàm lọc đơn hàng trả về mảng các Order
-    const getFilteredOrders = (): Order[] => {
-        return mockOrders.filter((order) => order.status === activeTab);
+    // --- STATE MỚI CHO POPUP HỦY ĐƠN ---
+    const [showCancelModal, setShowCancelModal] = useState<boolean>(false);
+    const [orderToCancel, setOrderToCancel] = useState<string | null>(null); // Lưu ID gốc để xử lý
+
+    const handleTabChange = (tab: TabStatus) => {
+        setActiveTab(tab);
+        setCurrentPage(1);
     };
 
-    const filteredOrders = getFilteredOrders();
+    // Hàm load dữ liệu (dùng chung để gọi lại khi cần reload)
+    const fetchOrders = () => {
+        const rawOrders: Order[] = JSON.parse(localStorage.getItem('orders') || '[]');
+        const rawItems: OrderItem[] = JSON.parse(localStorage.getItem('order_items') || '[]');
+        const rawProducts: Product[] = JSON.parse(localStorage.getItem('products') || '[]');
+
+        if (rawOrders.length > 0) {
+            const processedOrders: OrderDisplay[] = rawOrders.map((order) => {
+                const currentItems = rawItems.filter((item) => String(item.order_id) === String(order.id));
+                const itemsWithProduct = currentItems.map((item) => {
+                    const product = rawProducts.find((p) => p.id === item.product_id);
+                    return { ...item, productInfo: product };
+                });
+                return { ...order, itemsDetail: itemsWithProduct };
+            });
+
+            processedOrders.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+            setOrders(processedOrders);
+        }
+    };
+
+    useEffect(() => {
+        initLocalStorageData();
+        const timer = setTimeout(() => {
+            fetchOrders();
+            setIsLoading(false);
+        }, 300);
+        return () => clearTimeout(timer);
+    }, []);
+
+    // --- LOGIC HỦY ĐƠN ---
+
+    // 1. Mở popup
+    const onOpenCancelModal = (orderRawId: string) => {
+        setOrderToCancel(orderRawId);
+        setShowCancelModal(true);
+    };
+
+    // 2. Xác nhận hủy
+    const handleConfirmCancel = () => {
+        if (!orderToCancel) return;
+
+        const rawOrders: Order[] = JSON.parse(localStorage.getItem('orders') || '[]');
+
+        const updatedRawOrders = rawOrders.map(order => {
+            if (String(order.id) === String(orderToCancel)) {
+                // SỬA Ở ĐÂY: Thay 'as any' bằng 'as OrderStatus'
+                return { ...order, status: 'cancelled' as OrderStatus };
+            }
+            return order;
+        });
+
+        localStorage.setItem('orders', JSON.stringify(updatedRawOrders));
+
+        fetchOrders();
+        setShowCancelModal(false);
+        setOrderToCancel(null);
+    };
+
+    // --- END LOGIC ---
+
+    const filteredOrders = orders.filter((order) => mapBackendStatusToTab(order.status) === activeTab);
+
+    const totalPages = Math.ceil(filteredOrders.length / ITEMS_PER_PAGE);
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const currentOrders = filteredOrders.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+    const handlePageChange = (page: number) => {
+        if (page >= 1 && page <= totalPages) {
+            setCurrentPage(page);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
+
+    if (isLoading) {
+        return (
+            <div className={styles.container} style={{ display: 'flex', justifyContent: 'center', paddingTop: '100px' }}>
+                <p style={{ color: '#666' }}>Đang tải dữ liệu đơn hàng...</p>
+            </div>
+        );
+    }
 
     return (
         <div className={styles.container}>
-
-            {/* Tiêu đề */}
             <h1 className={styles.pageTitle}>Đơn Hàng Của Tôi</h1>
 
-            {/* Tabs Navigation */}
             <div className={styles.tabsContainer}>
-                <div
-                    className={`${styles.tabItem} ${activeTab === 'processing' ? styles.activeTab : ''}`}
-                    onClick={() => setActiveTab('processing')}
-                >
-                    Đang xử lý
-                </div>
-                <div
-                    className={`${styles.tabItem} ${activeTab === 'shipping' ? styles.activeTab : ''}`}
-                    onClick={() => setActiveTab('shipping')}
-                >
-                    Đang giao
-                </div>
-                <div
-                    className={`${styles.tabItem} ${activeTab === 'completed' ? styles.activeTab : ''}`}
-                    onClick={() => setActiveTab('completed')}
-                >
-                    Đã hoàn thành
-                </div>
-                <div
-                    className={`${styles.tabItem} ${activeTab === 'cancelled' ? styles.activeTab : ''}`}
-                    onClick={() => setActiveTab('cancelled')}
-                >
-                    Đã hủy
-                </div>
+                {(['processing', 'shipping', 'completed', 'cancelled'] as TabStatus[]).map((tab) => (
+                    <div
+                        key={tab}
+                        className={`${styles.tabItem} ${activeTab === tab ? styles.activeTab : ''}`}
+                        onClick={() => handleTabChange(tab)}
+                    >
+                        {tab === 'processing' && 'Đang xử lý'}
+                        {tab === 'shipping' && 'Đang giao'}
+                        {tab === 'completed' && 'Đã hoàn thành'}
+                        {tab === 'cancelled' && 'Đã hủy'}
+                    </div>
+                ))}
             </div>
 
-            {/* Danh sách đơn hàng (Card Layout) */}
             <div className={styles.ordersList}>
-                {filteredOrders.length > 0 ? (
-                    filteredOrders.map((order) => (
-                        <div key={order.id} className={styles.orderCard}>
+                {currentOrders.length > 0 ? (
+                    currentOrders.map((order) => {
+                        const visibleItems = order.itemsDetail.slice(0, 3);
+                        const remainingItemsCount = order.itemsDetail.length - 3;
 
-                            {/* Header: ID, Date, Button */}
-                            <div className={styles.cardHeader}>
-                                <div className={styles.orderIdDate}>
-                                    <span className={styles.orderCode}>Đơn hàng {order.id}</span>
-                                    <span className={styles.orderDate}>{order.date}</span>
+                        // Lấy trạng thái tab để check điều kiện hiển thị nút
+                        const currentTab = mapBackendStatusToTab(order.status);
+
+                        return (
+                            <div key={order.id} className={styles.orderCard}>
+                                <div className={styles.cardHeader}>
+                                    <div className={styles.orderIdDate}>
+                                        <span className={styles.orderCode}>Đơn hàng #{order.id}</span>
+                                        <span className={styles.orderDate}>
+                      {new Date(order.created_at).toLocaleDateString('vi-VN')}
+                    </span>
+                                    </div>
+
+                                    {/* BUTTON GROUP */}
+                                    <div className={styles.btnGroup}>
+                                        {/* Chỉ hiện nút Hủy ở tab Đang Xử Lý */}
+                                        {currentTab === 'processing' && (
+                                            <button
+                                                className={styles.btnCancel}
+                                                onClick={() => onOpenCancelModal(order.id)} // Truyền ID thực tế (Order.id)
+                                            >
+                                                Hủy đơn
+                                            </button>
+                                        )}
+                                        <button className={styles.btnDetail}>Xem Chi Tiết</button>
+                                    </div>
                                 </div>
-                                <button className={styles.btnDetail}>Xem Chi Tiết</button>
-                            </div>
 
-                            {/* Body: Danh sách sản phẩm */}
-                            <div className={styles.cardBody}>
-                                {order.items.map((item, index) => (
-                                    <div key={index} className={styles.productItem}>
-                                        <img src={item.img} alt={item.name} className={styles.productImg} />
-                                        <div className={styles.productInfo}>
-                                            <div className={styles.prodName}>{item.name}</div>
-                                            <div className={styles.prodQty}>x{item.qty}</div>
+                                <div className={styles.cardBody}>
+                                    {visibleItems.map((item, index) => (
+                                        <div key={`${order.id}-${index}`} className={styles.productItem}>
+                                            <img
+                                                src={item.productInfo?.imageUrl || 'https://via.placeholder.com/80'}
+                                                alt={item.productInfo?.name}
+                                                className={styles.productImg}
+                                            />
+                                            <div className={styles.productInfo}>
+                                                <div className={styles.prodName}>
+                                                    {item.productInfo?.name || `Sản phẩm #${item.product_id}`}
+                                                </div>
+                                                <div className={styles.prodQty}>x{item.quantity}</div>
+                                            </div>
+                                            <div style={{ marginLeft: 'auto', alignSelf: 'center', fontWeight: 500, color: '#333' }}>
+                                                {formatCurrency(item.price)}
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
-                            </div>
+                                    ))}
+                                </div>
 
-                            {/* Footer: Tổng tiền */}
-                            <div className={styles.cardFooter}>
-                                {/* Logic hiển thị thêm "sản phẩm khác" nếu > 1 item */}
-                                {order.items.length > 1 && (
-                                    <div className={styles.moreItemsTag}>
-                                        + {order.items.length - 1} sản phẩm khác
-                                    </div>
-                                )}
+                                <div className={styles.cardFooter}>
+                                    {remainingItemsCount > 0 ? (
+                                        <div className={styles.moreItemsTag}>
+                                            + {remainingItemsCount} sản phẩm khác
+                                        </div>
+                                    ) : (
+                                        <div></div>
+                                    )}
 
-                                <div className={styles.totalPriceWrapper}>
-                                    Tổng cộng:
-                                    <span className={styles.totalPriceValue}>đ {order.totalPrice}</span>
+                                    <div className={styles.totalPriceWrapper}>
+                                        Tổng cộng: <span className={styles.totalPriceValue}>{formatCurrency(order.total_amount)}</span>
+                                    </div>
                                 </div>
                             </div>
-
-                        </div>
-                    ))
+                        );
+                    })
                 ) : (
-                    <div style={{textAlign: 'center', color: '#888', padding: '40px'}}>
+                    <div style={{ textAlign: 'center', color: '#888', padding: '40px' }}>
                         Chưa có đơn hàng nào trong mục này.
                     </div>
                 )}
             </div>
 
-            {/* Phân trang */}
-            <div className={styles.pagination}>
-                <button className={styles.pageBtn}>&lt;</button>
-                <button className={`${styles.pageBtn} ${styles.activePage}`}>1</button>
-                <button className={styles.pageBtn}>2</button>
-                <button className={styles.pageBtn}>3</button>
-                <button className={`${styles.pageBtn} ${styles.nextBtn}`}>Tiếp</button>
-            </div>
+            {totalPages > 1 && (
+                <div className={styles.pagination}>
+                    <button
+                        className={`${styles.pageBtn} ${currentPage === 1 ? styles.disabled : ''}`}
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                    >
+                        <svg className={styles.iconSvg} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                        </svg>
+                    </button>
+
+                    {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+                        <button
+                            key={page}
+                            className={`${styles.pageBtn} ${currentPage === page ? styles.activePage : ''}`}
+                            onClick={() => handlePageChange(page)}
+                        >
+                            {page}
+                        </button>
+                    ))}
+
+                    <button
+                        className={`${styles.pageBtn} ${currentPage === totalPages ? styles.disabled : ''}`}
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                    >
+                        <svg className={styles.iconSvg} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </button>
+                </div>
+            )}
+
+            {/* --- POPUP MODAL --- */}
+            {showCancelModal && (
+                <div className={styles.modalOverlay} onClick={() => setShowCancelModal(false)}>
+                    {/* stopPropagation để click vào nội dung modal không bị đóng */}
+                    <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+                        <h3 className={styles.modalTitle}>Xác nhận hủy đơn</h3>
+                        <p className={styles.modalDesc}>
+                            Bạn có chắc chắn muốn hủy đơn hàng này không? <br/>
+                            Hành động này không thể hoàn tác.
+                        </p>
+                        <div className={styles.modalActions}>
+                            <button className={styles.btnCloseModal} onClick={() => setShowCancelModal(false)}>
+                                Đóng
+                            </button>
+                            <button className={styles.btnConfirm} onClick={handleConfirmCancel}>
+                                Xác nhận hủy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
         </div>
     );

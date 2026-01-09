@@ -102,6 +102,100 @@
     color: #888;
 }
 
+/* --- BUTTONS --- */
+.btnGroup {
+    display: flex;
+    gap: 10px;
+}
+
+.btnCancel {
+    background-color: #fff;
+    color: #d32f2f; /* Màu đỏ */
+    border: 1px solid #d32f2f;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btnCancel:hover {
+    background-color: #d32f2f;
+    color: #fff;
+}
+
+/* --- MODAL (POPUP) --- */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Nền tối mờ */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background-color: #fff;
+    padding: 24px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    text-align: center;
+}
+
+.modalTitle {
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.modalDesc {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 24px;
+}
+
+.modalActions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.btnConfirm {
+    background-color: #d32f2f;
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btnConfirm:hover {
+    background-color: #b71c1c;
+}
+
+.btnCloseModal {
+    background-color: #f0f0f0;
+    color: #333;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btnCloseModal:hover {
+    background-color: #e0e0e0;
+}
+
 .btnDetail {
     background-color: #3B823E;
     color: #fff;
@@ -191,12 +285,14 @@
 }
 
 /* PHÂN TRANG */
+
 .pagination {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 8px;
     margin-top: 40px;
+    padding-bottom: 20px;
 }
 
 .pageBtn {
@@ -207,30 +303,36 @@
     justify-content: center;
     border: 1px solid #ddd;
     background-color: #fff;
-    color: #555;
-    border-radius: 4px;
+    color: #555; /* Màu icon sẽ ăn theo màu này */
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 14px;
     transition: all 0.2s;
+    padding: 0; /* Reset padding để icon căn giữa chuẩn */
 }
 
-.pageBtn:hover {
+.pageBtn:hover:not(.disabled) {
     border-color: #3B823E;
     color: #3B823E;
+    background-color: #f4fbf6;
 }
 
 .activePage {
-    background-color: #01370C;
-    color: #fff;
-    border-color: #01370C;
+    background-color: #01370C !important;
+    color: #fff !important;
+    border-color: #01370C !important;
 }
 
-.activePage:hover {
-    background-color: #01370C;
-    color: #fff;
+.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background-color: #f9f9f9;
 }
 
-.nextBtn {
-    padding: 0 15px;
-    width: auto;
+/* Class riêng cho Icon để chắc chắn hiển thị */
+.iconSvg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    stroke-width: 2;
+    display: block; /* Quan trọng để không bị ẩn */
 }
