@@ -1,6 +1,5 @@
 import { api } from "./api";
-import type { Product } from "../types/product.type";
-import type { ProductDetail } from "../types/productdetail.type";
+import type { Product, ProductDetail } from "../types/product.type";
 
 //Khai báo
 export const productService = { // tự đăt để gom các hàm liên quan đến API

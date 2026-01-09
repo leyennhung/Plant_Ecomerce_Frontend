@@ -6,6 +6,8 @@ import styles from "./ProductDetail.module.css";
 import { formatPrice } from "../../../utils/formatPrice";
 import ReactMarkdown from "react-markdown";
 import ProductCard from "../../../components/common/product/single/ProductCard.tsx";
+import { reviewService } from "../../../services/review.service";
+import type { Review } from "../../../types/review.type";
 
 const Productdetail = () => {
     // const { id } = useParams<{ id: string }>();
@@ -17,6 +19,8 @@ const Productdetail = () => {
     const [isFavorite, setIsFavorite] = useState(false);
     const [relatedProducts, setRelatedProducts] = useState<ProductDetail[]>([]);
     const [suggestSupplies, setSuggestSupplies] = useState<ProductDetail[]>([]);
+    const [reviews, setReviews] = useState<Review[]>([]);
+    //const [loadingReview, setLoadingReview] = useState(false);
 
     useEffect(() => {
             if (!slug) return;
@@ -30,10 +34,22 @@ const Productdetail = () => {
                 });
                 productService.getRelatedProducts(slug).then(setRelatedProducts);
                 productService.getSuggestSupplies(slug).then(setSuggestSupplies);
-
         }, [slug]);
+    // Phần review ( chỉ load khi ở tab)
+    useEffect(() => {
+        if (activeAccordion !== 3 || !product?.id) return;
+        // setLoadingReview(true);
 
-        const changeMainImage = (img: ProductImage) => {
+        reviewService
+            .getReviewByProduct(product.id)
+            .then(setReviews)
+            .catch(() => setReviews([]));
+            // .finally(() => setLoadingReview(false))
+        ;
+    }, [activeAccordion, product?.id]);
+
+
+    const changeMainImage = (img: ProductImage) => {
         setMainImage(img.url);
     };
 
@@ -302,7 +318,51 @@ const Productdetail = () => {
                     </div>
                 </div>
             </div>
-        </div>
+                {/* BÌNH LUẬN ĐÁNH GIÁ */}
+                <div className={`${styles.accordionItem} ${
+                        activeAccordion === 3 ? styles.active : ""
+                    }`}>
+                    <button className={styles.accordionHeader}
+                        onClick={() => toggleAccordion(3)}>
+                        <span className={styles.accordionTitle}>Bình luận & đánh giá</span>
+                        <span className={styles.accordionIcon}></span>
+                    </button>
+
+                    <div className={styles.accordionContent}>
+                        <div className={styles.accordionInner}>
+                            <div className={styles.commentList}>
+                                {/*{loadingReview && <p>Đang tải các đánh giá về sản phẩm...</p>}*/}
+                                {/*{!loadingReview && reviews.length === 0 && (*/}
+                                {/*    <p>Chưa có đánh giá nào cho sản phẩm này</p>*/}
+                                {/*)}*/}
+                                    {/*ITEM*/}
+                            {reviews.length === 0 && (
+                                <p>Chưa có đánh giá nào cho sản phẩm này</p>)}
+                                    {reviews.map(review => (
+                                <div className={styles.commentItem} key={review.id}>
+                                    <img
+                                        className={styles.avatar}
+                                        src={review.user?.avatar || "https://heucollege.edu.vn/upload/2025/02/avatar-trang-nu-001.webp"}
+                                        alt={review.user?.name}
+                                    />
+
+                                    <div className={styles.commentBody}>
+                                        <div className={styles.commentHeader}>
+                                            <strong>{review.user?.name}</strong>
+                                            <span className={styles.rating}>
+                                                {"★".repeat(review.rating)}
+                                                {"☆".repeat(5 - review.rating)}
+                                            </span>
+                                        </div>
+                                        <p>{review.content}</p>
+                                    </div>
+                                </div>
+                                ))}
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
         {/*    DANH SÁCH SẢN PHẨM*/}
             <div className={styles.relatedproduct}>
                 {relatedProducts.length > 0 && (
@@ -384,7 +444,6 @@ const Productdetail = () => {
                     </p>
                 </div>
             </div>
-
         </div>
     );
 };
