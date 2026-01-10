@@ -1,0 +1,28 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "user1",
+      "email": "user1@gmail.com",
+      "password": "123",
+      "first_name": "Khach",
+      "last_name": "Hang 1",
+      "phone": "0909123456",
+      "role": "user",
+      "created_at": "2024-01-01T00:00:00.000Z",
+      "updated_at": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "username": "user2",
+      "email": "user2@gmail.com",
+      "password": "123",
+      "first_name": "Khach",
+      "last_name": "Hang 2",
+      "phone": "0909123457",
+      "role": "user",
+      "created_at": "2024-01-02T00:00:00.000Z",
+      "updated_at": "2024-01-02T00:00:00.000Z"
+    }
+  ]
+}
