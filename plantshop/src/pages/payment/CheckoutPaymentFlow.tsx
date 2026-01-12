@@ -1,4 +1,4 @@
-import mockData from "../../mocks/data/mockPayment.json";
+import mockData from "../../mocks/data/payment.json";
 import styles from "./CheckoutPaymentFlow.module.css";
 
 type BankPayment = {
