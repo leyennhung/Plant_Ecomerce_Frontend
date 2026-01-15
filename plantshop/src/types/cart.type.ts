@@ -9,7 +9,7 @@ export interface Cart {
 
 export interface CartItemEntity {
     id: number;
-    cart_id: number;
+    order_id: string;
     product_id: number;
     quantity: number;
     price: number;            // giá đã áp sale

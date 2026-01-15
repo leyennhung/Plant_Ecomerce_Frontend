@@ -9,12 +9,15 @@ import {mapToCheckoutCart} from "../../utils/mapCheckoutCart";
 import {useShippingFee} from "../../hooks/useShippingFee";
 import CheckoutPaymentFlow from "../../pages/payment/CheckoutPaymentFlow";
 import substrateImg from "../../assets/images/substrate.png";
+import type {CartViewItem} from "../../types/cart.type";
+import type {CartItemEntity} from "../../types/cart.type";
+import type {Order, OrderCreatePayload} from "../../types/order.type";
 
-// COUPON TYPE + DATA
+// Kiểu dữ liệu cho 1 mã giảm giá
 type CouponRule = {
     code: string;
-    min: number; // giá trị đơn tối thiểu
-    discount: number; // số tiền giảm
+    min: number; //  Giá trị đơn hàng tối thiểu để áp dụng
+    discount: number; // Số tiền được giảm (chỉ áp cho phí ship)
 };
 
 // Mảng các mã giảm giá và điều kiện áp dụng
@@ -25,10 +28,63 @@ const COUPONS: CouponRule[] = [
     {code: "FREESHIP10", min: 300_000, discount: 10_000},// Giảm 10k cho đơn từ 300k
 ];
 
+// LƯU ĐƠN HÀNG VÀO LOCALSTORAGE
+const saveOrderLocal = (
+    order: OrderCreatePayload, // Thông tin đơn hàng (chưa có id, status)
+    items: CartViewItem[] // Danh sách sản phẩm đã chọn
+): string => {
+    // Lấy danh sách đơn hàng đã có (nếu chưa có thì là mảng rỗng)
+    const orders: Order[] = JSON.parse(
+        localStorage.getItem("orders") || "[]"
+    );
+
+    // Lấy danh sách item của các đơn hàng trước đó
+    const orderItems: CartItemEntity[] = JSON.parse(
+        localStorage.getItem("order_items") || "[]"
+    );
+
+    // Sinh mã đơn hàng duy nhất dựa trên timestamp
+    const orderId = "ORD-" + Date.now();
+
+    // Tạo object Order hoàn chỉnh
+    const newOrder: Order = {
+        id: orderId,
+        status: "pending", // Trạng thái ban đầu
+        created_at: new Date().toISOString(), // Thời điểm tạo đơn
+        ...order, // Gộp dữ liệu từ payload
+    };
+
+    // Chuyển các item trong giỏ hàng thành order_items
+    const newOrderItems: CartItemEntity[] = items.map((item, index) => ({
+        id: orderItems.length + index + 1,  // Tạo id tăng dần
+        order_id: orderId,
+        product_id: item.productId,
+        quantity: item.quantity,
+        price: item.price,
+        original_price: item.original_price,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+    }));
+
+    // Lưu lại vào localStorage
+    localStorage.setItem("orders", JSON.stringify([...orders, newOrder]));
+    localStorage.setItem(
+        "order_items",
+        JSON.stringify([...orderItems, ...newOrderItems])
+    );
+
+    // Trả về orderId để dùng tiếp (navigate, meta, UI)
+    return orderId;
+};
+
+// COMPONENT CHECKOUT
 const Checkout = () => {
     const navigate = useNavigate();
+    // Lấy toàn bộ giỏ hàng từ Redux
     const cartItems = useSelector((state: RootState) => state.cart.items);// Lấy giỏ hàng từ Redux
+    // Lấy state được truyền từ trang cart (danh sách id đã chọn)
     const location = useLocation();// Lấy state từ react-router (để biết sản phẩm được chọn)
+    // Lọc ra các sản phẩm được chọn để thanh toán
     const selectedIds: number[] = location.state?.selectedIds || [];// ID các sản phẩm đã chọn thanh toán
     const selectedItems = cartItems.filter(item =>
         selectedIds.includes(item.productId)// Lọc ra các sản phẩm đã chọn
@@ -40,16 +96,24 @@ const Checkout = () => {
     const [email, setEmail] = useState("");
     const [formError, setFormError] = useState("");
 
+    // Phương thức thanh toán
     const [payment, setPayment] = useState<"bank" | "cod" | "wallet">("bank");
+
+    // Các gói mua thêm
     const [superPack, setSuperPack] = useState(false);
     const [substrate, setSubstrate] = useState(false);
+
+    // Checkbox đồng ý điều khoản
     const [agree, setAgree] = useState(false);
 
+    // Địa chỉ giao hàng
     const [provinceId, setProvinceId] = useState<number | "">("");
     const [wardId, setWardId] = useState<number | "">("");
     const [addressLine, setAddressLine] = useState("");
     const provinces = provincesData.provinces;
     const wards = wardsData.wards.filter((w) => w.province_id === provinceId);
+
+    // Ghi chú đơn hàng
     const [note, setNote] = useState("");
 
     // COUPON STATE
@@ -58,11 +122,14 @@ const Checkout = () => {
     const [couponError, setCouponError] = useState("");
 
     // TÍNH TOÁN GIỎ HÀNG
+    // Chuẩn hóa dữ liệu giỏ hàng để tính vận chuyển
     const checkoutCart = useMemo(() => mapToCheckoutCart(selectedItems), [selectedItems]);
+
+    // Hook tính phí ship theo tỉnh + trọng lượng
     const {shippingFee, totalWeight, zone, isTruck} = useShippingFee(
         provinceId,
         checkoutCart
-    );// Hook tính phí vận chuyển dựa trên tỉnh và giỏ hàng
+    );
 
     // Lưu thông tin vận chuyển vào localStorage
     useEffect(() => {
@@ -149,13 +216,44 @@ const Checkout = () => {
             return;
         }
 
+        // Lấy tên tỉnh + phường để ghép địa chỉ
         const province = provinces.find((p) => p.id === provinceId)?.name;
         const ward = wardsData.wards.find((w) => w.id === wardId)?.name;
+
+        // Payload tạo đơn
+        const payload: OrderCreatePayload = {
+            user_id: null,// Chưa đăng nhập
+            recipient_name: fullName,
+            recipient_phone: phone,
+            full_address: [addressLine, ward, province]
+                .filter(Boolean)
+                .join(", "),
+            payment_method_id:
+                payment === "cod" ? 2 : payment === "wallet" ? 3 : 1,
+            payment_status: "unpaid",
+            subtotal: productTotal,
+            shipping_fee: finalShipping,
+            discount_amount: shippingDiscount,
+            total_amount: total,
+        };
+
+        // Lưu đơn hàng vào localStorage
+        const orderId = saveOrderLocal(payload, selectedItems);
+
+        // Lưu meta phụ (email, note)
+        localStorage.setItem(
+            "order_meta",
+            JSON.stringify({
+                orderId,
+                email,
+                note,
+            })
+        );
 
         // Điều hướng sang trang Order Success kèm dữ liệu đơn hàng
         navigate("/order_success", {
             state: {
-                orderId: "ORD-" + Date.now(),
+                orderId,
                 total,
                 paymentMethod:
                     payment === "cod"
