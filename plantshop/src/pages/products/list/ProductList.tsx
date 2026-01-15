@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams, useLocation } from "react-router-dom";
 import { productService } from "../../../services/product.service";
 import { categoryService } from "../../../services/category.service";
 import type { Product, ProductType } from "../../../types/product.type";
@@ -11,6 +11,7 @@ import styles from "./ProductList.module.css";
 import banner from "../../../assets/images/banner_shop.png";
 
 const MAX_PRICE = 3_000_000;
+const PAGE_SIZE = 12;
 
 const ProductList = () => {
     const [products, setProducts] = useState<Product[]>([]);
@@ -22,7 +23,9 @@ const ProductList = () => {
     const [priceRange, setPriceRange] = useState<[number, number]>([0, MAX_PRICE]);
     // const [selectedType, setSelectedType] = useState<ProductType | "bulk">();
 
-
+    // page
+    const [currentPage, setCurrentPage] = useState(1);
+    const location = useLocation();
     // URL params
     const { slug: categorySlug } = useParams<{ slug?: string }>();
     const [searchParams] = useSearchParams();
@@ -108,15 +111,22 @@ const ProductList = () => {
         });
     }, [products, attrId, selectedAttributes, priceRange, selectedType]);
 
-    return (
-        <div className={styles.container}>
-            {/* BANNER */}
-            <div className={styles.banner}>
-                <img src={banner} alt="Shop banner" className={styles.imgbanner} />
-            </div>
+    const totalPages = Math.ceil(filteredProducts.length / PAGE_SIZE);
+    const paginatedProducts = useMemo(() => {
+        const start = (currentPage - 1) * PAGE_SIZE;
+        return filteredProducts.slice(start, start + PAGE_SIZE);
+    }, [filteredProducts, currentPage]);
 
+    return (
+        <div
+            key={location.pathname + location.search}
+            className={styles.container}>
+            {/*Banner*/}
+            <div className={styles.banner}>
+                <img src={banner} className={styles.imgbanner} />
+            </div>
+            {/*sidebar*/}
             <div className={styles.wrapper}>
-                {/* SIDEBAR */}
                 <FilterSidebar
                     categories={categories}
                     selectedAttributes={selectedAttributes}
@@ -124,33 +134,35 @@ const ProductList = () => {
                     priceRange={priceRange}
                     onPriceChange={setPriceRange}
                     selectedType={selectedType}
-                    // onTypeChange={setSelectedType}
-                    onTypeChange={() => {}}  // type lấy từ url
+                    onTypeChange={() => {}}
                 />
-
-                {/* PRODUCT LIST */}
+                {/*Danh saách sản phẩm*/}
                 <div className={styles.content}>
-                    <h2 className={styles.productListTitle}>
-                        {keyword
-                            ? <>Kết quả tìm kiếm: <b>{keyword}</b></>
-                            : "Danh sách sản phẩm"}
-                    </h2>
+                    <div className={styles.grid}>
+                        {paginatedProducts.map(p =>
+                            p.type === "combo" ? (
+                                <ProductCardCombo key={p.id} product={p} />
+                            ) : (
+                                <ProductCard key={p.id} product={p} />
+                            )
+                        )}
+                    </div>
 
-                    {filteredProducts.length === 0 ? (
-                        <p className={styles.empty}>
-                            Không tìm thấy sản phẩm phù hợp
-                        </p>
-                    ) : (
-                        <div className={styles.grid}>
-                            {filteredProducts.map(product =>
-                                product.type === "combo" ? (
-                                    <div key={product.id} className={styles.comboItem}>
-                                        <ProductCardCombo product={product} />
-                                    </div>
-                                ) : (
-                                    <ProductCard key={product.id} product={product} />
-                                )
-                            )}
+                    {totalPages > 1 && (
+                        <div className={styles.pagination}>
+                            {Array.from({ length: totalPages }).map((_, i) => (
+                                <button
+                                    key={i}
+                                    onClick={() => setCurrentPage(i + 1)}
+                                    className={
+                                        currentPage === i + 1
+                                            ? styles.active
+                                            : ""
+                                    }
+                                >
+                                    {i + 1}
+                                </button>
+                            ))}
                         </div>
                     )}
                 </div>
