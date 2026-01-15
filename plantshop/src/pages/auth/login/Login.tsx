@@ -1,11 +1,19 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { AxiosError } from "axios";
+import React, {useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {AxiosError} from "axios";
 import AuthService from "../../../services/auth.service";
 import styles from "./Login.module.css";
+import {useDispatch} from "react-redux";
+import {setCartItems} from "../../../store/cartSlice";
+import {mergeCartItems} from "../../../utils/cart";
+import type {CartViewItem} from "../../../types/cart.type";
+import {mergeWishlistItems} from "../../../utils/wishlist";
+import type {WishlistItem} from "../../../types/wishlist.type";
+import {setWishlist} from "../../../store/wishlistSlice";
 
 const Login = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [error, setError] = useState<string>("");
 
     //State điều khiển Modal thông báo
@@ -19,7 +27,7 @@ const Login = () => {
 
     //Hàm cập nhật state khi nhập liệu
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setCredentials(prev => ({
             ...prev,
             [name]: value
@@ -33,10 +41,49 @@ const Login = () => {
         try {
             //Gọi auth.service.login()
             await AuthService.login(credentials);
+
+            //  MERGE CART 
+            const guestCart: CartViewItem[] = JSON.parse(
+                localStorage.getItem("cart_guest") || "[]"
+            );
+
+            const stored = JSON.parse(localStorage.getItem("user") || "{}");
+            const userId = stored?.user?.id;
+
+            const userCart: CartViewItem[] = JSON.parse(
+                localStorage.getItem(`cart_user_${userId}`) || "[]"
+            );
+
+            const mergedCart = mergeCartItems(guestCart, userCart);
+
+            // dispatch
+            dispatch(setCartItems(mergedCart));
+
+            //  xóa cart guest
+            localStorage.removeItem("cart_guest");
+            /*  MERGE WISHLIST  */
+            const guestWishlist: WishlistItem[] = JSON.parse(
+                localStorage.getItem("wishlist_guest") || "[]"
+            );
+
+            const userWishlist: WishlistItem[] = JSON.parse(
+                localStorage.getItem(`wishlist_user_${userId}`) || "[]"
+            );
+
+            const mergedWishlist = mergeWishlistItems(
+                guestWishlist,
+                userWishlist,
+                userId
+            );
+
+            dispatch(setWishlist(mergedWishlist));
+            localStorage.setItem(
+                `wishlist_user_${userId}`,
+                JSON.stringify(mergedWishlist)
+            );
+            localStorage.removeItem("wishlist_guest");
             setShowSuccessModal(true);
-            setTimeout(() => {
-                navigate("/");
-            }, 2000);
+            setTimeout(() => navigate("/"), 2000);
 
         } catch (err) {
             //Xử lý lỗi
@@ -77,7 +124,7 @@ const Login = () => {
                 </div>
 
                 {/*Hiển thị lỗi nếu có*/}
-                {error && <p style={{ color: 'red', marginBottom: '10px' }}>{error}</p>}
+                {error && <p style={{color: 'red', marginBottom: '10px'}}>{error}</p>}
 
                 <button type="submit" className={styles.button}>
                     Đăng nhập

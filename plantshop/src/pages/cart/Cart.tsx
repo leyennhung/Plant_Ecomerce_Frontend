@@ -36,7 +36,22 @@ const Cart = () => {
             </h1>
 
             {/* giỏ hàng trống */}
-            {items.length === 0 ? (<p>Giỏ hàng trống</p>) : (
+            {items.filter(i => i?.productId).length === 0 ? (
+                <div className={styles.emptyCart}>
+                    <div className={styles.emptyIcon}><i className="fa-solid fa-cart-shopping"/></div>
+                    <h3 className={styles.emptyTitle}>
+                        Giỏ hàng của bạn đang trống
+                    </h3>
+
+                    <p className={styles.emptyDesc}>
+                        Hãy thêm sản phẩm vào giỏ để tiếp tục mua sắm
+                    </p>
+
+                    <Button onClick={() => navigate("/")}>
+                        Tiếp tục mua sắm
+                    </Button>
+                </div>
+            ) : (
                 <>
                     <div className={styles.tableWrapper}>
                         <div className={styles.table}>
@@ -83,7 +98,7 @@ const Cart = () => {
                                             }}
                                         />
                                     </div>
-                                {/* Tên sản phẩm */}
+                                    {/* Tên sản phẩm */}
                                     <div className={styles.product}>
                                         <img src={item.image} alt={item.name}/>
                                         <span>{item.name}</span>
@@ -138,7 +153,7 @@ const Cart = () => {
                                         return;
                                     }
                                     setShowError(false);
-                                    navigate("/checkout", { state: { selectedIds } });
+                                    navigate("/checkout", {state: {selectedIds}});
                                 }}
                             >
                                 Thanh toán

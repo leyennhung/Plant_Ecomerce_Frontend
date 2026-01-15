@@ -1,37 +1,80 @@
-// import { useState } from 'react'
-// import reactLogo from './assets/images/react.svg'
-// import viteLogo from '/vite.svg'
-import './App.css'
+import {useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import type {RootState} from "./store";
 import AppRoutes from "./routes/AppRoutes";
+import {setCartItems} from "./store/cartSlice";
+import {setWishlist} from "./store/wishlistSlice";
+import {setProducts} from "./store/productSlice";
+import {productService} from "./services/product.service";
 
 function App() {
-  // const [count, setCount] = useState(0)
-  //
-  // return (
-  //   <>
-  //     <div>
-  //       <a href="https://vite.dev" target="_blank">
-  //         <img src={viteLogo} className="logo" alt="Vite logo" />
-  //       </a>
-  //       <a href="https://react.dev" target="_blank">
-  //         <img src={reactLogo} className="logo react" alt="React logo" />
-  //       </a>
-  //     </div>
-  //     <h1>Vite + React</h1>
-  //     <div className="card">
-  //       <button onClick={() => setCount((count) => count + 1)}>
-  //         count is {count}
-  //       </button>
-  //       <p>
-  //         Edit <code>src/App.tsx</code> and save to test HMR
-  //       </p>
-  //     </div>
-  //     <p className="read-the-docs">
-  //       Click on the Vite and React logos to learn more
-  //     </p>
-  //   </>
-  // )
-    return <AppRoutes />;
+    const dispatch = useDispatch();
+
+    //LOAD PRODUCTS
+    useEffect(() => {
+        productService.getAll().then(data => {
+            dispatch(setProducts(data));
+        });
+    }, [dispatch]);
+
+    //LOAD WISHLIST
+    useEffect(() => {
+        const stored = localStorage.getItem("user");
+        let key = "wishlist_guest";
+
+        if (stored) {
+            try {
+                const {user} = JSON.parse(stored);
+                if (user?.id) key = `wishlist_user_${user.id}`;
+            } catch (err) {
+                console.warn("Cannot parse user from localStorage", err);
+            }
+        }
+
+        const wishlist = JSON.parse(localStorage.getItem(key) || "[]");
+        dispatch(setWishlist(wishlist));
+    }, [dispatch]);
+
+    //SAVE WISHLIST
+    const wishlistItems = useSelector(
+        (state: RootState) => state.wishlist.items
+    );
+
+    useEffect(() => {
+        const stored = localStorage.getItem("user");
+        let key = "wishlist_guest";
+
+        if (stored) {
+            try {
+                const {user} = JSON.parse(stored);
+                if (user?.id) key = `wishlist_user_${user.id}`;
+            } catch (err) {
+                console.warn("Cannot parse user from localStorage", err);
+            }
+        }
+
+        localStorage.setItem(key, JSON.stringify(wishlistItems));
+    }, [wishlistItems]);
+
+    //LOAD CART
+    useEffect(() => {
+        const stored = localStorage.getItem("user");
+        let key = "cart_guest";
+
+        if (stored) {
+            try {
+                const {user} = JSON.parse(stored);
+                if (user?.id) key = `cart_user_${user.id}`;
+            } catch (err) {
+                console.warn("Cannot parse user from localStorage", err);
+            }
+        }
+
+        const cart = JSON.parse(localStorage.getItem(key) || "[]");
+        dispatch(setCartItems(cart));
+    }, [dispatch]);
+
+    return <AppRoutes/>;
 }
 
-export default App
+export default App;
