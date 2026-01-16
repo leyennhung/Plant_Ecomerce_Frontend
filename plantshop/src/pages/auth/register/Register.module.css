@@ -92,7 +92,7 @@
 
 .modalTitle {
     margin-bottom: 30px;
-    color: #28a745;
+    color: #333;
     font-size: 20px;
 }
 
@@ -134,4 +134,19 @@
 
 .btnLogin:hover {
     background-color: #01370C;
+}
+
+h3::after{
+    background: none;
+}
+
+.iconContainer {
+    width: 60px;
+    height: 60px;
+    background-color: #3b823e;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px auto;
 }

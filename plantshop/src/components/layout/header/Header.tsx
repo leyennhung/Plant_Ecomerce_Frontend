@@ -26,6 +26,8 @@ const Header = () => {
     const cartItems = useSelector((state: RootState) => state.cart.items);
     const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
+    const [showLogoutPopup, setShowLogoutPopup] = useState(false);
+
     useEffect(() => {
         categoryService.getAll().then(setCategories);
     }, []);
@@ -59,7 +61,14 @@ const Header = () => {
     const handleLogout = () => {
         dispatch(logout());
         setOpenUser(false);
+        setShowLogoutPopup(false);
         navigate("/login");
+    };
+
+
+    // Mở popup xác nhận Đăng xuất
+    const handleConfirmLogout = () => {
+        setShowLogoutPopup(true);
     };
 
     return (
@@ -122,7 +131,7 @@ const Header = () => {
                                         className={`${styles.dropdownItem} ${styles.logout}`}
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            handleLogout();
+                                            handleConfirmLogout();
                                         }}
                                     >
                                         <i className="fa-solid fa-right-from-bracket" />
@@ -180,6 +189,28 @@ const Header = () => {
 
                                 <div className={styles.image}>
                                     <img src={menuplant1} alt="plant" />
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    {/*POPUP XÁC NHẬN ĐĂNG XUẤT*/}
+                    {showLogoutPopup && (
+                        <div className={styles.popupOverlay}>
+                            <div className={styles.popupBox}>
+                                <p>Bạn có chắc muốn đăng xuất?</p>
+                                <div className={styles.popupActions}>
+                                    <button
+                                        className={styles.cancelBtn}
+                                        onClick={handleLogout}
+                                    >
+                                        Đồng ý
+                                    </button>
+                                    <button
+                                        className={styles.logoutBtn}
+                                        onClick={() => setShowLogoutPopup(false)}
+                                    >
+                                        Hủy
+                                    </button>
                                 </div>
                             </div>
                         </div>

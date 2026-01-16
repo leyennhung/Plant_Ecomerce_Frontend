@@ -85,6 +85,21 @@ const Register = () => {
             {showSuccessModal && (
                 <div className={styles.overlay}>
                     <div className={styles.modal}>
+                        {/*Icon dấu tích*/}
+                        <div className={styles.iconContainer}>
+                            <svg
+                                width="30"
+                                height="30"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="white"
+                                strokeWidth="3"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            >
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
                         <h3 className={styles.modalTitle}>Đăng ký thành công!</h3>
 
                         <div className={styles.modalActions}>

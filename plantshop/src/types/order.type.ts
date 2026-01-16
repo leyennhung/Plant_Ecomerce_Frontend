@@ -3,7 +3,6 @@ export type OrderStatus =
     | "confirmed"
     | "packing"
     | "shipping"
-    | "done"
     | "success"
     | "cancelled"
 

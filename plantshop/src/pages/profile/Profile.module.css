@@ -71,12 +71,17 @@
 
 .input {
     padding: 14px 16px;
-    border-radius: 8px; /* UPDATED */
+    border-radius: 8px;
     border: 1.5px solid #d9e2d9;
     font-size: 0.95rem;
     outline: none;
     transition: border 0.2s;
     background-color: #ffffff;
+}
+
+/* email bị vô hiệu sửa*/
+.inputReadOnly {
+    cursor: not-allowed !important;
 }
 
 .input:focus {

@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from 'react'; // 1. Thêm useRef, useEffect
+import {useNavigate} from 'react-router-dom';
 import styles from './Profile.module.css';
+import {logout} from "../../store/authSlice.ts";
+import {useDispatch} from "react-redux";
 
 const Profile: React.FC = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    // Tạo reference để chọc vào ô input Họ
+    const lastNameInputRef = useRef<HTMLInputElement>(null);
 
     // State quản lý chế độ Sửa (true = đang sửa, false = chỉ xem)
     const [isEditing, setIsEditing] = useState(false);
@@ -28,6 +34,13 @@ const Profile: React.FC = () => {
             phone: storedUser.phone || '',
         };
     });
+
+    // Effect: Khi chế độ sửa bật lên -> Tự động focus vào ô Họ
+    useEffect(() => {
+        if (isEditing && lastNameInputRef.current) {
+            lastNameInputRef.current.focus();
+        }
+    }, [isEditing]);
 
     // Xử lý khi nhập liệu
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,7 +99,8 @@ const Profile: React.FC = () => {
 
     // Xử lý đăng xuất
     const handleLogout = () => {
-        localStorage.removeItem('user');
+        dispatch(logout());
+        setShowLogoutPopup(false);
         navigate('/login');
     };
 
@@ -109,6 +123,7 @@ const Profile: React.FC = () => {
                             <div className={styles.formGroup} style={{ flex: 1 }}>
                                 <label className={styles.label}>Họ</label>
                                 <input
+                                    ref={lastNameInputRef} // Gắn ref focus
                                     type="text"
                                     name="lastName"
                                     className={styles.input}
@@ -134,10 +149,10 @@ const Profile: React.FC = () => {
                         </div>
 
                         <div className={styles.formGroup}>
-                            <label className={styles.label}>Địa chỉ Email</label>
+                            <label className={styles.label} >Địa chỉ Email</label>
                             <input
                                 type="email"
-                                className={styles.input}
+                                className={`${styles.input} ${isEditing ? styles.inputReadOnly : ''}`}
                                 value={formData.email}
                                 disabled
                             />
