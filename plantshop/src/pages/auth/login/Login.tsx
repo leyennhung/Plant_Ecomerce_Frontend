@@ -10,7 +10,10 @@ import type {CartViewItem} from "../../../types/cart.type";
 import {mergeWishlistItems} from "../../../utils/wishlist";
 import type {WishlistItem} from "../../../types/wishlist.type";
 import {setWishlist} from "../../../store/wishlistSlice";
-import { loginSuccess } from "../../../store/authSlice";
+import {loginSuccess} from "../../../store/authSlice";
+import {addToCart} from "../../../store/cartSlice";
+import type { Session } from "../../../mocks/utils";
+
 
 const Login = () => {
     const navigate = useNavigate();
@@ -51,8 +54,19 @@ const Login = () => {
 
             // Gửi tín hiệu Login thành công cho redux
             if (user && token) {
-                dispatch(loginSuccess({ user, token }));
+                dispatch(loginSuccess({user, token}));
             }
+            const sessions: Session[] = JSON.parse(
+                localStorage.getItem("plant_shop_sessions") || "[]"
+            );
+
+            const expiry = Date.now() + 1000 * 60 * 60 * 24; // 24h
+            const newSession: Session = { token, userId, expiry };
+
+            localStorage.setItem(
+                "plant_shop_sessions",
+                JSON.stringify([...sessions.filter(s => s.token !== token), newSession])
+            );
 
             // MERGE CART
             const guestCart: CartViewItem[] = JSON.parse(
@@ -96,8 +110,18 @@ const Login = () => {
             localStorage.removeItem("wishlist_guest");
 
             // Hiển thị thông báo thành công
+            const redirect = localStorage.getItem("redirect_after_login");
+            const buyNowProduct = localStorage.getItem("buy_now_product");
+
+            if (redirect === "/checkout" && buyNowProduct) {
+                dispatch(addToCart({productId: Number(buyNowProduct), quantity: 1}));
+            }
+
+            localStorage.removeItem("redirect_after_login");
+            localStorage.removeItem("buy_now_product");
+
             setShowSuccessModal(true);
-            setTimeout(() => navigate("/"), 2000);
+            setTimeout(() => navigate(redirect || "/"), 1000);
 
         } catch (err) {
             //Xử lý lỗi

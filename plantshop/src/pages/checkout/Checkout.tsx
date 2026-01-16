@@ -31,7 +31,7 @@ const saveOrderLocal = (
     order: OrderCreatePayload,
     items: CartViewItem[]
 ): string => {
-    const key = order.user_id ? `orders_user_${order.user_id}` : "orders_guest";
+    const key = order.user_id ? `orders` : "orders";
     const orders: Order[] = JSON.parse(localStorage.getItem(key) || "[]");
 
     const orderItems: CartItemEntity[] = JSON.parse(
@@ -51,6 +51,8 @@ const saveOrderLocal = (
         id: orderItems.length + index + 1,
         order_id: orderId,
         product_id: item.productId,
+        name: item.name,
+        image: item.image,
         quantity: item.quantity,
         price: item.price,
         original_price: item.original_price,
@@ -85,9 +87,15 @@ const Checkout = () => {
 
     /* ---------- SELECTED ITEMS ---------- */
     const selectedIds: number[] = location.state?.selectedIds || [];
-    const selectedItems = cartItems.filter(item =>
-        selectedIds.includes(item.productId)
+    const buyNowItems: CartViewItem[] = JSON.parse(
+        localStorage.getItem("buy_now_order") || "[]"
     );
+
+    const selectedItems: CartViewItem[] =
+        selectedIds.length > 0
+            ? cartItems.filter(item => selectedIds.includes(item.productId))
+            : buyNowItems;
+
 
     /* ---------- FORM STATE ---------- */
     const [fullName, setFullName] = useState("");
@@ -150,12 +158,8 @@ const Checkout = () => {
 
     /* ---------- GUARDS ---------- */
     useEffect(() => {
-        if (cartItems.length === 0) navigate("/carts");
-    }, [cartItems, navigate]);
-
-    useEffect(() => {
-        if (selectedIds.length === 0) navigate("/carts");
-    }, [selectedIds, navigate]);
+        if (selectedItems.length === 0) navigate("/carts");
+    }, [selectedItems, navigate]);
 
     /* ---------- COUPON HANDLER ---------- */
     const applyCoupon = () => {
@@ -288,14 +292,15 @@ const Checkout = () => {
                                 <div className={styles.cartInfo}>
                                     <b>{item.name}</b>
                                     <p>
-                                        {item.quantity} × {item.price.toLocaleString()}₫
+                                        {item.quantity} × {(item.price ?? 0).toLocaleString()}₫
                                     </p>
                                 </div>
                                 <div className={styles.cartPrice}>
-                                    {(item.price * item.quantity).toLocaleString()}₫
+                                    {((item.price ?? 0) * (item.quantity ?? 1)).toLocaleString()}₫
                                 </div>
                             </div>
                         ))}
+
                         <div className={styles.cartTotalRow}>
                             <span>Tổng tiền hàng</span>
                             <span>{productTotal.toLocaleString()}₫</span>

@@ -16,6 +16,8 @@ export interface CartItemEntity {
     original_price?: number;  // giá gốc (optional)
     created_at: string;
     updated_at: string;
+    name: string;
+    image: string;
 }
 
 export interface CartResponse {

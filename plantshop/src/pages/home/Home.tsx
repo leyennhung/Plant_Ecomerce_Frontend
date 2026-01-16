@@ -12,10 +12,9 @@ import ComboImg from "../../assets/images/CayPhuQuy.jpg";
 import HatGiongImg from "../../assets/images/HatGiong.jpg";
 import GiaSiImg from "../../assets/images/CayGiongGiaSi.png";
 import vuonImg from "../../assets/images/vuon.jpg";
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {addToCart} from "../../store/cartSlice";
-import { isLoggedIn } from "../../mocks/utils";
 
 //Function component Home (khai báo, tạo)
 const Home = () => {
@@ -26,7 +25,6 @@ const Home = () => {
     // Product[]: mảng các sản phẩm
     // Giá trị ban đầu: [] (mảng rỗng)
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     // const [products, setProducts] = useState<Product[]>([]);
     const [newProducts, setNewProducts] = useState<Product[]>([]);
     const [trendingProducts, setTrendingProducts] = useState<Product[]>([]);
@@ -70,17 +68,6 @@ const Home = () => {
 
     const handleAddToCart = (productId: number) => {
         dispatch(addToCart({productId, quantity: 1}));
-    };
-
-
-    const handleBuyNow = (productId: number) => {
-        if (!isLoggedIn()) {
-            navigate("/login");
-            return;
-        }
-
-        dispatch(addToCart({ productId, quantity: 1 }));
-        navigate("/checkout");
     };
 
     //Trả về JSX - giao diện
@@ -138,7 +125,6 @@ const Home = () => {
                                 product={np}
                                 isNew
                                 onAddToCart={() => handleAddToCart(np.id)}
-                                onBuyNow={() => handleBuyNow(np.id)}
                             />
                         ))}
                     </div>
@@ -155,7 +141,6 @@ const Home = () => {
                                 product={tp}
                                 isTrending
                                 onAddToCart={() => handleAddToCart(tp.id)}
-                                onBuyNow={() => handleBuyNow(tp.id)}
 
                             />
                         ))}
@@ -173,7 +158,6 @@ const Home = () => {
                                 product={sp}
                                 isSale
                                 onAddToCart={() => handleAddToCart(sp.id)}
-                                onBuyNow={() => handleBuyNow(sp.id)}
                             />
                         ))}
                     </div>
@@ -189,7 +173,6 @@ const Home = () => {
                                 key={cbp.id}
                                 product={cbp}
                                 onAddToCart={() => handleAddToCart(cbp.id)}
-                                onBuyNow={() => handleBuyNow(cbp.id)}
 
                             />
                         ))}
@@ -206,7 +189,6 @@ const Home = () => {
                                 key={wsp.id}
                                 product={wsp}
                                 onAddToCart={() => handleAddToCart(wsp.id)}
-                                onBuyNow={() => handleBuyNow(wsp.id)}
 
                             />
                         ))}
@@ -223,7 +205,6 @@ const Home = () => {
                                 key={slp.id}
                                 product={slp}
                                 onAddToCart={() => handleAddToCart(slp.id)}
-                                onBuyNow={() => handleBuyNow(slp.id)}
                             />
                         ))}
                     </div>
