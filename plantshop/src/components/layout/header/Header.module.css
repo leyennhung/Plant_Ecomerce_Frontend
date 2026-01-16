@@ -51,6 +51,7 @@ body {
     color: white;
     font-weight: 500;
     font-size: 16px;
+    text-decoration: none;
 }
 .menuItem:hover {
     color: #f4fbf6;
@@ -81,8 +82,8 @@ body {
 
 /* ===== 2.1 MEGA MENU ===== */
 .megaMenu {
-    position: fixed;
-    top: 110px;
+    position: absolute;
+    top: 100%;
     left: 0;
     width: 100%;
     background: #faf8f3;
@@ -101,7 +102,9 @@ body {
 
 /* COLUMN */
 .column h4 {
+    display: block;
     margin-bottom: 15px;
+    cursor: pointer;
     font-size: 16px;
     color: #1f4d2b;
 }
@@ -112,6 +115,7 @@ body {
     cursor: pointer;
     color: #343434;
     gap: 10px;
+    text-decoration: none;
 }
 
 .column a:hover {

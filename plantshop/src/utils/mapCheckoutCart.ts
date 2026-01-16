@@ -31,7 +31,7 @@ export function mapToCheckoutCart(
             ...item,
 
             // Gắn thêm trọng lượng (kg) cho mỗi item
-            weightKg: parseWeightKg(product?.dimensions?.weight),
+            weightKg: parseWeightKg(product?.dimensions?.weight?? undefined),
         };
     });
 }

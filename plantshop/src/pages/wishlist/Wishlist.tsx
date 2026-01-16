@@ -1,8 +1,8 @@
 import styles from "./Wishlist.module.css";
-import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../../store";
-import { removeFromWishlist } from "../../store/wishlistSlice";
-import { addToCart } from "../../store/cartSlice";
+import {useDispatch, useSelector} from "react-redux";
+import type {RootState} from "../../store";
+import {removeFromWishlist} from "../../store/wishlistSlice";
+import {addToCart} from "../../store/cartSlice";
 
 const Wishlist = () => {
     const dispatch = useDispatch();
@@ -42,7 +42,7 @@ const Wishlist = () => {
                                     </button>
 
                                     <div className={styles.product}>
-                                        <img src={product.image} />
+                                        <img src={product.image}/>
                                         <span>{product.name}</span>
                                     </div>
 
@@ -54,17 +54,13 @@ const Wishlist = () => {
                                         className={styles.addCart}
                                         onClick={() =>
                                             dispatch(addToCart({
-                                                id: Date.now(),
                                                 productId: product.id,
-                                                name: product.name,
-                                                image: product.image,
-                                                price: product.price,
                                                 quantity: 1,
                                             }))
-                                        }
-                                    >
-                                        Thêm vào giỏ
+                                        }>
+                                        Thêm vào giỏ hàng
                                     </button>
+
                                 </div>
                             );
                         })}

@@ -1,0 +1,53 @@
+.searchOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 2000;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 150px;
+}
+
+.searchBox {
+    width: 600px;
+    background: #fff;
+    border-radius: 10px;
+    padding: 16px 20px;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.searchBox input {
+    flex: 1;
+    height: 44px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding: 0 14px;
+    font-size: 16px;
+    outline: none;
+}
+
+.searchBox input:focus {
+    border-color: #1f4d2b;
+}
+
+.closeBtn {
+    background: transparent !important;
+    color: #333 !important;
+    font-size: 20px;
+    border: none;
+}
+.btnSearch  {
+    background: transparent !important;
+    border: none;
+}
+.btnSearch:hover, .closeBtn:hover {
+    background: transparent !important;
+    border: none;
+}

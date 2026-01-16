@@ -1,5 +1,5 @@
 # 🌱 Plant Shop -Ecomerce – Frontend Project
-Dự án Frontend mô phỏng **website bán cây cảnh** được xây dựng bằng **React + TypeScript**, sử dụng **Mock Service Worker (MSW)** để giả lập  API trong quá trình phát triển.
+Dự án Frontend mô phỏng **website bán cây cảnh** được xây dựng bằng **React + TypeScript**, sử dụng **Mock Service Worker (MSW)** để giả lập Fake API trong quá trình phát triển.
 ---------------------------------------------------------------------------------------------
 ## 🚀 Công nghệ & Framework sử dụng
 -     **Nodejs v24.11.1**
@@ -18,7 +18,10 @@ Dự án Frontend mô phỏng **website bán cây cảnh** được xây dựng 
 - npm install msw --save-dev
 - npm install @reduxjs/toolkit react-redux
 - npm install react @types/react @types/react-dom --save-dev
+- npm install @radix-ui/react-slider
+- npm i react-markdown
 - npm install @fortawesome/fontawesome-free
+
 ---------------------------------------------------------------------------------------------
 
   ## 📦 Cài đặt & Chạy dự án
@@ -27,8 +30,8 @@ Dự án Frontend mô phỏng **website bán cây cảnh** được xây dựng 
 - cd plantshop
 
   ### 2️⃣ Cài đặt thư viện
-  - npm install    ( tạo ra node_modules/)
-  - npm run build  ( sẽ tạo ra dist/, gồm assets/ và index.html)
+  - npm install    ( sinh ra node_modules/)
+  - npm run build  ( sẽ sinh ra dist/, gồm assets/ và index.html)
 
   ### 3️⃣ Chạy môi trường development
   - npm run dev

@@ -1,4 +1,4 @@
-import {Routes, Route} from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import MainLayout from "../components/layout/main/MainLayout";
 import Home from "../pages/home/Home";
 import Login from "../pages/auth/login/Login";
@@ -12,11 +12,17 @@ import Orders from "../pages/order/Orders";
 import OrderDetails from "../pages/order/OrderDetails";
 import OrderSuccess from "../pages/order/OrderSuccess";
 import ShippingPolicy from "../pages/privacy/ShippingPolicy";
+import ProductList from "../pages/products/list/ProductList.tsx";
+import ProductDetail from "../pages/products/detail/ProductDetail.tsx";
 
 const AppRoutes = () => (
     <Routes>
         <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/products" element={<ProductList />} />
+            <Route path="/products/:slug" element={<ProductDetail />} />
+            <Route path="/products/category/:slug" element={<ProductList />} />
             <Route path="/login" element={<Login/>}/>
             <Route path="/register" element={<Register/>}/>
             <Route path="/profile" element={<Profile/>}/>

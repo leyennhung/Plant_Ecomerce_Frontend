@@ -1,31 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import styles from './OrderDetails.module.css';
-import type { Order, OrderStatus } from '../../types/order.type';
+import type { Order, OrderStatus, OrderItem } from '../../types/order.type';
 import { useParams, useNavigate } from "react-router-dom";
 
 const OrderDetailsPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+
     const [order, setOrder] = useState<Order | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isExpanded, setIsExpanded] = useState(false);
     const [showCancelModal, setShowCancelModal] = useState(false);
 
-    // Load data
     useEffect(() => {
-        const timer = setTimeout(() => {
+        const loadOrderData = () => {
+            setIsLoading(true);
             const storedOrders = localStorage.getItem('orders');
+
             if (storedOrders) {
                 const allOrders = JSON.parse(storedOrders) as Order[];
                 const foundOrder = allOrders.find((o) => String(o.id) === String(id));
 
                 if (foundOrder) {
-                    const originalItems = foundOrder.items || [];
-                    const itemsMapped = originalItems.map((item) => ({
+                    const storedItems = localStorage.getItem('order_items');
+                    // Sử dụng đúng type OrderItem[] để tránh lỗi ESLint
+                    const allItems: OrderItem[] = storedItems ? JSON.parse(storedItems) : [];
+
+                    const relatedItems = allItems.filter(item => String(item.order_id) === String(id));
+
+                    const itemsMapped: OrderItem[] = relatedItems.map((item) => ({
                         ...item,
                         productInfo: {
-                            name: item.name || "Sản phẩm",
-                            imageUrl: item.imageUrl
+                            name: item.productInfo?.name || item.name || `Sản phẩm #${item.product_id}`,
+                            imageUrl: item.productInfo?.imageUrl || item.imageUrl || 'https://via.placeholder.com/70'
                         }
                     }));
 
@@ -33,7 +40,9 @@ const OrderDetailsPage: React.FC = () => {
                 }
             }
             setIsLoading(false);
-        }, 300);
+        };
+
+        const timer = setTimeout(loadOrderData, 300);
         return () => clearTimeout(timer);
     }, [id]);
 
@@ -59,16 +68,15 @@ const OrderDetailsPage: React.FC = () => {
     };
 
     const currentItemsDetail = order?.itemsDetail || [];
-
     const displayedItems = isExpanded ? currentItemsDetail : currentItemsDetail.slice(0, 5);
     const remainingCount = currentItemsDetail.length - 5;
 
     const getStepStatus = (stepName: string, currentStatus: string) => {
-        const statusOrder = ['pending', 'processing', 'shipping', 'completed'];
+        const statusOrder = ['pending', 'processing', 'shipping', 'done', 'paid', 'success'];
         let normalizedStatus = currentStatus;
 
-        if (['paid', 'done', 'success', 'delivered'].includes(currentStatus)) normalizedStatus = 'completed';
-        if (['pending', 'confirmed', 'packing', 'unpaid'].includes(currentStatus)) normalizedStatus = 'processing';
+        if (['paid', 'done', 'success'].includes(currentStatus)) normalizedStatus = 'done';
+        if (['pending', 'confirmed', 'packing', 'unpaid', 'processing'].includes(currentStatus)) normalizedStatus = 'processing';
 
         if (currentStatus === 'cancelled' || currentStatus === 'failed') return '';
 
@@ -79,23 +87,25 @@ const OrderDetailsPage: React.FC = () => {
     };
 
     if (isLoading) return <div style={{ padding: 40, textAlign: 'center' }}>Đang tải...</div>;
+
     if (!order) return (
         <div style={{ padding: 40, textAlign: 'center' }}>
             <p>Không tìm thấy đơn hàng!</p>
-            <button onClick={() => navigate('/profile/orders')} className={styles.btnCancel} style={{marginTop: 10}}>Quay lại</button>
+            {/* Sửa lại đường dẫn về /orders theo AppRoutes */}
+            <button onClick={() => navigate('/orders')} className={styles.btnCancel} style={{marginTop: 10}}>Quay lại danh sách</button>
         </div>
     );
 
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <button onClick={() => navigate('/profile/orders')} style={{border:'none', background:'transparent', cursor:'pointer', fontSize: 16, marginRight: 10}}>←</button>
-                <div className={styles.title}>Chi Tiết Đơn Hàng #{order.id.substring(0,8).toUpperCase()}</div>
+                <div className={styles.title}>Chi Tiết Đơn Hàng #{String(order.id).substring(0,12).toUpperCase()}</div>
                 <div className={styles.subTitle}>
-                    Ngày đặt: {new Date(order.created_at).toLocaleDateString('vi-VN')}
+                    Ngày đặt: {new Date(order.created_at).toLocaleString('vi-VN')}
                 </div>
             </div>
 
+            {/* Giữ nguyên các phần UI còn lại ... */}
             <div className={styles.stepper}>
                 {order.status === 'cancelled' ? (
                     <>
@@ -118,7 +128,7 @@ const OrderDetailsPage: React.FC = () => {
                             <div className={styles.stepIcon}> ✓ </div>
                             <div className={styles.stepLabel}>Đang giao</div>
                         </div>
-                        <div className={`${styles.stepItem} ${getStepStatus('completed', order.status)}`}>
+                        <div className={`${styles.stepItem} ${getStepStatus('done', order.status)}`}>
                             <div className={styles.stepIcon}> ✓ </div>
                             <div className={styles.stepLabel}>Hoàn thành</div>
                         </div>
@@ -133,7 +143,7 @@ const OrderDetailsPage: React.FC = () => {
                         {displayedItems.map((item, index) => (
                             <div key={index} className={styles.productItem}>
                                 <img
-                                    src={item.productInfo?.imageUrl || 'https://via.placeholder.com/70'}
+                                    src={item.productInfo?.imageUrl}
                                     alt={item.productInfo?.name}
                                     className={styles.productImg}
                                 />
@@ -165,7 +175,7 @@ const OrderDetailsPage: React.FC = () => {
                     <div className={styles.sectionBox}>
                         <div className={styles.boxTitle}>Thông tin giao hàng</div>
                         <div className={styles.infoRow}>
-                            <span className={styles.infoLabel}>{order.recipient_name}</span>
+                            <span className={styles.infoLabel} style={{fontWeight: 'bold', display: 'block'}}>{order.recipient_name}</span>
                             {order.recipient_phone}
                         </div>
                         <div className={styles.infoRow}>
@@ -185,7 +195,7 @@ const OrderDetailsPage: React.FC = () => {
                         </div>
                         <div className={styles.paymentRow}>
                             <span>Giảm giá:</span>
-                            <span>- {formatCurrency(order.discount_amount)}</span>
+                            <span>- {formatCurrency(order.discount_amount || 0)}</span>
                         </div>
                         <div className={styles.totalRow}>
                             <span>Tổng cộng:</span>

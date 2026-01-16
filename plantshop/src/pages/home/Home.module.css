@@ -10,24 +10,170 @@ body {
     background-color: #f4fbf6;
 }
 /*1.BANNER*/
+.banner {
+    width: 100%;
+}
 .imgbanner {
     width: 100%;
     height: auto;
 }
+/*2. CONTENT*/
 .content {
     max-width: 1200px;
     margin: 0 auto;
+    padding: 50px 0;
+}
+/*2.1 CHOICE*/
+.choiceSection {
+    margin-bottom: 60px;
 }
 
-/*3.PRODUCTS*/
+.choiceList {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.choiceItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    text-decoration-line: none;
+}
+
+.choiceItem img {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #ffffff;
+    padding: 10px;
+    transition: transform 0.3s ease;
+}
+
+.choiceItem:hover img {
+    transform: scale(1.05);
+}
+
+.choiceItem span {
+    margin-top: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+.viewMoreWrapper {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.viewMoreBtn {
+    display: inline-block;
+    padding: 12px 28px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #2e7d32;
+    /*border: 2px solid #2e7d32;*/
+    /*border-radius: 30px;*/
+    text-decoration: none;
+    transition: all 0.25s ease;
+    background-color: transparent;
+}
+
+/*.viewMoreBtn:hover {*/
+/*    background-color: #2e7d32;*/
+/*    color: #ffffff;*/
+/*}*/
+
+/*2.2.SẢN PHẨM MỚI*/
+.productSection {
+    margin-bottom: 100px;
+}
 .title {
     font-size: 28px;
     margin-bottom: 20px;
     text-align: center;
+}
+.sectionTitle {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 600;
+    color: #2f2f2f;
+    margin-bottom: 8px;
+}
+
+.divider {
+    width: 180px;
+    height: 2px;
+    background-color: #2f2f2f;
+    margin: 0 auto 40px;
 }
 
 .productList {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
+    align-items: stretch;
+}
+.productListCombo {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    align-items: stretch;
+}
+/*3.GIỚI THIỆU*/
+.introSection {
+    padding: 50px 0;
+    background-color: #ffffff;
+    margin-bottom: 50px;
+}
+
+.introContainer {
+    display: flex;
+    gap: 50px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.introImage img {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.introContent h2 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: #1a3c24;
+}
+
+.introList {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 40px;
+}
+
+.introItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.introItem .icon {
+    font-size: 3rem;
+}
+
+.introItem h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1a3c24;
+}
+
+.introItem p {
+    margin: 5px 0 0;
+    font-size: 1.1rem;
+    color: #4b4b4b;
 }

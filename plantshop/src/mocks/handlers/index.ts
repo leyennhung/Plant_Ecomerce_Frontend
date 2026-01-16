@@ -1,5 +1,6 @@
 import { productHandlers } from "./product.handler";
 import {categoryHandlers} from "./category.handler";
+import {reviewHandlers} from "./review.handler.ts";
 import { wishlistHandlers } from "./wishlist.handler";
 import { cartHandlers } from "./cart.handler";
 import { cartItemHandlers } from "./cartItems.handler";
@@ -9,6 +10,7 @@ export const handlers = [
     ...cartItemHandlers,
     ...productHandlers,
     ...categoryHandlers,
+    ...reviewHandlers,
     ...wishlistHandlers,
     ...authHandlers
 ];

@@ -14,12 +14,12 @@ const saveDB = (db: WishlistItem[]) => {
 };
 
 export const wishlistHandlers = [
-    http.get("/plant/wishlist", () => {
+    http.get("/api/wishlist", () => {
         const db = loadDB();
         return HttpResponse.json({ wishlist: db });
     }),
     // xóa product
-    http.delete("/plant/wishlist/:productId", ({ params }) => {
+    http.delete("/api/wishlist/:productId", ({ params }) => {
         const productId = Number(params.productId);
         const db = loadDB().filter(
             item => item.product_id !== productId

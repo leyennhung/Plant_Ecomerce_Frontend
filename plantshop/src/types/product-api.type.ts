@@ -8,17 +8,19 @@ export interface ProductApi {
     id: number;
     slug: string;
     name: string;
-    sku: string;
     type: string;
     price: number;
-    sale_price?: number | null;
+    salePrice?: number | null;
     stock: number;
     status: string;
+    image?: string;
+
     images?: {
         id: number;
         url: string;
-        is_main: boolean;
         order: number;
+        is_main?: boolean;
     }[];
-    wholesale_prices?: WholesalePriceRule[]; // Danh sách mức giá sỉ theo số lượng
+
+    wholesalePrices?: WholesalePriceRule[];
 }

@@ -1,10 +1,18 @@
 import { useEffect, useState } from "react";
 import { productService } from "../../services/product.service";
 import type { Product } from "../../types/product.type";
-import Button from "../../components/common/Button";
+// import Button from "../../components/common/Button";
 import styles from "./Home.module.css";
 import banner from "../../assets/images/banner.png"
-import ProductCard from "../../components/common/product/ProductCard";
+import ProductCard from "../../components/common/product/single/ProductCard";
+import ProductCardCombo from "../../components/common/product/combo/ProductCardCombo";
+import CayTrongImg from "../../assets/images/CayTrauBaDeVuong.jpg";
+import ChauCayImg from "../../assets/images/ChauCayDatNung.jpg";
+import ComboImg from "../../assets/images/CayPhuQuy.jpg";
+import HatGiongImg from "../../assets/images/HatGiong.jpg";
+import GiaSiImg from "../../assets/images/CayGiongGiaSi.png";
+import vuonImg from "../../assets/images/vuon.jpg";
+import { Link } from "react-router-dom";
 
 //Function component Home (khai báo, tạo)
 const Home = () => {
@@ -14,15 +22,43 @@ const Home = () => {
     // setProducts: hàm cập nhật danh sách
     // Product[]: mảng các sản phẩm
     // Giá trị ban đầu: [] (mảng rỗng)
-    const [products, setProducts] = useState<Product[]>([]);
+
+    // const [products, setProducts] = useState<Product[]>([]);
+    const [newProducts, setNewProducts] = useState<Product[]>([]);
+    const [trendingProducts, setTrendingProducts] = useState<Product[]>([]);
+    const [saleProducts, setSaleProducts] = useState<Product[]>([]);
+    const [wholesaleProducts, setWholesaleProducts] = useState<Product[]>([]);
+    const [suppliesProducts, setSuppliesProducts] = useState<Product[]>([]);
+    const [comboProducts, setComboProducts] = useState<Product[]>([]);
+
     // loading: trạng thái đang tải dữ liệu
     // Ban đầu là true → đang load
     const [loading, setLoading] = useState(true);
 
     //useEffect – gọi API khi component được render lần đầu
     useEffect(() => {
-        productService.getAll()  // gọi hàm trong service để gọi api
-            .then(data => setProducts(data)) // API trả về json sẽ lưu ds spham vào state products đã khai báo trước đó
+        Promise.all([
+            productService.getNewProduct(),
+            productService.getTrendingProducts(),
+            productService.getSaleProducts(),
+            productService.getWholesaleProducts(),
+            productService.getSuppliesProducts(),
+            productService.getComboProducts(),
+        ])
+            // API trả về json sẽ lưu ds spham vào state products đã khai báo trước đó
+            .then(([newProds, trendingProds, salePros, wholesaleProds, suppliesProds, comboProds]) => {
+                setNewProducts(newProds);
+                setTrendingProducts(trendingProds);
+                setSaleProducts(salePros);
+                setWholesaleProducts(wholesaleProds);
+                setSuppliesProducts(suppliesProds);
+                // Chuẩn hóa combo: lấy images từ comboItems, loại bỏ undefined
+                const comboWithImages = comboProds.map((cbp) => ({
+                    ...cbp,
+                    images: cbp.comboItems?.map((item) => item.image).filter((img): img is string => !!img) || [],
+                }));
+                setComboProducts(comboWithImages);
+            })
             .finally(() => setLoading(false));  // dù api thành công hay thất bại thì quá trình load phải = false
     }, []);  // kết thúc quá trình loading
 
@@ -30,41 +66,210 @@ const Home = () => {
 
     //Trả về JSX - giao diện
     return (
-        <div className={styles.container}>    {/*styles.container là class CSS module*/}
+        <div className={styles.container}>
             {/*1.BANNER*/}
-            <div className="banner">
+            <div className={styles.banner}>
                 <img src={banner} alt={banner} className={styles.imgbanner}/>
             </div>
+            {/*2.CONTENT*/}
             <div className={styles.content}>
-            <h1 className={styles.title}>🌱 Sản phẩm nổi bật</h1>
-            <div className={styles.productList}>
+            {/*    2.1 CHOICE*/}
+                <section className={styles.choiceSection}>
+                    <div className={styles.choiceList}>
 
-                {/*Duyệt qua từng sản phẩm trong products
-                    map → render nhiều card*/}
-                {products.map(product => (
-                    // Mỗi sp là 1 card
-                    // <div key={product.id} className={styles.card}>
-                    //     <img
-                    //         src={product.image}
-                    //         alt={product.name}
-                    //         className={styles.image}
-                    //     />
-                    //     <h3 className={styles.name}>{product.name}</h3>
-                    //     <p className={styles.price}>
-                    //         {formatPrice(product.price)}
-                    //     </p>
-                    // </div>
-                    <ProductCard key={product.id} product={product} />
-                ))}
-            </div>
-                <Button onClick={() => alert("Clicked!")}>
-                    Thêm vào giỏ hàng
-                </Button>
+                        <Link to="/products?type=plant" className={styles.choiceItem}>
+                            <img src={CayTrongImg} alt="CayTrong" />
+                            <span>Cây trồng</span>
+                        </Link>
 
-                <Button variant="outline">
-                    Xem chi tiết
-                </Button>
+                        <Link to="/products?type=pot" className={styles.choiceItem}>
+                            <img src={ChauCayImg} alt="ChauCay" />
+                            <span>Chậu cây</span>
+                        </Link>
+
+                        <Link to="/products?type=combo" className={styles.choiceItem}>
+                            <img src={ComboImg} alt="Combo" />
+                            <span>Combo</span>
+                        </Link>
+
+                        <Link to="/products?type=seed" className={styles.choiceItem}>
+                            <img src={HatGiongImg} alt="HatGiong" />
+                            <span>Hạt gống</span>
+                        </Link>
+
+                        <Link to="/products?type=bulk" className={styles.choiceItem}>
+                            <img src={GiaSiImg} alt="UuDaiSi" />
+                            <span>Ưu đãi sĩ</span>
+                        </Link>
+                    </div>
+                    <div className={styles.viewMoreWrapper}>
+                        <Link to="/products" className={styles.viewMoreBtn}>
+                            Xem thêm sản phẩm →
+                        </Link>
+                    </div>
+                </section>
+                    {/*2.2 SẢN PHẨM MỚI*/}
+                <section className={styles.productSection}>
+                    <h2 className={styles.title}> Sản phẩm mới nhất</h2>
+                    <div className={styles.divider}></div>
+                    <div className={styles.productList}>
+
+                        {/*Duyệt qua từng sản phẩm trong products
+                            map → render nhiều card*/}
+                        {newProducts.map(np => (
+                            // Mỗi sp là 1 card
+                            // <div key={product.id} className={styles.card}>
+                            //     <img
+                            //         src={product.image}
+                            //         alt={product.name}
+                            //         className={styles.image}
+                            //     />
+                            //     <h3 className={styles.name}>{product.name}</h3>
+                            //     <p className={styles.price}>
+                            //         {formatPrice(product.price)}
+                            //     </p>
+                            // </div>
+                            <ProductCard key={np.id} product={np} isNew={true} />
+                        ))}
+                    </div>
+                </section>
+                {/*2.3 SẢN PHẨM TRENDING*/}
+                <section className={styles.productSection}>
+                    <h2 className={styles.title}>🌱 Sản phẩm Trending</h2>
+                    <div className={styles.divider}></div>
+                    <div className={styles.productList}>
+
+                        {/*Duyệt qua từng sản phẩm trong products
+                            map → render nhiều card*/}
+                        {trendingProducts.map(tp => (
+                            // Mỗi sp là 1 card
+                            <ProductCard key={tp.id} product={tp} isTrending={true}/>
+                        ))}
+                    </div>
+                </section>
+                {/*2.4 SẢN PHẨM GIẢM GIÁ*/}
+                <section className={styles.productSection}>
+                    <h2 className={styles.title}> Sản phẩm khuyến mãi</h2>
+                    <div className={styles.divider}></div>
+                    <div className={styles.productList}>
+
+                        {/*Duyệt qua từng sản phẩm trong products
+                            map → render nhiều card*/}
+                        {saleProducts.map(sp => (
+                            // Mỗi sp là 1 card
+                            <ProductCard key={sp.id} product={sp} isSale={true} />
+                        ))}
+                    </div>
+                </section>
+                {/* 2.5 COMBO HẤP DẪN */}
+                <section className={styles.productSection}>
+                    <h2 className={styles.title}>Combo hấp dẫn</h2>
+                    <div className={styles.divider}></div>
+                    <div className={styles.productListCombo}>
+                        {comboProducts.map((cbp) => (
+                            <ProductCardCombo key={cbp.id} product={cbp} />
+                        ))}
+                    </div>
+                </section>
+                {/*2.6 CÂY GIỐNG*/}
+                <section className={styles.productSection}>
+                    <h2 className={styles.title}>Ưu đãi giá sĩ cây giống</h2>
+                    <div className={styles.divider}></div>
+                    <div className={styles.productList}>
+
+                        {/*Duyệt qua từng sản phẩm trong products
+                            map → render nhiều card*/}
+                        {wholesaleProducts.map(wsp => (
+                            // Mỗi sp là 1 card
+                            <ProductCard key={wsp.id} product={wsp} />
+                        ))}
+                    </div>
+                </section>
+                {/*2.7 DỤNG CỤ */}
+                <section className={styles.productSection}>
+                    <h2 className={styles.title}>Vật tư cây trồng</h2>
+                    <div className={styles.divider}></div>
+                    <div className={styles.productList}>
+
+                        {/*Duyệt qua từng sản phẩm trong products
+                            map → render nhiều card*/}
+                        {suppliesProducts.map(slp => (
+                            // Mỗi sp là 1 card
+                            <ProductCard key={slp.id} product={slp} />
+                        ))}
+                    </div>
+                </section>
             </div>
+            {/* 3. GIỚI THIỆU */}
+            <section className={styles.introSection}>
+                <div className={styles.introContainer}>
+                    {/* Ảnh bên trái */}
+                    <div className={styles.introImage}>
+                        <img src={vuonImg} alt="Garden"/>
+                    </div>
+
+                    {/* Nội dung bên phải */}
+                    <div className={styles.introContent}>
+                        <h2>Lý do chọn PLAN A PLAN?</h2>
+                        <div className={styles.introList}>
+                            <div className={styles.introItem}>
+                                <span className={styles.icon}>🌱</span>
+                                <div>
+                                    <h3>Tuyển chọn</h3>
+                                    <p>Mọi cây xanh đều phải được chọn lọc kỹ lưỡng</p>
+                                </div>
+                            </div>
+                            <div className={styles.introItem}>
+                                <span className={styles.icon}>🪴</span>
+                                <div>
+                                    <h3>Đa dạng</h3>
+                                    <p>Dễ dàng tìm được sản phẩm mà bạn mong muốn</p>
+                                </div>
+                            </div>
+                            <div className={styles.introItem}>
+                                <span className={styles.icon}>🤝</span>
+                                <div>
+                                    <h3>Đồng hành</h3>
+                                    <p>Luôn đồng hành và giúp đỡ bạn về mặt kỹ thuật</p>
+                                </div>
+                            </div>
+                            <div className={styles.introItem}>
+                                <span className={styles.icon}>📸</span>
+                                <div>
+                                    <h3>Đúng chuẩn</h3>
+                                    <p>Sử dụng hình ảnh chụp thực tế giúp dễ hình dung</p>
+                                </div>
+                            </div>
+                            <div className={styles.introItem}>
+                                <span className={styles.icon}>✅</span>
+                                <div>
+                                    <h3>Tin cậy</h3>
+                                    <p>Gửi ảnh thực tế và cụ thể trước khi giao hàng</p>
+                                </div>
+                            </div>
+                            <div className={styles.introItem}>
+                                <span className={styles.icon}>💰</span>
+                                <div>
+                                    <h3>Cạnh tranh</h3>
+                                    <p>Tối ưu hóa ngân sách nhờ mức giá cực kì cạnh tranh</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+                {/*4.  BLOG*/}
+            <div>
+
+            </div>
+                {/*<Button onClick={() => alert("Clicked!")}>*/}
+                {/*    Thêm vào giỏ hàng*/}
+                {/*</Button>*/}
+
+                {/*<Button variant="outline">*/}
+                {/*    Xem chi tiết*/}
+                {/*</Button>*/}
         </div>
     );
 };
