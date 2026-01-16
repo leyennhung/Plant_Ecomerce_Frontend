@@ -1,5 +1,5 @@
-import {useEffect, useMemo, useState} from "react";
-import {useParams, useSearchParams, useLocation} from "react-router-dom";
+import { useEffect, useMemo, useState, useRef } from "react";
+import { useParams, useSearchParams, useLocation, useNavigate } from "react-router-dom";
 import {productService} from "../../../services/product.service";
 import {categoryService} from "../../../services/category.service";
 import type {Product, ProductType} from "../../../types/product.type";
@@ -30,6 +30,11 @@ const ProductList = () => {
     // page
     const [currentPage, setCurrentPage] = useState(1);
     const location = useLocation();
+    const contentRef = useRef<HTMLDivElement>(null);
+
+    // navigate
+    const navigate = useNavigate();
+
     // URL params
     const {slug: categorySlug} = useParams<{ slug?: string }>();
     const [searchParams] = useSearchParams();
@@ -66,8 +71,37 @@ const ProductList = () => {
         dispatch(addToCart({productId: product.id, quantity: 1}));
     };
 
+    // Lấy all sp
+    const handleViewAll = () => {
+        setSelectedAttributes({});
+        setPriceRange([0, MAX_PRICE]);
+        setCurrentPage(1);
+
+        navigate({
+            pathname: "/products",
+            search: ""
+        });
+        scrollToTop();
+
+    };
+
+    // Về đầu trang
+    const scrollToTop = () => {
+        contentRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+        });
+    };
+    useEffect(() => {
+        scrollToTop();
+    }, [currentPage]);
+    // về đầu trang cho button
+
+
+
     // chọn attribute (1 group = 1 value)
     const handleAttributeChange = (groupId: number, attrId: number) => {
+       setCurrentPage(1);
         setSelectedAttributes(prev => {
             const next = {...prev};
             if (attrId === 0) {
@@ -130,8 +164,8 @@ const ProductList = () => {
             key={location.pathname + location.search}
             className={styles.container}>
             {/*Banner*/}
-            <div className={styles.banner}>
-                <img src={banner} className={styles.imgbanner}/>
+            <div className={styles.banner} ref={contentRef}>
+                <img src={banner} className={styles.imgbanner} />
             </div>
             {/*sidebar*/}
             <div className={styles.wrapper}>
@@ -145,8 +179,22 @@ const ProductList = () => {
                     onTypeChange={() => {
                     }}
                 />
-                {/*Danh saách sản phẩm*/}
-                <div className={styles.content}>
+                {/*Danh sách sản phẩm*/}
+                <div className={styles.content} >
+                    <div className={styles.titleRow}>
+                        <h2 className={styles.productListTitle}>
+                            {keyword ? (
+                                <>
+                                    Kết quả tìm kiếm: <b>{keyword}</b>
+                                </>
+                            ) : (
+                                "Danh sách sản phẩm"
+                            )}
+                        </h2>
+                        {/*{(keyword || Object.keys(selectedAttributes).length > 0) && (*/}
+                        <span className={styles.viewAll} onClick={handleViewAll}>Tất cả</span>
+                            {/*)}*/}
+                        </div>
                     <div className={styles.grid}>
                         {paginatedProducts.map(p =>
                             p.type === "combo" ? (

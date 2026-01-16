@@ -22,12 +22,7 @@ export interface Product extends ProductBase {
     attributes?: Attribute[];
     hasBulkPrice?: boolean;
 
-    comboItems?: {
-        productId: number;
-        quantity: number;
-        name?: string;
-        image?: string;
-    }[];
+    comboItems?: ComboItem[];
 }
 
 export interface ProductImage {
@@ -106,7 +101,15 @@ export interface SuppliesDetail {
     packaging: string;
     volume?: string | null;
 }
-
+export interface ComboItem {
+    id: number;
+    slug: string;
+    name: string;
+    product_type: ProductType;
+    quantity: number;
+    price: number;
+    image: string;
+}
 
 // Kế thừa Product list, thêm tất cả field detail
 export interface ProductDetail extends ProductBase {
@@ -124,6 +127,7 @@ export interface ProductDetail extends ProductBase {
     potDetail?: PotDetail;
     variants?: PotVariant[];
     suppliesDetail?: SuppliesDetail;
+    comboItems?: ComboItem[];
     wholesalePrices?: WholesalePrice[];
     infor?: ProductInfor;
 }

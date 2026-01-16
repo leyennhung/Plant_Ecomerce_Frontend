@@ -1,5 +1,5 @@
-import data from "../data/product_sub.json";
-import datapro from "../data/products.json";
+import datapro from "../data/product_sub.json";
+import data from "../data/products.json";
 import { http, HttpResponse } from "msw"; //hàm có sẵn của thư viện MSW
 import { normalize } from "../../utils/normalize";
 
@@ -10,27 +10,27 @@ export const productHandlers = [
     // }),
     // GET /plant/new_products      => trả mảng sp moi
     http.get("/api/new_products", () => {
-        return HttpResponse.json(data.new_products);
+        return HttpResponse.json(datapro.new_products);
     }),
     //GET /plant/trending_products  => trả mảng sp trend
     http.get("/api/trending_products", () => {
-        return HttpResponse.json(data.trending_products);
+        return HttpResponse.json(datapro.trending_products);
     }),
     // GET /plant/sale_products      => trả mảng sp khuyến mãi
     http.get("/api/sale_products", () => {
-        return HttpResponse.json(data.sale_products);
+        return HttpResponse.json(datapro.sale_products);
     }),
     //GET /plant/wholesale_products  => trả mảng sp giá sĩ
     http.get("/api/wholesale_products", () => {
-        return HttpResponse.json(data.wholesale_products);
+        return HttpResponse.json(datapro.wholesale_products);
     }),
     //GET /plant/supplies_products  => trả mảng sp vật tư
     http.get("/api/supplies_products", () => {
-        return HttpResponse.json(data.supplies_products);
+        return HttpResponse.json(datapro.supplies_products);
     }),
     //GET /plant/supplies_products  => trả mảng sp combo
     http.get("/api/combo_products", () => {
-        return HttpResponse.json(data.combo_products);
+        return HttpResponse.json(datapro.combo_products);
     }),
     // http.get("/api/products/:id", (req) => {
     //     const id = Number(req.params.id);
@@ -45,7 +45,7 @@ export const productHandlers = [
     // })
     http.get("/api/products/:slug", ({ params }) => {
         const slug = params.slug as string;
-        const product = datapro.products.find(
+        const product = data.products.find(
             p => p.slug === slug);
         if (!product) {
             return new HttpResponse(null, { status: 404 });
@@ -69,11 +69,11 @@ export const productHandlers = [
     // }),
     // JSON Sản phâmr tương tự
     http.get("/api/products/:slug/related", () => {
-        return HttpResponse.json(data.relate_products);
+        return HttpResponse.json(datapro.relate_products);
     }),
     // JSON vật tư gợi ý đi kèm
     http.get("/api/products/:slug/accessories", () => {
-        return HttpResponse.json(data.suggest_supplies);
+        return HttpResponse.json(datapro.suggest_supplies);
     }),
 //     Tìm kiếm
     http.get("/api/products", ({ request }) => {
@@ -81,7 +81,7 @@ export const productHandlers = [
         const search = url.searchParams.get("search")?.toLowerCase();
         // Không có search → trả tất cả
         if (!search) {
-            return HttpResponse.json(datapro.products);
+            return HttpResponse.json(data.products);
         }
         // Có search → lọc theo tên
         const keyword = normalize(search);
@@ -114,7 +114,7 @@ return HttpResponse.json(filteredProducts);
         const attrIdParam = url.searchParams.get("attrId");
         const attrId = attrIdParam ? Number(attrIdParam) : null;
 
-        let filteredProducts = datapro.products.filter(
+        let filteredProducts = data.products.filter(
             p => p.category?.slug === slug
         );
 

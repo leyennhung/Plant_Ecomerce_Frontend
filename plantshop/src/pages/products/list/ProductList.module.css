@@ -33,6 +33,25 @@ body {
     margin-bottom: 1.5rem;
     color: #3b823e;
 }
+.titleRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.viewAll {
+    font-size: 14px;
+    color: #38a169;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.viewAll:hover {
+    text-decoration: underline;
+}
+
 
 .empty {
     font-size: 1.2rem;
@@ -86,6 +105,33 @@ body {
 .nav:disabled {
     opacity: 0.4;
     cursor: not-allowed;
+}
+/*BUTTON về đầu màn hình*/
+.scrollTopBtn {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    background: #2f7d32;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transition: all 0.25s ease;
+}
+
+.scrollTopBtn:hover {
+    background: #256628;
+    transform: translateY(-4px);
 }
 
 
