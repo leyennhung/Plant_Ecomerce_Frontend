@@ -3,13 +3,12 @@ import {formatPrice} from "../../../../utils/formatPrice.ts";
 import styles from "./ProductCard.module.css";
 import {Link, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {useState} from "react";
+import { useState, useMemo } from "react";
 import type {RootState} from "../../../../store";
 import type {CartViewItem} from "../../../../types/cart.type";
 import {addToWishlist, removeFromWishlist,} from "../../../../store/wishlistSlice";
 import {getFinalPrice} from "../../../../utils/getFinalPrice";
 import type {ProductApi} from "../../../../types/product-api.type";
-import {useMemo} from "react";
 
 type Props = {
     product: ProductBase;
@@ -31,31 +30,43 @@ const ProductCard = ({product, isNew, isSale, isTrending, onAddToCart}: Props) =
         typeof salePrice === "number" && salePrice > 0 && salePrice < product.price;
 
     // sp yêu thích
-    const wishlistItems = useSelector(
-        (state: RootState) => state.wishlist.items
-    );
-    const isFavorite = wishlistItems.some(
-        item => item.product_id === product.id
-    );    /* load favorite từ localStorage */
+    const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
 
-    // lưu sp yêu thích vào local storage
+    const isFavorite = wishlistItems.some(
+        item => item.product_id === product.id && item.variant_id == null
+    );
+
     const toggleFavorite = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
 
         if (isFavorite) {
-            dispatch(removeFromWishlist(product.id));
+            dispatch(
+                removeFromWishlist({
+                    productId: product.id,
+                    variantId: undefined,
+                })
+            );
         } else {
             dispatch(
                 addToWishlist({
-                    id: Date.now(),          // fake id cho client
-                    user_id: 0,              // guest user
+                    id: Date.now(),
+                    user_id: 0,
                     product_id: product.id,
+                    variant_id: undefined,
+                    name: product.name,
+                    image: product.image,
+                    price: product.salePrice ?? product.price,
                     created_at: new Date().toISOString(),
                 })
             );
         }
     };
+
+    /* ===== GIÁ THEO SỐ LƯỢNG ===== */
+    const priceInfo = useMemo(() => {
+        return getFinalPrice(product as ProductApi, quantity);
+    }, [product, quantity]);
 
     const handleAddToCart = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -70,10 +81,6 @@ const ProductCard = ({product, isNew, isSale, isTrending, onAddToCart}: Props) =
         setQuantity(1);
         setShowBuyNow(true);
     };
-
-    const priceInfo = useMemo(() => {
-        return getFinalPrice(product as ProductApi, quantity);
-    }, [product, quantity]);
 
     const confirmBuyNow = () => {
         const buyNowItem: CartViewItem = {

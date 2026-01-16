@@ -31,46 +31,42 @@ const ProductCardCombo = ({product, onAddToCart}: Props) => {
             ?.map(item => item.image)
             .filter((img): img is string => !!img)
             .slice(0, 2) || [];
-    // sp yêu thích
-    const wishlistItems = useSelector(
-        (state: RootState) => state.wishlist.items
-    );
-    const isFavorite = wishlistItems.some(
-        item => item.product_id === product.id
-    );    /* load favorite từ localStorage */
 
-    // lưu sp yêu thích vào local storage
+    // sp yêu thích
+    const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
+
+    const isFavorite = wishlistItems.some(
+        item => item.product_id === product.id && item.variant_id == null
+    );
+
     const toggleFavorite = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
 
         if (isFavorite) {
-            dispatch(removeFromWishlist(product.id));
+            dispatch(
+                removeFromWishlist({
+                    productId: product.id,
+                    variantId: undefined,
+                })
+            );
         } else {
             dispatch(
                 addToWishlist({
                     id: Date.now(),
                     user_id: 0,
                     product_id: product.id,
+                    variant_id: undefined,
+                    name: product.name,
+                    image: product.image,
+                    price: product.salePrice ?? product.price,
                     created_at: new Date().toISOString(),
                 })
             );
         }
     };
 
-    const handleAddToCart = (e: React.MouseEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        onAddToCart?.();
-    };
-    //  Mua ngay, sang trang thanh toán
-    const openBuyNow = (e: React.MouseEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setQuantity(1);
-        setShowBuyNow(true);
-    };
-
+    /* PRICE */
     const priceInfo = useMemo(() => {
         return getFinalPrice(
             {
@@ -89,7 +85,19 @@ const ProductCardCombo = ({product, onAddToCart}: Props) => {
             quantity
         );
     }, [product, quantity]);
-
+    
+    const handleAddToCart = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onAddToCart?.();
+    };
+    //  Mua ngay, sang trang thanh toán
+    const openBuyNow = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setQuantity(1);
+        setShowBuyNow(true);
+    };
 
     const confirmBuyNow = () => {
         const buyNowItem: CartViewItem = {
@@ -178,7 +186,7 @@ const ProductCardCombo = ({product, onAddToCart}: Props) => {
                 </button>
             </div>
 
-            {/* ===== MODAL MUA NGAY ===== */}
+            {/* MODAL MUA NGAY */}
             {showBuyNow && (
                 <div className={styles.overlay} onClick={() => setShowBuyNow(false)}>
                     <div className={styles.modal} onClick={e => e.stopPropagation()}>

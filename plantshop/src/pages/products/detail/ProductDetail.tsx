@@ -1,6 +1,6 @@
-import { useEffect, useState, useRef } from "react";
-import { useParams, useNavigate} from "react-router-dom";
-import { productService } from "../../../services/product.service";
+import {useEffect, useState, useRef} from "react";
+import {useParams, useNavigate} from "react-router-dom";
+import {productService} from "../../../services/product.service";
 import type {PotVariant, ProductDetail, ProductImage} from "../../../types/product.type";
 import styles from "./ProductDetail.module.css";
 import {formatPrice} from "../../../utils/formatPrice";
@@ -12,12 +12,15 @@ import PlantSpecs from "./components/PlantSpecs.tsx";
 import SeedSpecs from "./components/SeedSpecs.tsx";
 import PotSpecs from "./components/PotSpecs.tsx";
 import SuppliesSpecs from "./components/SuppliesSpecs.tsx";
-import {useDispatch} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
+import type {RootState} from "../../../store";
+import {addToWishlist, removeFromWishlist} from "../../../store/wishlistSlice";
 import {addToCart} from "../../../store/cartSlice";
 
 
 const Productdetail = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     // const { id } = useParams<{ id: string }>();
     const {slug} = useParams<{ slug: string }>();
@@ -25,7 +28,6 @@ const Productdetail = () => {
     const [mainImage, setMainImage] = useState<string>("");
     const [quantity, setQuantity] = useState<number>(1);
     const [activeAccordion, setActiveAccordion] = useState<number | null>(0);
-    const [isFavorite, setIsFavorite] = useState(false);
     const [relatedProducts, setRelatedProducts] = useState<ProductDetail[]>([]);
     const [suggestSupplies, setSuggestSupplies] = useState<ProductDetail[]>([]);
     const [reviews, setReviews] = useState<Review[]>([]);
@@ -38,7 +40,73 @@ const Productdetail = () => {
     const [selectedVariant, setSelectedVariant] = useState<PotVariant | null>(null);
     // về đầu page
     const topRef = useRef<HTMLDivElement>(null);
-    const navigate = useNavigate();
+
+    /* WISHLIST REDUX */
+    const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
+
+    const isFavorite = (() => {
+        if (!product) return false;
+
+        if (product.type === "pot") {
+            if (!selectedVariant) return false;
+            return wishlistItems.some(
+                i =>
+                    i.product_id === product.id &&
+                    i.variant_id === selectedVariant.id
+            );
+        }
+
+        return wishlistItems.some(i => i.product_id === product.id);
+    })();
+
+    const toggleFavorite = () => {
+        if (!product) return;
+
+        if (product.type === "pot") {
+            if (!selectedVariant) {
+                alert("Vui lòng chọn màu và kích thước trước khi thêm wishlist");
+                return;
+            }
+
+            if (isFavorite) {
+                dispatch(
+                    removeFromWishlist({
+                        productId: product.id,
+                        variantId: selectedVariant.id,
+                    })
+                );
+            } else {
+                dispatch(
+                    addToWishlist({
+                        id: Date.now(),
+                        user_id: 0,
+                        product_id: product.id,
+                        variant_id: selectedVariant.id,
+                        name: product.name,
+                        image: selectedVariant.image || product.images?.[0]?.url || "",
+                        price: selectedVariant.price,
+                        created_at: new Date().toISOString(),
+                    })
+                );
+            }
+        } else {
+            if (isFavorite) {
+                dispatch(removeFromWishlist({productId: product.id}));
+            } else {
+                dispatch(
+                    addToWishlist({
+                        id: Date.now(),
+                        user_id: 0,
+                        product_id: product.id,
+                        name: product.name,
+                        image: product.images?.[0]?.url || "",
+                        price: product.salePrice ?? product.price,
+                        created_at: new Date().toISOString(),
+                    })
+                );
+            }
+        }
+    };
 
     const user = {id: 999, name: "Khách hàng", avatar: "https://i.pravatar.cc/60?img=50"}; // demo user
     useEffect(() => {
@@ -47,28 +115,24 @@ const Productdetail = () => {
             setProduct(p);
             setMainImage(p.images?.[0].url ?? "");
 
-                    if (p.type === "pot" && p.variants && p.variants.length > 0) {
-                        const colors = Array.from(new Set(p.variants.map(v => v.color)));
-                        // chỉ có 1 màu → auto chọn
-                        if (colors.length === 1 && !selectedColor) {
-                            setSelectedColor(colors[0]);
-                        }
-                        // const first = p.variants[0];
-                        // setSelectedColor(first.color);
-                        // setSelectedSize(first.size);
-                        // setSelectedVariant(first);
-                        // setMainImage(first.image || p.images?.[0].url);
-                    }
+            if (p.type === "pot" && p.variants && p.variants.length > 0) {
+                const colors = Array.from(new Set(p.variants.map(v => v.color)));
+                // chỉ có 1 màu → auto chọn
+                if (colors.length === 1 && !selectedColor) {
+                    setSelectedColor(colors[0]);
+                }
+                // const first = p.variants[0];
+                // setSelectedColor(first.color);
+                // setSelectedSize(first.size);
+                // setSelectedVariant(first);
+                // setMainImage(first.image || p.images?.[0].url);
+            }
+        });
+        productService.getRelatedProducts(slug).then(setRelatedProducts);
+        productService.getSuggestSupplies(slug).then(setSuggestSupplies);
+    }, [slug]);
 
-                    // load favorite from localStorage
-                    const fav = localStorage.getItem(`favorite-${slug}`);
-                    setIsFavorite(!!fav);
-                });
-                productService.getRelatedProducts(slug).then(setRelatedProducts);
-                productService.getSuggestSupplies(slug).then(setSuggestSupplies);
-        }, [slug]);
-
-            // load favorite from localStorage
+    // load favorite from localStorage
     // Phần review ( chỉ load khi ở tab)
     useEffect(() => {
         if (activeAccordion !== 3 || !product?.id) return;
@@ -78,7 +142,7 @@ const Productdetail = () => {
             .getReviewByProduct(product.id)
             .then(setReviews)
             .catch(() => setReviews([]));
-            // .finally(() => setLoadingReview(false))
+        // .finally(() => setLoadingReview(false))
         ;
     }, [activeAccordion, product?.id]);
 
@@ -92,7 +156,26 @@ const Productdetail = () => {
 
     const handleAddToCart = () => {
         if (!product) return;
-        dispatch(addToCart({productId: product.id, quantity}));
+
+        if (product.type === "pot") {
+            if (!selectedVariant) {
+                alert("Vui lòng chọn màu và kích thước chậu");
+                return;
+            }
+
+            dispatch(addToCart({
+                productId: product.id,
+                quantity,
+                variant: {
+                    id: selectedVariant.id,
+                    name: `${selectedVariant.color} - ${selectedVariant.size}`,
+                    price: selectedVariant.price,
+                    image: selectedVariant.image,
+                },
+            }));
+        } else {
+            dispatch(addToCart({productId: product.id, quantity}));
+        }
     };
 
     const changeMainImage = (img: ProductImage) => {
@@ -101,20 +184,6 @@ const Productdetail = () => {
 
     const toggleAccordion = (index: number) => {
         setActiveAccordion(prev => (prev === index ? null : index));
-    };
-    // Lưu sp yêu thích vào local storage
-    const toggleFavorite = () => {
-        setIsFavorite(prev => {
-            const next = !prev;
-
-            if (next) {
-                localStorage.setItem(`favorite-${slug}`, "1");
-            } else {
-                localStorage.removeItem(`favorite-${slug}`);
-            }
-
-            return next;
-        });
     };
     if (!product) return <div>Loading...</div>;
 
@@ -259,10 +328,10 @@ const Productdetail = () => {
                             <strong>Danh mục: </strong>
                             {categoryTags.join(", ")}
                         </p>
-                            <p>
-                                <strong>Danh mục: </strong>
-                                {categoryTags.join(", ")}
-                            </p>
+                        <p>
+                            <strong>Danh mục: </strong>
+                            {categoryTags.join(", ")}
+                        </p>
                         {/* CHỌN BIẾN THỂ CHẬU */}
                         {product.type === "pot" && product.variants && (
                             <div className={styles.variantBox}>
@@ -312,7 +381,6 @@ const Productdetail = () => {
                                     isFavorite ? styles.active : ""
                                 }`}
                             />
-
                         </div>
                     </div>
                 </div>

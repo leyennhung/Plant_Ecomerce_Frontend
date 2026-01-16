@@ -59,7 +59,6 @@ const saveOrderLocal = (
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
     }));
-
     localStorage.setItem(key, JSON.stringify([...orders, newOrder]));
     localStorage.setItem(
         "order_items",
@@ -86,15 +85,18 @@ const Checkout = () => {
     }, [userId, navigate]);
 
     /* ---------- SELECTED ITEMS ---------- */
-    const selectedIds: number[] = location.state?.selectedIds || [];
+    const selectedKeys: string[] = location.state?.selectedKeys || [];
     const buyNowItems: CartViewItem[] = JSON.parse(
         localStorage.getItem("buy_now_order") || "[]"
     );
 
     const selectedItems: CartViewItem[] =
-        selectedIds.length > 0
-            ? cartItems.filter(item => selectedIds.includes(item.productId))
+        selectedKeys.length > 0
+            ? cartItems.filter(item =>
+                selectedKeys.includes(`${item.productId}-${item.variantId ?? "base"}`)
+            )
             : buyNowItems;
+
 
 
     /* ---------- FORM STATE ---------- */
