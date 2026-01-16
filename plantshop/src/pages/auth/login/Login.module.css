@@ -1,6 +1,5 @@
 .container {
     min-height: 100vh;
-    background-color: #f0f5f0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -91,7 +90,7 @@
 .iconContainer {
     width: 60px;
     height: 60px;
-    background-color: #28a745; /* Màu xanh lá */
+    background-color: #3b823e;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -107,10 +106,30 @@
 }
 
 .successText {
-    color: #666;
+    color: #333;
     font-size: 14px;
     font-family: Arial, sans-serif;
     margin: 0;
+}
+
+/* Nút Đăng ký */
+.registerPrompt {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 16px;
+    color: #333;
+}
+
+.registerLink {
+    color: #3b823e;
+    font-weight: 600;
+    text-decoration: none;
+    margin-left: 5px;
+    transition: color 0.3s ease;
+}
+
+.registerLink:hover {
+    color: #01370C;
 }
 
 @keyframes fadeIn {

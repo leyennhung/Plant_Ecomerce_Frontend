@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, Link} from "react-router-dom"; // 1. Thêm Link vào đây
 import {AxiosError} from "axios";
 import AuthService from "../../../services/auth.service";
 import styles from "./Login.module.css";
@@ -10,6 +10,7 @@ import type {CartViewItem} from "../../../types/cart.type";
 import {mergeWishlistItems} from "../../../utils/wishlist";
 import type {WishlistItem} from "../../../types/wishlist.type";
 import {setWishlist} from "../../../store/wishlistSlice";
+import { loginSuccess } from "../../../store/authSlice";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -39,16 +40,24 @@ const Login = () => {
         setError("");
 
         try {
-            //Gọi auth.service.login()
+            // Gọi auth.service.login()
             await AuthService.login(credentials);
 
-            //  MERGE CART 
+            // Lấy thông tin user vừa lưu để xử lý
+            const storedData = JSON.parse(localStorage.getItem("user") || "{}");
+            const user = storedData.user;
+            const token = storedData.token;
+            const userId = user?.id;
+
+            // Gửi tín hiệu Login thành công cho redux
+            if (user && token) {
+                dispatch(loginSuccess({ user, token }));
+            }
+
+            // MERGE CART
             const guestCart: CartViewItem[] = JSON.parse(
                 localStorage.getItem("cart_guest") || "[]"
             );
-
-            const stored = JSON.parse(localStorage.getItem("user") || "{}");
-            const userId = stored?.user?.id;
 
             const userCart: CartViewItem[] = JSON.parse(
                 localStorage.getItem(`cart_user_${userId}`) || "[]"
@@ -61,7 +70,7 @@ const Login = () => {
 
             //  xóa cart guest
             localStorage.removeItem("cart_guest");
-            /*  MERGE WISHLIST  */
+            /* MERGE WISHLIST  */
             const guestWishlist: WishlistItem[] = JSON.parse(
                 localStorage.getItem("wishlist_guest") || "[]"
             );
@@ -76,12 +85,17 @@ const Login = () => {
                 userId
             );
 
+            // Cập nhật Redux Wishlist
             dispatch(setWishlist(mergedWishlist));
+
+            // Lưu lại wishlist mới của user vào local
             localStorage.setItem(
                 `wishlist_user_${userId}`,
                 JSON.stringify(mergedWishlist)
             );
             localStorage.removeItem("wishlist_guest");
+
+            // Hiển thị thông báo thành công
             setShowSuccessModal(true);
             setTimeout(() => navigate("/"), 2000);
 
@@ -129,6 +143,15 @@ const Login = () => {
                 <button type="submit" className={styles.button}>
                     Đăng nhập
                 </button>
+
+                {/* đăng ký mới*/}
+                <div className={styles.registerPrompt}>
+                    <span>Bạn chưa có tài khoản? </span>
+                    <Link to="/register" className={styles.registerLink}>
+                        Đăng ký ngay
+                    </Link>
+                </div>
+
             </form>
 
             {showSuccessModal && (

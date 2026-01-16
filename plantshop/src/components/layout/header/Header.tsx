@@ -7,9 +7,10 @@ import { categoryService } from "../../../services/category.service";
 import type { Category } from "../../../types/category.type";
 
 import Search from "../../../pages/search/Search";
-import { useSelector } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import type { RootState } from "../../../store";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { logout } from "../../../store/authSlice";
 
 const Header = () => {
     const [openMenu, setOpenMenu] = useState<number | null>(null);
@@ -18,6 +19,9 @@ const Header = () => {
     const [searchOpen, setSearchOpen] = useState(false);
 
     const userRef = useRef<HTMLDivElement>(null);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
 
     const cartItems = useSelector((state: RootState) => state.cart.items);
     const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
@@ -41,6 +45,22 @@ const Header = () => {
         return () =>
             document.removeEventListener("mousedown", handleClickOutside);
     }, []);
+
+    // Kiểm tra đăng nhập khi click icon user
+    const handleUserClick = () => {
+        if (isAuthenticated) {
+            setOpenUser(prev => !prev);
+        } else {
+            navigate("/login");
+        }
+    };
+
+    // Xử lý đăng xuất
+    const handleLogout = () => {
+        dispatch(logout());
+        setOpenUser(false);
+        navigate("/login");
+    };
 
     return (
         <>
@@ -68,28 +88,43 @@ const Header = () => {
                             )}
                         </Link>
 
-                        <i className="fa-solid fa-heart" />
+                        {/* Gắn link Wishlist */}
+                        <Link to="/wishlist">
+                            <i className="fa-solid fa-heart" />
+                        </Link>
 
+                        {/* Xử lý logic User */}
                         <div className={styles.userWrapper}
-                            ref={userRef}
-                            onClick={() => setOpenUser(prev => !prev)}
+                             ref={userRef}
+                             onClick={handleUserClick}
                         >
                             <i className="fa-solid fa-user" />
-                            {openUser && (
+
+                            {/* Chỉ hiển thị menu khi đã login và đang mở */}
+                            {openUser && isAuthenticated && (
                                 <div className={styles.userDropdown}>
-                                    <div className={styles.dropdownItem}>
+                                    {/* Link tới Profile */}
+                                    <Link to="/profile" className={styles.dropdownItem}>
                                         <i className="fa-solid fa-user-circle" />
                                         <span>Tài khoản</span>
-                                    </div>
+                                    </Link>
 
-                                    <div className={styles.dropdownItem}>
+                                    {/* Link tới Orders */}
+                                    <Link to="/orders" className={styles.dropdownItem}>
                                         <i className="fa-solid fa-box" />
                                         <span>Đơn mua</span>
-                                    </div>
+                                    </Link>
 
                                     <div className={styles.divider} />
 
-                                    <div className={`${styles.dropdownItem} ${styles.logout}`}>
+                                    {/* Nút đăng xuất */}
+                                    <div
+                                        className={`${styles.dropdownItem} ${styles.logout}`}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleLogout();
+                                        }}
+                                    >
                                         <i className="fa-solid fa-right-from-bracket" />
                                         <span>Đăng xuất</span>
                                     </div>
