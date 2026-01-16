@@ -14,17 +14,22 @@ import OrderSuccess from "../pages/order/OrderSuccess";
 import ShippingPolicy from "../pages/privacy/ShippingPolicy";
 import ProductList from "../pages/products/list/ProductList.tsx";
 import ProductDetail from "../pages/products/detail/ProductDetail.tsx";
+import AuthLayout from "../components/layout/main/AuthLayout.tsx";
 
 const AppRoutes = () => (
     <Routes>
+        <Route element={<AuthLayout />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+        </Route>
         <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
             <Route path="/products" element={<ProductList />} />
             <Route path="/products/:slug" element={<ProductDetail />} />
             <Route path="/products/category/:slug" element={<ProductList />} />
-            <Route path="/login" element={<Login/>}/>
-            <Route path="/register" element={<Register/>}/>
+            {/*<Route path="/login" element={<Login/>}/>*/}
+            {/*<Route path="/register" element={<Register/>}/>*/}
             <Route path="/profile" element={<Profile/>}/>
             <Route path="/carts" element={<Cart/>}/>
             <Route path="/wishlist" element={<Wishlist/>}/>
