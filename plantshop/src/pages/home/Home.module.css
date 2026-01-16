@@ -9,6 +9,9 @@ body {
     min-width: 1200px;
     background-color: #f4fbf6;
 }
+h3::after{
+    background: none;
+}
 /*1.BANNER*/
 .banner {
     width: 100%;

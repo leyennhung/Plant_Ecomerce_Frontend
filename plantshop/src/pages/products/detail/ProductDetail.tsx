@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { useParams} from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
+import { useParams, useNavigate} from "react-router-dom";
 import { productService } from "../../../services/product.service";
-import type { ProductDetail, ProductImage } from "../../../types/product.type";
+import type {PotVariant, ProductDetail, ProductImage} from "../../../types/product.type";
 import styles from "./ProductDetail.module.css";
 import { formatPrice } from "../../../utils/formatPrice";
 import ReactMarkdown from "react-markdown";
@@ -27,6 +27,13 @@ const Productdetail = () => {
     //const [loadingReview, setLoadingReview] = useState(false);
     const [newComment, setNewComment] = useState("");
     const [newRating, setNewRating] = useState(5);
+    // select kích thước, màu
+    const [selectedColor, setSelectedColor] = useState<string>("");
+    const [selectedSize, setSelectedSize] = useState<string>("");
+    const [selectedVariant, setSelectedVariant] = useState<PotVariant | null>(null);
+    // về đầu page
+    const topRef = useRef<HTMLDivElement>(null);
+    const navigate = useNavigate();
 
     const user = { id: 999, name: "Khách hàng", avatar: "https://i.pravatar.cc/60?img=50" }; // demo user
     useEffect(() => {
@@ -35,6 +42,19 @@ const Productdetail = () => {
                     setProduct(p);
                     setMainImage(p.images?.[0].url ?? "");
 
+                    if (p.type === "pot" && p.variants && p.variants.length > 0) {
+                        const colors = Array.from(new Set(p.variants.map(v => v.color)));
+                        // chỉ có 1 màu → auto chọn
+                        if (colors.length === 1 && !selectedColor) {
+                            setSelectedColor(colors[0]);
+                        }
+                        // const first = p.variants[0];
+                        // setSelectedColor(first.color);
+                        // setSelectedSize(first.size);
+                        // setSelectedVariant(first);
+                        // setMainImage(first.image || p.images?.[0].url);
+                    }
+
                     // load favorite from localStorage
                     const fav = localStorage.getItem(`favorite-${slug}`);
                     setIsFavorite(!!fav);
@@ -42,6 +62,7 @@ const Productdetail = () => {
                 productService.getRelatedProducts(slug).then(setRelatedProducts);
                 productService.getSuggestSupplies(slug).then(setSuggestSupplies);
         }, [slug]);
+
     // Phần review ( chỉ load khi ở tab)
     useEffect(() => {
         if (activeAccordion !== 3 || !product?.id) return;
@@ -54,6 +75,14 @@ const Productdetail = () => {
             // .finally(() => setLoadingReview(false))
         ;
     }, [activeAccordion, product?.id]);
+
+    // Về đầu page
+    useEffect(() => {
+        topRef.current?.scrollIntoView({
+            behavior: "instant",
+            block: "start",
+        });
+    }, [slug]);
 
 
     const changeMainImage = (img: ProductImage) => {
@@ -115,7 +144,38 @@ const Productdetail = () => {
             alert("Không thể gửi bình luận, thử lại sau");
         }
     };
+    // tạo danh sách kích thước, màu ( lọc trungf)
+    const potColors = product?.variants
+        ? Array.from(new Set(product.variants.map(v => v.color)))
+        : [];
 
+    const potSizes = product?.variants
+        ? product.variants
+            .filter(v => v.color === selectedColor)
+            .map(v => v.size)
+        : [];
+    // handler chọn màu và kích thước
+    const handleSelectColor = (color: string) => {
+        setSelectedColor(color);
+        setSelectedSize("");
+        setSelectedVariant(null);
+    };
+
+    const handleSelectSize = (size: string) => {
+        setSelectedSize(size);
+        const variant = product?.variants?.find(
+            v => v.color === selectedColor && v.size === size
+        );
+
+        if (variant) {
+            setSelectedVariant(variant);
+            setMainImage(variant.image || mainImage);
+        }
+    };
+    // Hiển thị giá theo sp (pot)
+    const displayPrice = selectedVariant?.price ?? product.price;
+
+// Hiển thị theo productType
     const renderSpecs = () => {
         switch (product.type) {
             case "plant":
@@ -139,7 +199,7 @@ const Productdetail = () => {
     };
 
     return (
-        <div className={styles.container}>
+        <div ref={topRef} className={styles.container}>
             <div className={styles.main}>
                 {/* Gallery */}
                 <div className={styles.gallery}>
@@ -173,7 +233,8 @@ const Productdetail = () => {
                                 </>
                             ) : (
                                 <span className={styles.onlyPrice}>
-                                {formatPrice(product.price)}
+                                {/*{formatPrice(product.price)}*/}
+                                    {formatPrice(displayPrice)}
                                  </span>
                             )}
                         </div>
@@ -188,6 +249,40 @@ const Productdetail = () => {
                                 <strong>Danh mục: </strong>
                                 {categoryTags.join(", ")}
                             </p>
+                        {/* CHỌN BIẾN THỂ CHẬU */}
+                        {product.type === "pot" && product.variants && (
+                            <div className={styles.variantBox}>
+                                {/* MÀU */}
+                                <div className={styles.variantRow}>
+                                    <label>Màu sắc</label>
+                                    <select
+                                        value={selectedColor}
+                                        onChange={e => handleSelectColor(e.target.value)}
+                                    >
+                                        <option value="">Chọn màu</option>
+                                        {potColors.map(color => (
+                                            <option key={color} value={color}>{color}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                {/* KÍCH THƯỚC */}
+                                <div className={styles.variantRow}>
+                                    <label>Kích thước</label>
+                                    <select
+                                        value={selectedSize}
+                                        onChange={e => handleSelectSize(e.target.value)}
+                                        disabled={!selectedColor}
+                                    >
+                                        <option value="">Chọn kích thước</option>
+                                        {potSizes.map(size => (
+                                            <option key={size} value={size}>{size}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+                        )}
+
                         <div className={styles.buyRow}>
                             <div className={styles.quantityBox}>
                                 <button onClick={() => setQuantity(q => Math.max(1, q - 1))}>-</button>
@@ -210,68 +305,72 @@ const Productdetail = () => {
             <div className={styles.productTabs}>
                 <div className={styles.tabContent}>
                     <div className={styles.titleTab}>
-                        <h3 className={styles.productTitle}>Giới thiệu</h3>
+                        <h3 className={styles.productTitle}>
+                            {product.type === "combo" ? "Sản phẩm trong combo" : "Giới thiệu"}
+                        </h3>
                     </div>
 
-                    <div className={styles.productSpecs}>
-                        {/* BẢNG 1 – THÔNG TIN CÂY */}
-                        {/*<div className={styles.specTable}>*/}
-                        {/*    <div className={styles.specRow}>*/}
-                        {/*        <span><strong>Tên thường gọi</strong></span>*/}
-                        {/*        <span>{product.plantDetail?.commonName}</span>*/}
-                        {/*    </div>*/}
+                    {/* COMBO*/}
+                    {product.type === "combo" ? (
+                        <div className={styles.comboList}>
+                            {product.comboItems?.map((item, index) => (
+                                <div key={index} className={styles.comboItem}
+                                     onClick={() => navigate(`/products/${item.slug}`)}>
+                                    <img
+                                        src={item.image}
+                                        alt={item.name}
+                                        className={styles.comboImage}
+                                    />
 
-                        {/*    <div className={styles.specRow}>*/}
-                        {/*        <span><strong>Tên Khoa học</strong></span>*/}
-                        {/*        <span>{product.plantDetail?.scientificName}</span>*/}
-                        {/*    </div>*/}
-
-                        {/*    <div className={styles.specRow}>*/}
-                        {/*        <span><strong>Độ khó chăm sóc</strong></span>*/}
-                        {/*        <span>{product.plantDetail?.difficulty}</span>*/}
-                        {/*    </div>*/}
-
-                        {/*    <div className={styles.specRow}>*/}
-                        {/*        <span><strong>Nhu cầu ánh sáng</strong></span>*/}
-                        {/*        <span>{product.plantDetail?.light}</span>*/}
-                        {/*    </div>*/}
-
-                        {/*    <div className={styles.specRow}>*/}
-                        {/*        <span><strong>Nhu cầu nước</strong></span>*/}
-                        {/*        <span>{product.plantDetail?.water}</span>*/}
-                        {/*    </div>*/}
-                        {/*</div>*/}
-                        {renderSpecs()}
-
-                        {/* BẢNG 2 – QUY CÁCH */}
-                        <div className={styles.specTable}>
-                            <div className={styles.specRow}>
-                                <span><strong>Trọng lượng</strong></span>
-                                <span>{product.dimensions?.weight}</span>
-                            </div>
-                            <div className={styles.specRow}>
-                                <span><strong>Chiều cao:</strong></span>
-                                <span>{product.dimensions?.totalHeight}</span>
-                            </div>
-
-                            <div className={styles.specRow}>
-                                <span><strong>Độ rộng sản phẩm:</strong></span>
-                                <span>{product.dimensions?.canopyWidth}</span>
-                            </div>
-                            <div className={styles.specRow}>
-                                <span><strong>Đường kính chậu:</strong></span>
-                                <span>{product.dimensions?.potWidth}</span>
-                            </div>
-
-                            <div className={styles.specRow}>
-                                <span><strong>Chiều cao chậu: </strong></span>
-                                <span>{product.dimensions?.potHeight}</span>
-                            </div>
-
+                                    <div className={styles.comboInfo}>
+                                        <p className={styles.comboName}>
+                                            {item.name}
+                                        </p>
+                                        <p className={styles.comboQty}>
+                                            Số lượng: x{item.quantity}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-                    </div>
+                    ) : (
+                        /* PRODUCT THƯỜNG */
+                        <div className={styles.productSpecs}>
+                            {/* BẢNG 1 – THÔNG TIN THEO LOẠI */}
+                            {renderSpecs()}
+
+                            {/* BẢNG 2 – QUY CÁCH */}
+                            <div className={styles.specTable}>
+                                <div className={styles.specRow}>
+                                    <span><strong>Trọng lượng</strong></span>
+                                    <span>{product.dimensions?.weight}</span>
+                                </div>
+
+                                <div className={styles.specRow}>
+                                    <span><strong>Chiều cao:</strong></span>
+                                    <span>{product.dimensions?.totalHeight}</span>
+                                </div>
+
+                                <div className={styles.specRow}>
+                                    <span><strong>Chiều rộng:</strong></span>
+                                    <span>{product.dimensions?.canopyWidth}</span>
+                                </div>
+
+                                <div className={styles.specRow}>
+                                    <span><strong>Đường kính chậu:</strong></span>
+                                    <span>{product.dimensions?.potWidth}</span>
+                                </div>
+
+                                <div className={styles.specRow}>
+                                    <span><strong>Chiều cao chậu:</strong></span>
+                                    <span>{product.dimensions?.potHeight}</span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
+
             {/* TAB BẢNG GIAS SĨ */}
             <div className={styles.priceTabs}>
                 {product.wholesalePrices && product.wholesalePrices.length > 0 && (
@@ -358,7 +457,7 @@ const Productdetail = () => {
                     activeAccordion === 2 ? styles.active : ""}`}>
                 <button className={styles.accordionHeader}
                     onClick={() => toggleAccordion(2)}>
-                <span className={styles.accordionTitle}>Chăm sóc / Trồng cây</span>
+                <span className={styles.accordionTitle}>Chăm sóc / Bảo quản</span>
                     <span className={styles.accordionIcon}></span>
                 </button>
                 <div className={styles.accordionContent}>
@@ -448,7 +547,7 @@ const Productdetail = () => {
             <div className={styles.relatedproduct}>
                 {relatedProducts.length > 0 && (
                 <div className={styles.relatedSection}>
-                    <h3 className={styles.title}>🌳 Gợi ý cho không gian của bạn</h3>
+                    <h3 className={styles.title}> Gợi ý cho không gian của bạn</h3>
                     <div className={styles.divider}></div>
                     <div className={styles.productList}>
                         {relatedProducts.map(p => (

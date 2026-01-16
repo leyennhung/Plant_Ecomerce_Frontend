@@ -16,7 +16,9 @@ body {
     gap: 50px;
     margin-top: 20px;
 }
-
+h3::after{
+    background: none;
+}
 /* SẢN PHẨM */
 .gallery {
     flex: 1;
@@ -93,11 +95,11 @@ body {
     margin-bottom: 30px;
 }
 .description {
-    padding: 0 10px;
+    padding: 20px 10px 0 10px;
     background-color: #ffffff;
     border: #1f3d2b solid 1px;
     border-radius: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 .buyRow {
     display: flex;
@@ -149,11 +151,36 @@ body {
 .heartIcon:hover {
     transform: scale(1.15);
 }
+/*CHỌN SIZE VÀ MÀU*/
+.variantBox {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+}
+.variantRow {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.variantRow label {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.variantRow select {
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
 
 /* TAB GIỚI THIỆU */
 .productTabs {
     margin-top: 60px;
-    background: #506B52;
+    background: #D9E9CF;
     padding: 40px 50px;
     border-radius: 14px;
 }
@@ -166,9 +193,9 @@ body {
 
 .productTabs .titleTab .productTitle {
     display: inline-block;
-    font-size: 32px;
+    font-size: 24px;
     font-weight: 600;
-    color: #F0F5F0;
+    color: #000000;
     margin-bottom: 12px;
     position: relative;
 }
@@ -176,7 +203,7 @@ body {
 /* Gạch vàng dưới title */
 .productTabs .titleTab .productTitle::after {
     content: "";
-    width: 200px;
+    width: 350px;
     height: 4px;
     background: #f0c040;
     display: block;
@@ -362,7 +389,7 @@ body {
 
 /* style chữ khi mở */
 .accordionItem.active .accordionTitle {
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 700;
     text-align: center;
     position: relative;
@@ -532,7 +559,7 @@ body {
 }
 /*tên*/
 .relatedproduct .title {
-    font-size: 28px;
+    font-size: 24px;
     margin-bottom: 10px;
     text-align: center;
 }
@@ -622,6 +649,80 @@ body {
         padding: 40px 20px;
     }
 }
+
+/* COMBO LIST */
+.comboList {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 30px;
+}
+
+/* ITEM */
+.comboItem {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    padding: 16px;
+    border: 1px solid #e6e6e6;
+    border-radius: 12px;
+    background: #f9fdfb;
+    transition: all 0.25s ease;
+}
+
+.comboItem:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+/* IMAGE */
+.comboImage {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+/* INFO */
+.comboInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.comboName {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1f3d2b;
+    line-height: 1.4;
+}
+
+.comboQty {
+    font-size: 14px;
+    color: #3f5a4c;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .comboList {
+        grid-template-columns: 1fr;
+        padding: 20px;
+    }
+
+    .comboItem {
+        gap: 12px;
+        padding: 14px;
+    }
+
+    .comboImage {
+        width: 70px;
+        height: 70px;
+    }
+}
+
 
 
 
