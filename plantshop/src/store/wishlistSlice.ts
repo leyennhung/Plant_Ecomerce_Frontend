@@ -1,53 +1,52 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { WishlistState } from '../types/wishlist.type';
-import type { RootState } from './index';
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { WishlistItem } from "../types/wishlist.type";
+import type { RootState } from "./index";
+
+
+type WishlistState = {
+    items: WishlistItem[];
+};
 
 const initialState: WishlistState = {
-    productIds: [],
-    isLoading: false,
-    error: null,
+    items: [],
 };
 
 const wishlistSlice = createSlice({
-    name: 'wishlist',
+    name: "wishlist",
     initialState,
     reducers: {
-        // Bắt đầu fetch wishlist
-        fetchWishlistStart: (state) => {
-            state.isLoading = true;
-            state.error = null;
+        setWishlist(state, action: PayloadAction<WishlistItem[]>) {
+            state.items = action.payload;
         },
 
-        // Fetch wishlist thành công
-        fetchWishlistSuccess: (state, action: PayloadAction<number[]>) => {
-            state.isLoading = false;
-            state.productIds = action.payload;
+        addToWishlist(state, action: PayloadAction<WishlistItem>) {
+            const exists = state.items.some(
+                i => i.product_id === action.payload.product_id
+            );
+            if (!exists) {
+                state.items.push(action.payload);
+            }
         },
 
-        // Fetch wishlist thất bại
-        fetchWishlistFailure: (state, action: PayloadAction<string>) => {
-            state.isLoading = false;
-            state.error = action.payload;
-        },
-
-        // Xóa sản phẩm khỏi wishlist
-        removeFromWishlist: (state, action: PayloadAction<number>) => {
-            state.productIds = state.productIds.filter(
-                id => id !== action.payload
+        removeFromWishlist(state, action: PayloadAction<number>) {
+            state.items = state.items.filter(
+                i => i.product_id !== action.payload
             );
         },
     },
 });
 
 export const {
-    fetchWishlistStart,
-    fetchWishlistSuccess,
-    fetchWishlistFailure,
+    setWishlist,
+    addToWishlist,
     removeFromWishlist,
 } = wishlistSlice.actions;
 
 export default wishlistSlice.reducer;
 
-export const selectIsProductInWishlist =
+export const selectWishlistItems = (state: RootState) =>
+    state.wishlist.items;
+
+export const selectIsInWishlist =
     (productId: number) => (state: RootState) =>
-        state.wishlist.productIds.includes(productId);
+        state.wishlist.items.some(i => i.product_id === productId);

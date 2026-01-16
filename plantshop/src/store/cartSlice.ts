@@ -16,22 +16,29 @@ const cartSlice = createSlice({
         // Set toàn bộ danh sách cart items
         setCartItems: (state, action: PayloadAction<CartViewItem[]>) => {
             state.items = action.payload;
+            localStorage.setItem(
+                getCartStorageKey(),
+                JSON.stringify(state.items)
+            );
         },
+
 
         // Thêm sản phẩm vào cart
         addToCart: (state, action: PayloadAction<CartViewItem>) => {
-            // Kiểm tra sản phẩm đã tồn tại trong cart chưa
             const existing = state.items.find(
                 item => item.productId === action.payload.productId
             );
 
-            // Nếu đã tồn tại, cộng thêm số lượng
             if (existing) {
                 existing.quantity += action.payload.quantity;
             } else {
-                // Nếu chưa tồn tại, thêm mới
                 state.items.push(action.payload);
             }
+
+            localStorage.setItem(
+                getCartStorageKey(),
+                JSON.stringify(state.items)
+            );
         },
 
         // Xóa sản phẩm khỏi cart theo productId
@@ -60,6 +67,17 @@ const cartSlice = createSlice({
         },
     },
 });
+function getCartStorageKey() {
+    const stored = localStorage.getItem("user");
+    if (!stored) return "cart_guest";
+
+    try {
+        const { user } = JSON.parse(stored);
+        return user?.id ? `cart_user_${user.id}` : "cart_guest";
+    } catch {
+        return "cart_guest";
+    }
+}
 
 export const {
     setCartItems,

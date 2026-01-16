@@ -194,3 +194,49 @@ Button {
     color: #d32f2f;
     margin-top: 4px;
 }
+
+.emptyCart {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 14px;
+    margin-top: 32px;
+}
+
+.emptyIcon {
+    font-size: 100px;
+    opacity: 0.4;
+    margin-bottom: 8px;
+}
+
+.emptyTitle {
+    font-size: 22px;
+    font-weight: 600;
+    color: #213547;
+}
+
+.emptyDesc {
+    font-size: 15px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.emptyCart Button {
+    background: #ffffff;
+    color: #2f6331;
+    border: 2px solid #2f6331;
+    padding: 10px 22px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.25s ease;
+}
+
+.emptyCart Button:hover {
+    background: #2f6331;
+    color: #ffffff;
+    border-color: #2f6331;
+}
