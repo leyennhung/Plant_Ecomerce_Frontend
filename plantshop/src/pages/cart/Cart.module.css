@@ -33,13 +33,12 @@ body {
     background: #fff;
     border-radius: 12px;
     overflow: hidden;
-    /*border: 1.5px solid #213547;*/
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .row {
     display: grid;
-    grid-template-columns: 60px 1fr 200px 180px 160px 80px;
+    grid-template-columns: 60px 1fr 220px 180px 160px 80px;
     align-items: center;
     padding: 24px 12px;
     border-bottom: 1px solid rgba(33, 53, 71, 0.25);
@@ -96,6 +95,7 @@ body {
     display: flex;
     align-items: center;
     gap: 16px;
+    padding-right: 24px;
 }
 
 .product img {

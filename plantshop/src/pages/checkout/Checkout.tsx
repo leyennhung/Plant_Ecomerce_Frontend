@@ -9,54 +9,46 @@ import {mapToCheckoutCart} from "../../utils/mapCheckoutCart";
 import {useShippingFee} from "../../hooks/useShippingFee";
 import CheckoutPaymentFlow from "../../pages/payment/CheckoutPaymentFlow";
 import substrateImg from "../../assets/images/substrate.png";
-import type {CartViewItem} from "../../types/cart.type";
-import type {CartItemEntity} from "../../types/cart.type";
+import type {CartViewItem, CartItemEntity} from "../../types/cart.type";
 import type {Order, OrderCreatePayload} from "../../types/order.type";
 
-// Kiểu dữ liệu cho 1 mã giảm giá
+/* ================== COUPON ================== */
 type CouponRule = {
     code: string;
-    min: number; //  Giá trị đơn hàng tối thiểu để áp dụng
-    discount: number; // Số tiền được giảm (chỉ áp cho phí ship)
+    min: number;
+    discount: number;
 };
 
-// Mảng các mã giảm giá và điều kiện áp dụng
 const COUPONS: CouponRule[] = [
-    {code: "FREESHIP", min: 2_000_000, discount: 999_999}, // Miễn phí vận chuyển cho đơn từ 2 triệu
-    {code: "FREESHIP50", min: 1_000_000, discount: 50_000},// Giảm 50k cho đơn từ 1 triệu
-    {code: "FREESHIP20", min: 500_000, discount: 20_000},// Giảm 20k cho đơn từ 500k
-    {code: "FREESHIP10", min: 300_000, discount: 10_000},// Giảm 10k cho đơn từ 300k
+    {code: "FREESHIP", min: 2_000_000, discount: 999_999},
+    {code: "FREESHIP50", min: 1_000_000, discount: 50_000},
+    {code: "FREESHIP20", min: 500_000, discount: 20_000},
+    {code: "FREESHIP10", min: 300_000, discount: 10_000},
 ];
 
-// LƯU ĐƠN HÀNG VÀO LOCALSTORAGE
+/* ================== SAVE ORDER (GLOBAL) ================== */
 const saveOrderLocal = (
-    order: OrderCreatePayload, // Thông tin đơn hàng (chưa có id, status)
-    items: CartViewItem[] // Danh sách sản phẩm đã chọn
+    order: OrderCreatePayload,
+    items: CartViewItem[]
 ): string => {
-    // Lấy danh sách đơn hàng đã có (nếu chưa có thì là mảng rỗng)
-    const orders: Order[] = JSON.parse(
-        localStorage.getItem("orders") || "[]"
-    );
+    const key = order.user_id ? `orders_user_${order.user_id}` : "orders_guest";
+    const orders: Order[] = JSON.parse(localStorage.getItem(key) || "[]");
 
-    // Lấy danh sách item của các đơn hàng trước đó
     const orderItems: CartItemEntity[] = JSON.parse(
         localStorage.getItem("order_items") || "[]"
     );
 
-    // Sinh mã đơn hàng duy nhất dựa trên timestamp
     const orderId = "ORD-" + Date.now();
 
-    // Tạo object Order hoàn chỉnh
     const newOrder: Order = {
         id: orderId,
-        status: "pending", // Trạng thái ban đầu
-        created_at: new Date().toISOString(), // Thời điểm tạo đơn
-        ...order, // Gộp dữ liệu từ payload
+        status: "pending",
+        created_at: new Date().toISOString(),
+        ...order,
     };
 
-    // Chuyển các item trong giỏ hàng thành order_items
     const newOrderItems: CartItemEntity[] = items.map((item, index) => ({
-        id: orderItems.length + index + 1,  // Tạo id tăng dần
+        id: orderItems.length + index + 1,
         order_id: orderId,
         product_id: item.productId,
         quantity: item.quantity,
@@ -66,72 +58,72 @@ const saveOrderLocal = (
         updated_at: new Date().toISOString(),
     }));
 
-    // Lưu lại vào localStorage
-    localStorage.setItem("orders", JSON.stringify([...orders, newOrder]));
+    localStorage.setItem(key, JSON.stringify([...orders, newOrder]));
     localStorage.setItem(
         "order_items",
         JSON.stringify([...orderItems, ...newOrderItems])
     );
 
-    // Trả về orderId để dùng tiếp (navigate, meta, UI)
     return orderId;
 };
 
-// COMPONENT CHECKOUT
+/* ================== COMPONENT ================== */
 const Checkout = () => {
     const navigate = useNavigate();
-    // Lấy toàn bộ giỏ hàng từ Redux
-    const cartItems = useSelector((state: RootState) => state.cart.items);// Lấy giỏ hàng từ Redux
-    // Lấy state được truyền từ trang cart (danh sách id đã chọn)
-    const location = useLocation();// Lấy state từ react-router (để biết sản phẩm được chọn)
-    // Lọc ra các sản phẩm được chọn để thanh toán
-    const selectedIds: number[] = location.state?.selectedIds || [];// ID các sản phẩm đã chọn thanh toán
+    const location = useLocation();
+    const cartItems = useSelector((state: RootState) => state.cart.items);
+
+    /* ---------- LOGIN GUARD (BLOCK HARD) ---------- */
+    const storedUser = JSON.parse(localStorage.getItem("user") || "null");
+    const userId = storedUser?.user?.id || null;
+
+    useEffect(() => {
+        if (!userId) {
+            navigate("/login", {state: {redirect: "/checkout"}});
+        }
+    }, [userId, navigate]);
+
+    /* ---------- SELECTED ITEMS ---------- */
+    const selectedIds: number[] = location.state?.selectedIds || [];
     const selectedItems = cartItems.filter(item =>
-        selectedIds.includes(item.productId)// Lọc ra các sản phẩm đã chọn
+        selectedIds.includes(item.productId)
     );
 
-    // FORM STATE
+    /* ---------- FORM STATE ---------- */
     const [fullName, setFullName] = useState("");
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
     const [formError, setFormError] = useState("");
 
-    // Phương thức thanh toán
     const [payment, setPayment] = useState<"bank" | "cod" | "wallet">("bank");
-
-    // Các gói mua thêm
     const [superPack, setSuperPack] = useState(false);
     const [substrate, setSubstrate] = useState(false);
-
-    // Checkbox đồng ý điều khoản
     const [agree, setAgree] = useState(false);
 
-    // Địa chỉ giao hàng
     const [provinceId, setProvinceId] = useState<number | "">("");
     const [wardId, setWardId] = useState<number | "">("");
     const [addressLine, setAddressLine] = useState("");
     const provinces = provincesData.provinces;
-    const wards = wardsData.wards.filter((w) => w.province_id === provinceId);
+    const wards = wardsData.wards.filter(w => w.province_id === provinceId);
 
-    // Ghi chú đơn hàng
     const [note, setNote] = useState("");
 
-    // COUPON STATE
+    /* ---------- COUPON ---------- */
     const [couponInput, setCouponInput] = useState("");
     const [appliedCoupon, setAppliedCoupon] = useState<CouponRule | null>(null);
     const [couponError, setCouponError] = useState("");
 
-    // TÍNH TOÁN GIỎ HÀNG
-    // Chuẩn hóa dữ liệu giỏ hàng để tính vận chuyển
-    const checkoutCart = useMemo(() => mapToCheckoutCart(selectedItems), [selectedItems]);
+    /* ---------- SHIPPING ---------- */
+    const checkoutCart = useMemo(
+        () => mapToCheckoutCart(selectedItems),
+        [selectedItems]
+    );
 
-    // Hook tính phí ship theo tỉnh + trọng lượng
     const {shippingFee, totalWeight, zone, isTruck} = useShippingFee(
         provinceId,
         checkoutCart
     );
 
-    // Lưu thông tin vận chuyển vào localStorage
     useEffect(() => {
         localStorage.setItem(
             "checkout_shipping",
@@ -139,41 +131,36 @@ const Checkout = () => {
         );
     }, [shippingFee, totalWeight, provinceId]);
 
-    // Phí thêm gói đóng gói
+    /* ---------- PRICE ---------- */
     const superPackFee = superPack ? 30_000 : 0;
     const substrateFee = substrate ? 25_000 : 0;
 
-    // Tổng tiền sản phẩm
     const productTotal = selectedItems.reduce(
         (sum, item) => sum + item.price * item.quantity,
         0
     );
 
-    // Giảm phí vận chuyển nếu có coupon
-    const shippingDiscount = appliedCoupon ? Math.min(appliedCoupon.discount, shippingFee) : 0;
+    const shippingDiscount = appliedCoupon
+        ? Math.min(appliedCoupon.discount, shippingFee)
+        : 0;
+
     const finalShipping = Math.max(0, shippingFee - shippingDiscount);
 
-    // Tổng thanh toán
     const total = productTotal + finalShipping + superPackFee + substrateFee;
 
-    // Nếu giỏ hàng trống, điều hướng về trang giỏ hàng
+    /* ---------- GUARDS ---------- */
     useEffect(() => {
-        if (cartItems.length === 0) {
-            navigate("/carts");
-        }
+        if (cartItems.length === 0) navigate("/carts");
     }, [cartItems, navigate]);
 
-    // Nếu không có sản phẩm chọn thanh toán, điều hướng về giỏ hàng
     useEffect(() => {
-        if (selectedIds.length === 0) {
-            navigate("/carts");
-        }
+        if (selectedIds.length === 0) navigate("/carts");
     }, [selectedIds, navigate]);
 
-    // ÁP DỤNG COUPON
+    /* ---------- COUPON HANDLER ---------- */
     const applyCoupon = () => {
         const code = couponInput.trim().toUpperCase();
-        const rule = COUPONS.find((c) => c.code === code);
+        const rule = COUPONS.find(c => c.code === code);
 
         if (!rule) {
             setCouponError("Mã giảm giá không hợp lệ");
@@ -196,12 +183,18 @@ const Checkout = () => {
         setCouponInput("");
     };
 
-    // XỬ LÝ ĐẶT HÀNG
+    /* ---------- ORDER ---------- */
     const handleOrder = () => {
+        if (!userId) {
+            navigate("/login", {state: {redirect: "/checkout"}});
+            return;
+        }
+
         if (!fullName || !phone || !email) {
             setFormError("Vui lòng nhập đầy đủ thông tin");
             return;
         }
+
         if (!/^\d{9,11}$/.test(phone)) {
             setFormError("Số điện thoại không hợp lệ");
             return;
@@ -211,25 +204,21 @@ const Checkout = () => {
             setFormError("Email không hợp lệ");
             return;
         }
+
         if (!provinceId || !wardId) {
             setFormError("Vui lòng chọn tỉnh/thành và xã/phường");
             return;
         }
 
-        // Lấy tên tỉnh + phường để ghép địa chỉ
-        const province = provinces.find((p) => p.id === provinceId)?.name;
-        const ward = wardsData.wards.find((w) => w.id === wardId)?.name;
+        const province = provinces.find(p => p.id === provinceId)?.name;
+        const ward = wardsData.wards.find(w => w.id === wardId)?.name;
 
-        // Payload tạo đơn
         const payload: OrderCreatePayload = {
-            user_id: null,// Chưa đăng nhập
+            user_id: userId,
             recipient_name: fullName,
             recipient_phone: phone,
-            full_address: [addressLine, ward, province]
-                .filter(Boolean)
-                .join(", "),
-            payment_method_id:
-                payment === "cod" ? 2 : payment === "wallet" ? 3 : 1,
+            full_address: [addressLine, ward, province].filter(Boolean).join(", "),
+            payment_method_id: payment === "cod" ? 2 : payment === "wallet" ? 3 : 1,
             payment_status: "unpaid",
             subtotal: productTotal,
             shipping_fee: finalShipping,
@@ -237,10 +226,8 @@ const Checkout = () => {
             total_amount: total,
         };
 
-        // Lưu đơn hàng vào localStorage
         const orderId = saveOrderLocal(payload, selectedItems);
 
-        // Lưu meta phụ (email, note)
         localStorage.setItem(
             "order_meta",
             JSON.stringify({
@@ -250,7 +237,6 @@ const Checkout = () => {
             })
         );
 
-        // Điều hướng sang trang Order Success kèm dữ liệu đơn hàng
         navigate("/order_success", {
             state: {
                 orderId,
@@ -271,6 +257,7 @@ const Checkout = () => {
         });
     };
 
+    if (!userId) return null;
     return (
         <div className={styles.page}>
             <h1 className={styles.breadcrumb}>
@@ -284,7 +271,7 @@ const Checkout = () => {
                     <div className={styles.coupon}>
                         <input
                             value={couponInput}
-                            onChange={(e) => setCouponInput(e.target.value)}
+                            onChange={e => setCouponInput(e.target.value)}
                             placeholder="Mã giảm giá"
                         />
                         <button onClick={applyCoupon}>Áp dụng</button>
@@ -296,7 +283,7 @@ const Checkout = () => {
                     {/* Cart preview */}
                     <div className={styles.cartPreview}>
                         <h3 className={styles.sectionTitle}>SẢN PHẨM ĐÃ CHỌN</h3>
-                        {checkoutCart.map((item) => (
+                        {checkoutCart.map(item => (
                             <div key={item.id} className={styles.cartItem}>
                                 <div className={styles.cartInfo}>
                                     <b>{item.name}</b>
@@ -321,29 +308,29 @@ const Checkout = () => {
                         <input
                             placeholder="Họ và tên *"
                             value={fullName}
-                            onChange={(e) => setFullName(e.target.value)}
+                            onChange={e => setFullName(e.target.value)}
                         />
                         <input
                             placeholder="Số điện thoại *"
                             value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
+                            onChange={e => setPhone(e.target.value)}
                         />
                         <input
                             placeholder="Email *"
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={e => setEmail(e.target.value)}
                         />
 
                         <select
                             value={provinceId}
-                            onChange={(e) => {
+                            onChange={e => {
                                 const value = e.target.value;
                                 setProvinceId(value ? Number(value) : "");
                                 setWardId("");
                             }}
                         >
                             <option value="">Chọn tỉnh / thành phố</option>
-                            {provinces.map((p) => (
+                            {provinces.map(p => (
                                 <option key={p.id} value={p.id}>
                                     {p.name}
                                 </option>
@@ -352,15 +339,14 @@ const Checkout = () => {
 
                         <select
                             value={wardId}
-                            onChange={(e) => {
+                            onChange={e => {
                                 const value = e.target.value;
                                 setWardId(value ? Number(value) : "");
                             }}
                             disabled={!provinceId}
                         >
-
                             <option value="">Chọn xã / phường</option>
-                            {wards.map((w) => (
+                            {wards.map(w => (
                                 <option key={w.id} value={w.id}>
                                     {w.name}
                                 </option>
@@ -371,11 +357,13 @@ const Checkout = () => {
                             className={styles.full}
                             placeholder="Địa chỉ (Ví dụ: Số 20, ngõ 90)"
                             value={addressLine}
-                            onChange={(e) => setAddressLine(e.target.value)}
+                            onChange={e => setAddressLine(e.target.value)}
                         />
                     </div>
 
-                    {formError && <p style={{color: "red", fontSize: 13}}>{formError}</p>}
+                    {formError && (
+                        <p style={{color: "red", fontSize: 13}}>{formError}</p>
+                    )}
 
                     {/* Add-on options */}
                     <h3 className={styles.subTitle}>Gói đóng gói & mua thêm</h3>
@@ -412,7 +400,7 @@ const Checkout = () => {
                         className={styles.note}
                         placeholder="Ghi chú cho đơn hàng (không bắt buộc)"
                         value={note}
-                        onChange={(e) => setNote(e.target.value)}
+                        onChange={e => setNote(e.target.value)}
                     />
                 </div>
 
@@ -427,14 +415,14 @@ const Checkout = () => {
                         </div>
                         {zone && (
                             <div className={styles.row}>
-                            <span>
-                                Giao hàng ({zone})
-                                {zone === "Z4" && (
-                                    <small style={{color: "#d97706", marginLeft: 6}}>
-                                        (khu vực xa – phí cao)
-                                    </small>
-                                )}
-                            </span>
+                <span>
+                  Giao hàng ({zone})
+                    {zone === "Z4" && (
+                        <small style={{color: "#d97706", marginLeft: 6}}>
+                            (khu vực xa – phí cao)
+                        </small>
+                    )}
+                </span>
                                 <span>{shippingFee.toLocaleString()}₫</span>
                             </div>
                         )}
@@ -450,16 +438,16 @@ const Checkout = () => {
                         {appliedCoupon && (
                             <div>
                                 <div className={styles.rowDiscount}>
-                                <span>
-                                    Mã giảm giá: {appliedCoupon.code}
-                                    <button
-                                        onClick={removeCoupon}
-                                        style={{marginLeft: 8, fontSize: 12}}>
-                                        [Bỏ mã giảm giá]
-                                    </button>
-                                </span>
+                  <span>
+                    Mã giảm giá: {appliedCoupon.code}
+                      <button
+                          onClick={removeCoupon}
+                          style={{marginLeft: 8, fontSize: 12}}
+                      >
+                      [Bỏ mã giảm giá]
+                    </button>
+                  </span>
                                     <span>-{shippingDiscount.toLocaleString()}₫</span>
-
                                 </div>
                                 <div className={styles.row} style={{marginTop: 8}}>
                                     <span>Phí vận chuyển sau giảm</span>
@@ -552,27 +540,32 @@ const Checkout = () => {
                         <h4>MÃ GIẢM GIÁ</h4>
                         <ul>
                             <li>
-                                <b>FREESHIP</b> – Miễn phí phí vận chuyển<br/>
+                                <b>FREESHIP</b> – Miễn phí phí vận chuyển
+                                <br/>
                                 Áp dụng cho đơn hàng từ <b>2.000.000₫</b>
                             </li>
                             <li>
-                                <b>FREESHIP50</b> – Giảm <b>50.000₫</b> phí vận chuyển<br/>
+                                <b>FREESHIP50</b> – Giảm <b>50.000₫</b> phí vận chuyển
+                                <br/>
                                 Áp dụng cho đơn hàng từ <b>1.000.000₫</b>
                             </li>
                             <li>
-                                <b>FREESHIP20</b> – Giảm <b>20.000₫</b> phí vận chuyển<br/>
+                                <b>FREESHIP20</b> – Giảm <b>20.000₫</b> phí vận chuyển
+                                <br/>
                                 Áp dụng cho đơn hàng từ <b>500.000₫</b>
                             </li>
                             <li>
-                                <b>FREESHIP10</b> – Giảm <b>10.000₫</b> phí vận chuyển<br/>
+                                <b>FREESHIP10</b> – Giảm <b>10.000₫</b> phí vận chuyển
+                                <br/>
                                 Áp dụng cho đơn hàng từ <b>300.000₫</b>
                             </li>
                         </ul>
                     </div>
 
-                    {/* NOTE / Hướng dẫn mã giảm giá */}
                     <div className={styles.couponNote}>
-                        <p><b>Điều kiện áp dụng:</b></p>
+                        <p>
+                            <b>Điều kiện áp dụng:</b>
+                        </p>
                         <ul>
                             <li>Mã giảm giá chỉ áp dụng cho <b>phí vận chuyển</b></li>
                             <li>Mỗi đơn hàng chỉ sử dụng được <b>01 mã</b></li>
@@ -581,25 +574,35 @@ const Checkout = () => {
                             <li>Áp dụng cho tất cả phương thức thanh toán</li>
                         </ul>
                         <p>
-                            Nhập mã và bấm <b>Áp dụng</b> để kiểm tra điều kiện giảm phí vận chuyển.
+                            Nhập mã và bấm <b>Áp dụng</b> để kiểm tra điều kiện giảm phí vận
+                            chuyển.
                         </p>
                         <p>
-                            <b>Lưu ý:</b> Mã giảm giá chỉ áp dụng cho phí vận chuyển. Các khu vực giao hàng được chia
-                            thành các zone:
+                            <b>Lưu ý:</b> Mã giảm giá chỉ áp dụng cho phí vận chuyển. Các khu
+                            vực giao hàng được chia thành các zone:
                         </p>
                         <ul>
-                            <li><b>Z1:</b> Trung tâm, phí vận chuyển thấp</li>
-                            <li><b>Z2:</b> Ngoại thành gần, phí vận chuyển trung bình</li>
-                            <li><b>Z3:</b> Ngoại thành xa, phí vận chuyển cao</li>
-                            <li><b>Z4:</b> Khu vực đặc biệt, phí vận chuyển cao hơn</li>
+                            <li>
+                                <b>Z1:</b> Trung tâm, phí vận chuyển thấp
+                            </li>
+                            <li>
+                                <b>Z2:</b> Ngoại thành gần, phí vận chuyển trung bình
+                            </li>
+                            <li>
+                                <b>Z3:</b> Ngoại thành xa, phí vận chuyển cao
+                            </li>
+                            <li>
+                                <b>Z4:</b> Khu vực đặc biệt, phí vận chuyển cao hơn
+                            </li>
                             <li style={{fontSize: 16, listStyle: "none"}}>
-                                Mời bạn xem thêm về <a href="/shipping-policy">phương thức vận
-                                chuyển</a></li>
+                                Mời bạn xem thêm về{" "}
+                                <a href="/shipping-policy">phương thức vận chuyển</a>
+                            </li>
                         </ul>
                     </div>
                     <li style={{fontSize: 16, listStyle: "none"}}>
-                        Chúng tôi thu thập, lưu trữ và xử lý thông tin của bạn cho quá trình giao dịch.
-                        Xem <a href="/privacy-policy">chính sách bảo mật</a>
+                        Chúng tôi thu thập, lưu trữ và xử lý thông tin của bạn cho quá trình
+                        giao dịch. Xem <a href="/privacy-policy">chính sách bảo mật</a>
                     </li>
                 </div>
             </div>

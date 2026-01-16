@@ -27,7 +27,7 @@ const AppRoutes = () => (
             <Route path="/shipping-policy" element={<ShippingPolicy />} />
             <Route path="/order_success" element={< OrderSuccess />} />
             <Route path="/orders" element={<Orders />} />
-            <Route path="/order/:id" element={<OrderDetails />} />
+            <Route path="/orders/:id" element={<OrderDetails />} />
         </Route>
     </Routes>
 );

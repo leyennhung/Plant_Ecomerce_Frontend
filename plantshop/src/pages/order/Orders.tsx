@@ -179,7 +179,7 @@ const OrdersPage: React.FC = () => {
                                         )}
                                         <button
                                             className={styles.btnDetail}
-                                            onClick={() => navigate(`/profile/orders/${order.id}`)}
+                                            onClick={() => navigate(`/orders/${order.id}`)}
                                         >
                                             Xem Chi Tiết
                                         </button>
