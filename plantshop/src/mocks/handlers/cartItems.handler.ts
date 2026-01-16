@@ -4,7 +4,7 @@ import { http, HttpResponse } from "msw";
 export const cartItemHandlers = [
 
     // Lấy danh sách item theo cart_id
-    http.get("/api/cart_items", ({ request }) => {
+    http.get("/plant/cart_items", ({ request }) => {
         // Lấy cart_id từ query params
         const url = new URL(request.url);
         const cartId = url.searchParams.get("cart_id");
@@ -18,7 +18,7 @@ export const cartItemHandlers = [
     }),
 
     // Cập nhật số lượng item trong cart
-    http.patch("/api/cart_items/:id", async ({ params, request }) => {
+    http.patch("/plant/cart_items/:id", async ({ params, request }) => {
         const { id } = params;
         const body = (await request.json()) as { quantity: number };
 
@@ -33,7 +33,7 @@ export const cartItemHandlers = [
     }),
 
     //  Thêm sản phẩm vào cart
-    http.post("/api/cart_items", async ({ request }) => {
+    http.post("/plant/cart_items", async ({ request }) => {
         const body = await request.json() as {
             cart_id: number;
             product_id: number;

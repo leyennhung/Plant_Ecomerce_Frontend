@@ -1,5 +1,5 @@
 body {
-    background:  #f4fbf6;
+    background: #f4fbf6;
     margin: 0;
 }
 
@@ -30,22 +30,35 @@ body {
     display: flex;
     flex-direction: column;
     width: 100%;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    /*border: 1.5px solid #213547;*/
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .row {
     display: grid;
-    grid-template-columns: 60px 1fr 200px 180px 160px;
+    grid-template-columns: 60px 1fr 200px 180px 160px 80px;
     align-items: center;
-    padding: 24px 0;
-    border-bottom: 1px solid #e5e5e5;
+    padding: 24px 12px;
+    border-bottom: 1px solid rgba(33, 53, 71, 0.25);
+    background: #fff;
+    transition: all 0.2s ease;
+}
+
+.row:not(.header):hover {
+    background: #fff;
 }
 
 .header {
     font-size: 16px;
-    color: #214738;
+    color: #213547;
     font-weight: bold;
     letter-spacing: 1px;
     text-transform: uppercase;
+    background: #fff;
+    border-bottom: 2px solid #213547;
 }
 
 .header > div:nth-child(2) {
@@ -76,7 +89,7 @@ body {
     border-color: #000;
     color: #000;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
-    background:  #f4fbf6;
+    background: #fff;
 }
 
 .product {
@@ -91,6 +104,7 @@ body {
     object-fit: cover;
     background: #fff;
     border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 .product span {
@@ -117,7 +131,7 @@ body {
 .summary {
     margin-top: 32px;
     padding-top: 20px;
-    border-top: 2px solid #e0e0e0;
+    border-top: 2px solid #213547;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -134,10 +148,49 @@ body {
     color: #666;
     text-align: center;
 }
-Button{
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
+
+Button {
+    background: #ffffff;
+    color: #2f6331;
+    border: 2px solid #2f6331;
 }
-Button:hover{
+
+.checkoutWrapper Button:hover, .quantity Button:hover {
     background: #2f6331;
     color: #fff;
+    border: 2px solid #2f6331;
+}
+
+.row:not(.header):hover .removeBtn {
+    border-color: #213547;
+    color: #213547;
+}
+
+.row:not(.header):hover .total {
+    color: #213547;
+}
+
+.row:not(.header):hover .total {
+    color: #213547;
+}
+
+.row:not(.header):hover .price {
+    color: #213547;
+}
+
+.row:not(.header):hover .removeBtn {
+    color: #213547;
+}
+
+.checkoutWrapper {
+    position: relative;
+}
+
+.errorMessage {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    font-size: 13px;
+    color: #d32f2f;
+    margin-top: 4px;
 }

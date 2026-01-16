@@ -4,7 +4,29 @@ export type OrderStatus =
     | "packing"
     | "shipping"
     | "done"
-    | "paid"; // thêm nếu backend có
+    | "paid"
+    | "success"
+    | "cancelled"
+    | "failed"
+
+// Định nghĩa thông tin sản phẩm snapshot
+export type ProductSnapshot = {
+    name: string;
+    imageUrl?: string;
+};
+
+export type OrderItem = {
+    id: number;
+    order_id?: string;
+    product_id: number;
+    quantity: number;
+    price: number;
+
+    // Các trường snapshot từ Cart để hiển thị
+    name?: string;
+    imageUrl?: string;
+    productInfo?: ProductSnapshot;
+};
 
 export type Order = {
     id: string;
@@ -20,4 +42,11 @@ export type Order = {
     total_amount: number;
     status: OrderStatus;
     created_at: string;
+
+    // Mảng items lưu nested trong localStorage
+    items?: OrderItem[];
+    itemsDetail?: OrderItem[];
+
+    note?: string;
+    payment_method?: string;
 };

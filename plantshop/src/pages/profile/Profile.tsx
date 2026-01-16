@@ -5,9 +5,6 @@ import styles from './Profile.module.css';
 const Profile: React.FC = () => {
     const navigate = useNavigate();
 
-    // State quản lý Tab đang active
-    const [activeTab, setActiveTab] = useState('profile');
-
     // State quản lý chế độ Sửa (true = đang sửa, false = chỉ xem)
     const [isEditing, setIsEditing] = useState(false);
 
@@ -27,12 +24,6 @@ const Profile: React.FC = () => {
             phone: storedUser.phone || '',
         };
     });
-
-    // Danh sách các tab
-    const menuTabs = [
-        { key: 'profile', label: 'Hồ sơ' },
-        { key: 'orders', label: 'Đơn hàng' },
-    ];
 
     // Xử lý khi nhập liệu
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,197 +90,92 @@ const Profile: React.FC = () => {
                 {/* Tiêu đề trang */}
                 <h1 className={styles.pageTitle}>Tài khoản của tôi</h1>
 
-                {/* Thanh Tabs Navigation */}
-                <nav className={styles.tabs}>
-                    {menuTabs.map((tab) => (
-                        <div
-                            key={tab.key}
-                            className={`${styles.tabItem} ${
-                                activeTab === tab.key ? styles.activeTab : ''
-                            }`}
-                            onClick={() => setActiveTab(tab.key)}
-                        >
-                            {tab.label}
-                        </div>
-                    ))}
-                </nav>
+                <div className={styles.profileLayout}>
 
-                {/* Tab là Hồ sơ */}
-                {activeTab === 'profile' && (
-                    <div className={styles.profileLayout}>
-
-                        {/* Cột Trái: Form nhập liệu */}
-                        <div className={styles.formSection}>
-                            <div style={{ display: 'flex', gap: '20px' }}>
-                                <div className={styles.formGroup} style={{ flex: 1 }}>
-                                    <label className={styles.label}>Họ</label>
-                                    <input
-                                        type="text"
-                                        name="lastName"
-                                        className={styles.input}
-                                        value={formData.lastName}
-                                        onChange={handleChange}
-                                        disabled={!isEditing}
-                                        placeholder="Chưa cập nhật"
-                                    />
-                                </div>
-                                <div className={styles.formGroup} style={{ flex: 1 }}>
-                                    <label className={styles.label}>Tên</label>
-                                    <input
-                                        type="text"
-                                        name="firstName"
-                                        className={styles.input}
-                                        value={formData.firstName}
-                                        onChange={handleChange}
-                                        disabled={!isEditing}
-                                        placeholder="Chưa cập nhật"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className={styles.formGroup}>
-                                <label className={styles.label}>Địa chỉ Email</label>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    className={styles.input}
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    disabled={true} // Email không cho sửa
-                                    style={{ backgroundColor: '#f0f2f5', cursor: 'not-allowed' }}
-                                />
-                            </div>
-
-                            <div className={styles.formGroup}>
-                                <label className={styles.label}>Số điện thoại</label>
+                    {/* Cột Trái: Form nhập liệu */}
+                    <div className={styles.formSection}>
+                        <div style={{ display: 'flex', gap: '20px' }}>
+                            <div className={styles.formGroup} style={{ flex: 1 }}>
+                                <label className={styles.label}>Họ</label>
                                 <input
                                     type="text"
-                                    name="phone"
+                                    name="lastName"
                                     className={styles.input}
-                                    value={formData.phone}
+                                    value={formData.lastName}
                                     onChange={handleChange}
                                     disabled={!isEditing}
                                     placeholder="Chưa cập nhật"
                                 />
                             </div>
-                            <div className={styles.buttonGroup}>
-                                <button
-                                    className={styles.saveBtn}
-                                    onClick={handleEditOrSave}
-                                    style={{ backgroundColor: isEditing ? '#28a745' : '' }}
-                                >
-                                    {isEditing ? 'Lưu thông tin' : 'Sửa thông tin'}
-                                </button>
-
-                                <button className={styles.logoutBtn} onClick={handleLogout}>
-                                    Đăng xuất
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* Cột Phải: Ảnh đại diện */}
-                        <div className={styles.photoSection}>
-                            <p className={styles.label} style={{ marginBottom: '15px' }}></p>
-                            <div className={styles.avatarWrapper}>
-                                <img
-                                    src="https://cdn.prod.website-files.com/6516b906a45da7a169a81553/653fbb4b1d9ed3bffbf4ba68_user_physiopoint3.png"
-                                    alt="Avatar người dùng"
-                                    className={styles.avatar}
+                            <div className={styles.formGroup} style={{ flex: 1 }}>
+                                <label className={styles.label}>Tên</label>
+                                <input
+                                    type="text"
+                                    name="firstName"
+                                    className={styles.input}
+                                    value={formData.firstName}
+                                    onChange={handleChange}
+                                    disabled={!isEditing}
+                                    placeholder="Chưa cập nhật"
                                 />
                             </div>
-                            <label className={styles.userName}>
-                                {formData.username}
-                            </label>
+                        </div>
+
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Địa chỉ Email</label>
+                            <input
+                                type="email"
+                                name="email"
+                                className={styles.input}
+                                value={formData.email}
+                                onChange={handleChange}
+                                disabled={true} // Email không cho sửa
+                                style={{ cursor: 'not-allowed' }}
+                            />
+                        </div>
+
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Số điện thoại</label>
+                            <input
+                                type="text"
+                                name="phone"
+                                className={styles.input}
+                                value={formData.phone}
+                                onChange={handleChange}
+                                disabled={!isEditing}
+                                placeholder="Chưa cập nhật"
+                            />
+                        </div>
+                        <div className={styles.buttonGroup}>
+                            <button
+                                className={styles.saveBtn}
+                                onClick={handleEditOrSave}
+                                style={{ backgroundColor: isEditing ? '#28a745' : '' }}
+                            >
+                                {isEditing ? 'Lưu thông tin' : 'Sửa thông tin'}
+                            </button>
+
+                            <button className={styles.logoutBtn} onClick={handleLogout}>
+                                Đăng xuất
+                            </button>
                         </div>
                     </div>
-                )}
 
-                {/* Tab là Đơn hàng */}
-                {activeTab === 'orders' && (
-                    <div className={styles.ordersTab}>
-                        {/* HEADER */}
-                        <div className={styles.headerBlock}>
-                            <div className={styles.colProductsHeader}>Sản phẩm</div>
-                            <div className={styles.colDateHeader}>Ngày Đặt</div>
-                            <div className={styles.colStatusHeader}>Trạng Thái</div>
-                            <div className={styles.colPriceHeader}>Tổng Tiền</div>
-                            <div className={styles.colActionHeader}></div>
+                    {/* Cột Phải: Ảnh đại diện */}
+                    <div className={styles.photoSection}>
+                        <p className={styles.label} style={{ marginBottom: '15px' }}></p>
+                        <div className={styles.avatarWrapper}>
+                            <img
+                                src="https://cdn.prod.website-files.com/6516b906a45da7a169a81553/653fbb4b1d9ed3bffbf4ba68_user_physiopoint3.png"
+                                alt="Avatar người dùng"
+                                className={styles.avatar}
+                            />
                         </div>
-
-                        {/*DANH SÁCH ĐƠN HÀNG*/}
-                        <div className={styles.orderList}>
-                            <div className={styles.orderBlock}>
-                                <div className={styles.colProducts}>
-                                    <div className={styles.productItem}>
-                                        <img
-                                            src="https://mowgarden.com/wp-content/uploads/2022/09/cay-ngu-gia-bi-xanh-de-ban-chau-men-su-768x768.jpg"
-                                            alt="Cây ngũ gia bì xanh"
-                                            className={styles.thumb}
-                                        />
-                                        <div className={styles.productMeta}>
-                                            <span className={styles.prodName}>Cây ngũ gia bì xanh</span>
-                                            <span className={styles.prodQty}>x1</span>
-                                        </div>
-                                    </div>
-                                    <div className={styles.productItem}>
-                                        <img
-                                            src="https://mowgarden.com/wp-content/uploads/2022/10/cay-bang-singapore-mini-uyen-uong-768x768.jpg"
-                                            alt="Cây bàng Singapore"
-                                            className={styles.thumb}
-                                        />
-                                        <div className={styles.productMeta}>
-                                            <span className={styles.prodName}>Cây bàng Singapore</span>
-                                            <span className={styles.prodQty}>x2</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className={styles.colDate}>
-                                    <span className={styles.textData}>31/12/2025</span>
-                                </div>
-                                <div className={styles.colStatus}>
-                                    <span className={`${styles.badge} ${styles.badgeProcessing}`}>
-                                        Đang xử lý
-                                    </span>
-                                </div>
-                                <div className={styles.colPrice}>
-                                    <span className={styles.priceData}>4.500.000đ</span>
-                                </div>
-                                <div className={styles.colAction}>
-                                    <button className={styles.btnDetail}>Xem chi tiết</button>
-                                </div>
-                            </div>
-
-                            <div className={styles.orderBlock}>
-                                <div className={styles.colProducts}>
-                                    <div className={styles.productItem}>
-                                        <img
-                                            src="https://mowgarden.com/wp-content/uploads/2022/08/cay-rong-bac-de-ban-mowgarden-768x768.jpg"
-                                            alt="Cây Rồng Bạc"
-                                            className={styles.thumb}
-                                        />
-                                        <div className={styles.productMeta}>
-                                            <span className={styles.prodName}>Cây Rồng Bạc</span>
-                                            <span className={styles.prodQty}>x1</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className={styles.colDate}>
-                                    <span className={styles.textData}>30/12/2025</span>
-                                </div>
-                                <div className={styles.colStatus}>
-                                    <span className={`${styles.badge} ${styles.badgeSuccess}`}>Đã giao</span>
-                                </div>
-                                <div className={styles.colPrice}>
-                                    <span className={styles.priceData}>150.000đ</span>
-                                </div>
-                                <div className={styles.colAction}>
-                                    <button className={styles.btnDetail}>Xem chi tiết</button>
-                                </div>
-                            </div>
-
-                        </div>
+                        <label className={styles.userName}>
+                            {formData.username}
+                        </label>
                     </div>
-                )}
+                </div>
             </div>
         </div>
     );

@@ -1,5 +1,5 @@
 .page {
-    background:  #fff;
+    background: #fff;
 }
 
 .container {
@@ -10,36 +10,53 @@
     color: #213547;
 }
 
-h1 {
+.top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 16px;
+}
+
+.title {
+    text-align: center;
     font-size: 32px;
     font-weight: 500;
     margin-bottom: 28px;
     color: #213547;
 }
 
-h2 {
+.section {
+    margin-bottom: 32px;
+}
+
+.section h2 {
     font-size: 20px;
     margin-top: 28px;
     margin-bottom: 12px;
     color: #214738;
 }
 
-p {
+.section h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    color: #213547;
+}
+
+.section p {
     font-size: 16px;
     margin-bottom: 12px;
     color: #333;
 }
 
-b {
-    font-weight: 600;
-}
-
-ul {
+.section ul {
     padding-left: 18px;
     margin-bottom: 16px;
 }
 
-li {
+.section li {
     font-size: 16px;
     margin-bottom: 8px;
 }

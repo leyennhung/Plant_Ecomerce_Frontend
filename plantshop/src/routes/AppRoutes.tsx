@@ -8,9 +8,13 @@ import Cart from "../pages/cart/Cart";
 import Wishlist from "../pages/wishlist/Wishlist";
 import Checkout from "../pages/checkout/Checkout";
 import PrivacyPolicy from "../pages/privacy/PrivacyPolicy";
+import Orders from "../pages/order/Orders";
+import OrderDetails from "../pages/order/OrderDetails";
 import OrderSuccess from "../pages/order/OrderSuccess";
+import ShippingPolicy from "../pages/privacy/ShippingPolicy";
 import ProductList from "../pages/products/list/ProductList.tsx";
 import ProductDetail from "../pages/products/detail/ProductDetail.tsx";
+
 const AppRoutes = () => (
     <Routes>
         <Route element={<MainLayout />}>
@@ -26,7 +30,10 @@ const AppRoutes = () => (
             <Route path="/wishlist" element={<Wishlist/>}/>
             <Route path="/checkout" element={<Checkout/>}/>
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/shipping-policy" element={<ShippingPolicy />} />
             <Route path="/order_success" element={< OrderSuccess />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/orders/:id" element={<OrderDetails />} />
         </Route>
     </Routes>
 );
