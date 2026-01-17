@@ -4,6 +4,13 @@ export interface WholesalePriceRule {
     price: number;
 }
 
+export type ComboItemApi = {
+    id: number;
+    name: string;
+    image: string;
+    quantity: number;
+};
+
 export interface ProductApi {
     id: number;
     slug: string;
@@ -19,8 +26,7 @@ export interface ProductApi {
         id: number;
         url: string;
         order: number;
-        is_main?: boolean;
-    }[];
-
+        is_main?: boolean; }[];
     wholesalePrices?: WholesalePriceRule[];
+    comboItems?: ComboItemApi[];
 }

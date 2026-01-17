@@ -1,7 +1,7 @@
 import type {ProductBase} from "../../../../types/product.type.ts";
 import {formatPrice} from "../../../../utils/formatPrice.ts";
 import styles from "./ProductCard.module.css";
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {useState, useMemo} from "react";
 import type {RootState} from "../../../../store";
@@ -28,6 +28,12 @@ const ProductCard = ({product, isNew, isSale, isTrending}: Props) => {
     const salePrice = product.salePrice ?? null;
     const hasSale =
         typeof salePrice === "number" && salePrice > 0 && salePrice < product.price;
+    const isCombo = product.type === "combo";
+
+    const comboItems =
+        isCombo && "comboItems" in product
+            ? (product as ProductApi).comboItems
+            : undefined;
 
     // sp yêu thích
     const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
@@ -68,7 +74,7 @@ const ProductCard = ({product, isNew, isSale, isTrending}: Props) => {
         }
     };
 
-    /* ===== GIÁ THEO SỐ LƯỢNG ===== */
+    /* GIÁ THEO SỐ LƯỢNG */
     const priceInfo = useMemo(() => {
         return getFinalPrice(product as ProductApi, quantity);
     }, [product, quantity]);
@@ -76,15 +82,16 @@ const ProductCard = ({product, isNew, isSale, isTrending}: Props) => {
     const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         e.stopPropagation();
-
+        console.log("ADD CART:", product.id);
+        // Pot thì bắt chọn variant rồi chuyển sang detail
         if (product.type === "pot") {
             navigate(`/products/${product.slug}`);
             return;
         }
 
+        // Combo & product thường
         dispatch(addToCart({productId: product.id, quantity: 1}));
     };
-
 
     // Mua ngay, sang trang thanh toán
     const openBuyNow = (e: React.MouseEvent) => {
@@ -95,25 +102,54 @@ const ProductCard = ({product, isNew, isSale, isTrending}: Props) => {
     };
 
     const confirmBuyNow = () => {
-        const buyNowItem: CartViewItem = {
-            id: Date.now(),
-            productId: product.id,
-            name: product.name,
-            image: product.image,
-            price: priceInfo.price,
-            original_price: basePrice,
-            quantity,
-            isWholesale: priceInfo.isWholesale,
-            wholesaleMin: priceInfo.wholesaleMin,
-        };
+        let buyNowItems: CartViewItem[];
 
-        localStorage.setItem("buy_now_order", JSON.stringify([buyNowItem]));
+        if (isCombo) {
+            // Combo: lưu 1 dòng combo cha, không bung comboItems
+            buyNowItems = [
+                {
+                    id: Date.now(),
+                    productId: product.id,
+                    name: product.name,
+                    image: product.image,
+                    price: priceInfo.price,          // giá combo
+                    original_price: basePrice,
+                    quantity: 1,
+                    isWholesale: false,
+                    wholesaleMin: undefined,
+                    comboItems:
+                        comboItems?.map(ci => ({
+                            productId: ci.id,
+                            name: ci.name,
+                            image: ci.image,
+                            quantity: ci.quantity,
+                        })) || [],
+                },
+            ];
+        } else {
+            // Product thường
+            buyNowItems = [
+                {
+                    id: Date.now(),
+                    productId: product.id,
+                    name: product.name,
+                    image: product.image,
+                    price: priceInfo.price,
+                    original_price: basePrice,
+                    quantity,
+                    isWholesale: priceInfo.isWholesale,
+                    wholesaleMin: priceInfo.wholesaleMin,
+                },
+            ];
+        }
+
+        localStorage.setItem("buy_now_order", JSON.stringify(buyNowItems));
         navigate("/checkout");
     };
 
     return (
         <>
-            <div className={styles.card}>
+            <div className={styles.card} onClick={() => navigate(`/products/${product.slug}`)}>
                 {isNew && <span className={styles.newBadge}>NEW</span>}
                 {isSale && hasSale && <span className={styles.saleBadge}>SALE</span>}
                 {isTrending && <span className={styles.trendingBadge}>TRENDING</span>}
@@ -124,15 +160,16 @@ const ProductCard = ({product, isNew, isSale, isTrending}: Props) => {
                 </button>
 
                 {/* ADD TO CART */}
-                <button className={styles.cartBtn} onClick={handleAddToCart}>
+                <button
+                    type="button"
+                    className={styles.cartBtn}
+                    onClick={handleAddToCart}
+                >
                     <i className="fa-solid fa-cart-plus"></i>
                 </button>
-                <Link to={`/products/${product.slug}`} className={styles.productLink}>
-                    <img src={product.image}
-                         alt={product.name}
-                         className={styles.image}/>
-                    <h3 className={styles.name}>{product.name}</h3>
-                </Link>
+
+                <img src={product.image} alt={product.name} className={styles.image}/>
+                <h3 className={styles.name}>{product.name}</h3>
                 <p className={styles.price}>
                     {priceInfo.isWholesale ? (
                         <>
@@ -151,18 +188,22 @@ const ProductCard = ({product, isNew, isSale, isTrending}: Props) => {
                     )}
                 </p>
 
-                <button className={styles.buyBtn} onClick={openBuyNow}>
+                <button
+                    type="button"
+                    className={styles.buyBtn}
+                    onClick={openBuyNow}
+                >
                     Mua ngay
                 </button>
             </div>
 
-            {/* ===== MODAL MUA NGAY ===== */}
+            {/* MODAL MUA NGAY */}
             {showBuyNow && (
                 <div className={styles.overlay} onClick={() => setShowBuyNow(false)}>
                     <div className={styles.modal} onClick={e => e.stopPropagation()}>
                         <h3>{product.name}</h3>
 
-                        {/* ===== GIÁ ĐỘNG THEO SỐ LƯỢNG ===== */}
+                        {/* GIÁ ĐỘNG THEO SỐ LƯỢNG */}
                         <p className={styles.modalPrice}>
                             {priceInfo.isWholesale ? (
                                 <>
@@ -187,7 +228,7 @@ const ProductCard = ({product, isNew, isSale, isTrending}: Props) => {
                             )}
                         </p>
 
-                        {/* ===== SỐ LƯỢNG ===== */}
+                        {/* SỐ LƯỢNG */}
                         <div className={styles.qtyRow}>
                             <button onClick={() => setQuantity(q => Math.max(1, q - 1))}>−</button>
                             <span>{quantity}</span>

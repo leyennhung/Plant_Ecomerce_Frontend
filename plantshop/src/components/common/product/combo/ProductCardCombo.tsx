@@ -32,16 +32,16 @@ const ProductCardCombo = ({product, onAddToCart}: Props) => {
             .filter((img): img is string => !!img)
             .slice(0, 2) || [];
 
-    // sp yêu thích
+    // lấy sp yêu thích từ redux store
     const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
-
+    // kiểm tra sp hiện tại có trong wishlist chưa
     const isFavorite = wishlistItems.some(
         item => item.product_id === product.id && item.variant_id == null
     );
 
     const toggleFavorite = (e: React.MouseEvent) => {
         e.preventDefault();
-        e.stopPropagation();
+        e.stopPropagation();//không cho click này kích hoạt navigate của card
 
         if (isFavorite) {
             dispatch(
@@ -55,8 +55,8 @@ const ProductCardCombo = ({product, onAddToCart}: Props) => {
                 addToWishlist({
                     id: Date.now(),
                     user_id: 0,
-                    product_id: product.id,
-                    variant_id: undefined,
+                    product_id: product.id,//id product combo
+                    variant_id: undefined,// combo không có variant(khong có chọn màu, kích thước)
                     name: product.name,
                     image: product.image,
                     price: product.salePrice ?? product.price,
@@ -80,12 +80,12 @@ const ProductCardCombo = ({product, onAddToCart}: Props) => {
                 status: "active",
                 image: product.image,
                 images: undefined,
-                wholesalePrices: undefined,
+                wholesalePrices: undefined,// combo không dùng wholesale
             },
             quantity
         );
     }, [product, quantity]);
-    
+//thêm vào giỏ hàng
     const handleAddToCart = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
@@ -94,18 +94,18 @@ const ProductCardCombo = ({product, onAddToCart}: Props) => {
     //  Mua ngay, sang trang thanh toán
     const openBuyNow = (e: React.MouseEvent) => {
         e.preventDefault();
-        e.stopPropagation();
+        e.stopPropagation();//không navigate card
         setQuantity(1);
         setShowBuyNow(true);
     };
-
+//buy now, lưu vào localstorage chuyển sang checkout không thêm vào cart
     const confirmBuyNow = () => {
         const buyNowItem: CartViewItem = {
             id: Date.now(),
-            productId: product.id,
+            productId: product.id,//id combo
             name: product.name,
             image: product.image,
-            price: priceInfo.price,
+            price: priceInfo.price,//giá combo đã tính
             original_price: product.price,
             quantity,
             isWholesale: priceInfo.isWholesale,
@@ -118,9 +118,9 @@ const ProductCardCombo = ({product, onAddToCart}: Props) => {
 
     return (
         <>
-            <div className={styles.comboCard}>
+            <div className={styles.comboCard} onClick={() => navigate(`/products/${product.slug}`)}>
                 <div className={styles.imageWrapper}>
-                    {/* ❤️ FAVORITE */}
+                    {/*FAVORITE */}
                     <button className={`${styles.favoriteBtn} 
             ${isFavorite ? styles.active : ""}`} onClick={toggleFavorite}>
                         <i className="fa-solid fa-heart"></i>
@@ -131,14 +131,14 @@ const ProductCardCombo = ({product, onAddToCart}: Props) => {
                         <i className="fa-solid fa-cart-plus"/>
                     </button>
                     {hasMainImage ? (
-                        // Có image → dùng image
+                        // Có image -> dùng image
                         <img
                             src={product.image}
                             alt={product.name}
                             className={styles.singleImage}
                         />
                     ) : fallbackImages.length >= 2 ? (
-                        // Không có image → dùng 2 ảnh con
+                        // Không có image -> dùng 2 ảnh con
                         <>
                             <img
                                 src={fallbackImages[0]}
