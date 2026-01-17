@@ -38,4 +38,7 @@ export interface CartViewItem {
     quantity: number;
     isWholesale?: boolean;
     wholesaleMin?: number;
+    // thêm cho variant (chậu)
+    variantId?: number;
+    variantName?: string;
 }

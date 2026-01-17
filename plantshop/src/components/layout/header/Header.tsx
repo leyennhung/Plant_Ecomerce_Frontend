@@ -25,6 +25,8 @@ const Header = () => {
 
     const cartItems = useSelector((state: RootState) => state.cart.items);
     const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
+    const wishListCount = wishlistItems.length;
 
     const [showLogoutPopup, setShowLogoutPopup] = useState(false);
 
@@ -98,8 +100,9 @@ const Header = () => {
                         </Link>
 
                         {/* Gắn link Wishlist */}
-                        <Link to="/wishlist">
+                        <Link to="/wishlist"className={styles.wishListWrapper}>
                             <i className="fa-solid fa-heart" />
+                            {wishListCount > 0 && (<span className={styles.wishListBadge}>{wishListCount}</span>)}
                         </Link>
 
                         {/* Xử lý logic User */}

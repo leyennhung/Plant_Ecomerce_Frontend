@@ -214,7 +214,6 @@ body {
     font-weight: bold;
 }
 
-
 /* POPUP */
 
 .popupOverlay {
@@ -278,4 +277,27 @@ body {
 .logoutBtn:hover {
     background-color: #1a3c1e;
     color: #ffffff;
+.wishListWrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    text-decoration-line: none;
+}
+
+.wishListBadge {
+    position: absolute;
+    top: -6px;
+    right: -10px;
+    background: #e53935;
+    color: #fff;
+    font-size: 12px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
 }

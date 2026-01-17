@@ -21,6 +21,9 @@ body {
     color: #213547;
 }
 
+h3::after {
+    background: none;
+}
 
 .tableWrapper {
     width: 100%;
@@ -127,21 +130,35 @@ body {
     font-weight: 600;
 }
 
-
 .summary {
-    margin-top: 32px;
-    padding-top: 20px;
-    border-top: 2px solid #213547;
+    border-radius: 6px;
+    position: sticky;
+    bottom: 0;
+    inset-inline: 0;
+    background: white;
+    padding: 20px 32px;
+    box-shadow: 0 -6px 16px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    color: #2f6331;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-sizing: border-box;
+    margin-top: 32px;
+    border: 2px solid #2f6331;
+}
+
+.checkoutWrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .subtotal {
     font-size: 18px;
     font-weight: bold;
+    color: #2f6331;
 }
-
 
 .empty {
     font-size: 16px;
@@ -156,9 +173,9 @@ Button {
 }
 
 .checkoutWrapper Button:hover, .quantity Button:hover {
-    background: #2f6331;
-    color: #fff;
+    color: white;
     border: 2px solid #2f6331;
+    background-color: #2f6331;
 }
 
 .row:not(.header):hover .removeBtn {
@@ -189,10 +206,12 @@ Button {
 .errorMessage {
     position: absolute;
     top: 100%;
-    left: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 6px;
     font-size: 13px;
-    color: #d32f2f;
-    margin-top: 4px;
+    color: crimson;
+    white-space: nowrap;
 }
 
 .emptyCart {

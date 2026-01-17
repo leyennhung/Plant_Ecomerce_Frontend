@@ -3,7 +3,12 @@ import {formatPrice} from "../../../../utils/formatPrice.ts";
 import styles from "./ProductCardCombo.module.css";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import type {RootState} from "../../../../store";
 import type {CartViewItem} from "../../../../types/cart.type";
+import {addToWishlist, removeFromWishlist,} from "../../../../store/wishlistSlice";
+import {getFinalPrice} from "../../../../utils/getFinalPrice";
+import {useMemo} from "react";
 
 type Props = {
     product: Product;
@@ -12,6 +17,7 @@ type Props = {
 
 const ProductCardCombo = ({product, onAddToCart}: Props) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 // popup mua ngay
     const [showBuyNow, setShowBuyNow] = useState(false);
     const [quantity, setQuantity] = useState(1);
@@ -25,26 +31,61 @@ const ProductCardCombo = ({product, onAddToCart}: Props) => {
             ?.map(item => item.image)
             .filter((img): img is string => !!img)
             .slice(0, 2) || [];
-    // sp yêu thích
-    const [isFavorite, setIsFavorite] = useState(false);
-    /* load favorite từ localStorage */
 
-    // lưu sp yêu thích vào local storage
+    // sp yêu thích
+    const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
+
+    const isFavorite = wishlistItems.some(
+        item => item.product_id === product.id && item.variant_id == null
+    );
+
     const toggleFavorite = (e: React.MouseEvent) => {
-        e.preventDefault(); //chặn click link sp
+        e.preventDefault();
         e.stopPropagation();
 
-        setIsFavorite(prev => {
-            const next = !prev;
-
-            if (next) {
-                localStorage.setItem(`favorite-${product.slug}`, "1");
-            } else {
-                localStorage.removeItem(`favorite-${product.slug}`);
-            }
-            return next;
-        });
+        if (isFavorite) {
+            dispatch(
+                removeFromWishlist({
+                    productId: product.id,
+                    variantId: undefined,
+                })
+            );
+        } else {
+            dispatch(
+                addToWishlist({
+                    id: Date.now(),
+                    user_id: 0,
+                    product_id: product.id,
+                    variant_id: undefined,
+                    name: product.name,
+                    image: product.image,
+                    price: product.salePrice ?? product.price,
+                    created_at: new Date().toISOString(),
+                })
+            );
+        }
     };
+
+    /* PRICE */
+    const priceInfo = useMemo(() => {
+        return getFinalPrice(
+            {
+                id: product.id,
+                slug: product.slug ?? "",
+                name: product.name,
+                type: "combo",
+                price: product.price,
+                salePrice: product.salePrice,
+                stock: 0,
+                status: "active",
+                image: product.image,
+                images: undefined,
+                wholesalePrices: undefined,
+            },
+            quantity
+        );
+    }, [product, quantity]);
+    
     const handleAddToCart = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
@@ -64,9 +105,11 @@ const ProductCardCombo = ({product, onAddToCart}: Props) => {
             productId: product.id,
             name: product.name,
             image: product.image,
-            price: salePrice ?? product.price,
+            price: priceInfo.price,
             original_price: product.price,
             quantity,
+            isWholesale: priceInfo.isWholesale,
+            wholesaleMin: priceInfo.wholesaleMin,
         };
 
         localStorage.setItem("buy_now_order", JSON.stringify([buyNowItem]));
@@ -143,15 +186,14 @@ const ProductCardCombo = ({product, onAddToCart}: Props) => {
                 </button>
             </div>
 
-            {/* ===== MODAL MUA NGAY ===== */}
+            {/* MODAL MUA NGAY */}
             {showBuyNow && (
                 <div className={styles.overlay} onClick={() => setShowBuyNow(false)}>
                     <div className={styles.modal} onClick={e => e.stopPropagation()}>
                         <h3>{product.name}</h3>
                         <p className={styles.modalPrice}>
-                            {formatPrice(salePrice ?? product.price)}
+                            {formatPrice(priceInfo.price)}
                         </p>
-
                         <div className={styles.qtyRow}>
                             <button onClick={() => setQuantity(q => Math.max(1, q - 1))}>−</button>
                             <span>{quantity}</span>
