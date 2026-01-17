@@ -1,7 +1,11 @@
 export interface WishlistItem {
     id: number;
-    user_id: number;
+    user_id: number | null;
     product_id: number;
+    variant_id?: number;
+    name: string;
+    image: string;
+    price: number;
     created_at: string;
 }
 

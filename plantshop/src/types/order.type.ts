@@ -4,10 +4,8 @@ export type OrderStatus =
     | "packing"
     | "shipping"
     | "done"
-    | "paid"
     | "success"
     | "cancelled"
-    | "failed"
 
 // Định nghĩa thông tin sản phẩm snapshot
 export type ProductSnapshot = {
@@ -49,4 +47,17 @@ export type Order = {
 
     note?: string;
     payment_method?: string;
+};
+
+export type OrderCreatePayload = {
+    user_id: number | null;
+    recipient_name: string;
+    recipient_phone: string;
+    full_address: string;
+    payment_method_id: number;
+    payment_status: string;
+    subtotal: number;
+    shipping_fee: number;
+    discount_amount: number;
+    total_amount: number;
 };

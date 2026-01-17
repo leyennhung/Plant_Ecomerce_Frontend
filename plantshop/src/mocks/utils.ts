@@ -4,7 +4,7 @@ import userData from './data/users.json';
 export const USER_STORAGE_KEY = 'plant_shop_users';
 export const SESSION_STORAGE_KEY = 'plant_shop_sessions';
 
-interface Session {
+export interface Session {
     token: string;
     userId: number;
     expiry: number;
@@ -34,4 +34,17 @@ export const getUserFromRequest = (request: Request): User | null => {
     const users: User[] = storedUsers ? JSON.parse(storedUsers) : (userData.users as User[]);
 
     return users.find(u => u.id === session.userId) || null;
+};
+
+export const isLoggedIn = (): boolean => {
+    const stored = JSON.parse(localStorage.getItem("user") || "{}");
+    const token = stored?.token;
+    if (!token) return false;
+
+    const sessions: Session[] = JSON.parse(
+        localStorage.getItem(SESSION_STORAGE_KEY) || "[]"
+    );
+
+    const session = sessions.find(s => s.token === token);
+    return !!session && Date.now() <= session.expiry;
 };

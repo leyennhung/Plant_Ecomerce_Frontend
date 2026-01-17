@@ -14,6 +14,10 @@
     font-weight: bold;
 }
 
+h3::after {
+    background: none;
+}
+
 .paymentBox p {
     margin: 4px 0;
     font-size: 14px;

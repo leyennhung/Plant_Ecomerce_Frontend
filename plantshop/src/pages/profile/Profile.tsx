@@ -8,6 +8,10 @@ const Profile: React.FC = () => {
     // State quản lý chế độ Sửa (true = đang sửa, false = chỉ xem)
     const [isEditing, setIsEditing] = useState(false);
 
+    // State popup
+    const [showSavePopup, setShowSavePopup] = useState(false);
+    const [showLogoutPopup, setShowLogoutPopup] = useState(false);
+
     // Load dữ liệu từ local storage
     const [formData, setFormData] = useState(() => {
         const storedUserJSON = localStorage.getItem('user');
@@ -48,8 +52,6 @@ const Profile: React.FC = () => {
                     ...oldData, // Giữ nguyên các trường ở lớp ngoài
                     user: {
                         ...oldData.user, // Giữ nguyên dữ liệu cũ trong object user
-
-                        // Cập nhật các trường mới sửa
                         first_name: formData.firstName,
                         last_name: formData.lastName,
                         phone: formData.phone
@@ -71,28 +73,37 @@ const Profile: React.FC = () => {
             // Tắt chế độ sửa
             setIsEditing(false);
 
+            // Popup lưu thành công
+            setShowSavePopup(true);
+            setTimeout(() => {
+                setShowSavePopup(false);
+            }, 2000);
+
         } else {
-            //
             setIsEditing(true);
         }
     };
 
     // Xử lý đăng xuất
     const handleLogout = () => {
-        localStorage.removeItem('user'); // Xóa user
-        navigate('/login'); // Quay về trang đăng nhập
+        localStorage.removeItem('user');
+        navigate('/login');
+    };
+
+    // Mở popup xác nhận Đăng xuất
+    const handleConfirmLogout = () => {
+        setShowLogoutPopup(true);
     };
 
     return (
         <div className={styles.container}>
             <div className={styles.contentWrapper}>
 
-                {/* Tiêu đề trang */}
                 <h1 className={styles.pageTitle}>Tài khoản của tôi</h1>
 
                 <div className={styles.profileLayout}>
 
-                    {/* Cột Trái: Form nhập liệu */}
+                    {/* CỘT TRÁI – FORM */}
                     <div className={styles.formSection}>
                         <div style={{ display: 'flex', gap: '20px' }}>
                             <div className={styles.formGroup} style={{ flex: 1 }}>
@@ -107,6 +118,7 @@ const Profile: React.FC = () => {
                                     placeholder="Chưa cập nhật"
                                 />
                             </div>
+
                             <div className={styles.formGroup} style={{ flex: 1 }}>
                                 <label className={styles.label}>Tên</label>
                                 <input
@@ -125,12 +137,9 @@ const Profile: React.FC = () => {
                             <label className={styles.label}>Địa chỉ Email</label>
                             <input
                                 type="email"
-                                name="email"
                                 className={styles.input}
                                 value={formData.email}
-                                onChange={handleChange}
-                                disabled={true} // Email không cho sửa
-                                style={{ cursor: 'not-allowed' }}
+                                disabled
                             />
                         </div>
 
@@ -146,37 +155,87 @@ const Profile: React.FC = () => {
                                 placeholder="Chưa cập nhật"
                             />
                         </div>
+                    </div>
+
+                    {/* CỘT PHẢI – AVATAR */}
+                    <div className={styles.photoSection}>
+                        <div className={styles.avatarWrapper}>
+                            <img
+                                src="https://cdn.prod.website-files.com/6516b906a45da7a169a81553/653fbb4b1d9ed3bffbf4ba68_user_physiopoint3.png"
+                                className={styles.avatar}
+                                alt="avatar"
+                            />
+                        </div>
+
+                        <div className={styles.userName}>
+                            {formData.username}
+                        </div>
+
                         <div className={styles.buttonGroup}>
                             <button
                                 className={styles.saveBtn}
                                 onClick={handleEditOrSave}
-                                style={{ backgroundColor: isEditing ? '#28a745' : '' }}
                             >
-                                {isEditing ? 'Lưu thông tin' : 'Sửa thông tin'}
+                                {isEditing ? 'Lưu' : 'Sửa thông tin'}
                             </button>
 
-                            <button className={styles.logoutBtn} onClick={handleLogout}>
+                            <button
+                                className={styles.logoutBtn}
+                                onClick={handleConfirmLogout}
+                            >
                                 Đăng xuất
                             </button>
                         </div>
                     </div>
-
-                    {/* Cột Phải: Ảnh đại diện */}
-                    <div className={styles.photoSection}>
-                        <p className={styles.label} style={{ marginBottom: '15px' }}></p>
-                        <div className={styles.avatarWrapper}>
-                            <img
-                                src="https://cdn.prod.website-files.com/6516b906a45da7a169a81553/653fbb4b1d9ed3bffbf4ba68_user_physiopoint3.png"
-                                alt="Avatar người dùng"
-                                className={styles.avatar}
-                            />
-                        </div>
-                        <label className={styles.userName}>
-                            {formData.username}
-                        </label>
-                    </div>
                 </div>
             </div>
+
+            {/*POPUP LƯU THÀNH CÔNG*/}
+            {showSavePopup && (
+                <div className={styles.popupOverlay}>
+                    <div className={styles.popupBox}>
+                        {/*Icon dấu tích*/}
+                        <div className={styles.iconContainer}>
+                            <svg
+                                width="30"
+                                height="30"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="white"
+                                strokeWidth="3"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            >
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                        <p>Cập nhật thông tin thành công</p>
+                    </div>
+                </div>
+            )}
+
+            {/*POPUP XÁC NHẬN ĐĂNG XUẤT*/}
+            {showLogoutPopup && (
+                <div className={styles.popupOverlay}>
+                    <div className={styles.popupBox}>
+                        <p>Bạn có chắc muốn đăng xuất?</p>
+                        <div className={styles.popupActions}>
+                            <button
+                                className={styles.saveBtn}
+                                onClick={handleLogout}
+                            >
+                                Đồng ý
+                            </button>
+                            <button
+                                className={styles.logoutBtn}
+                                onClick={() => setShowLogoutPopup(false)}
+                            >
+                                Hủy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

@@ -22,7 +22,9 @@ body {
     border-radius: 12px;
     padding: 0 24px;
     background: #fff;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    max-width: 900px;
+    margin: 0 auto;
 }
 
 .table {
@@ -33,7 +35,7 @@ body {
 
 .row {
     display: grid;
-    grid-template-columns: 60px 1fr 200px 180px 160px;
+    grid-template-columns: 60px 500px 180px 160px;
     align-items: center;
     padding: 24px 0;
     border-bottom: 1px solid rgba(33, 53, 71, 0.25);
@@ -72,7 +74,7 @@ body {
     object-fit: cover;
     background: #fff;
     border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 .product span {
@@ -134,4 +136,8 @@ body {
 .addCart:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+h3::after {
+    background: none;
 }

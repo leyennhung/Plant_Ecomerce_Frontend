@@ -1,14 +1,12 @@
-import { useEffect, useRef } from "react";
-import { useNavigate, useLocation, Navigate } from "react-router-dom";
+import {useNavigate, useLocation, Navigate} from "react-router-dom";
 import styles from "./OrderSuccess.module.css";
-import { saveOrder } from "../../utils/orderStorage";
 
 const ORDER_STEPS = [
-    "Đã đặt hàng",
+    "Đang xử lý",
     "Đã xác nhận",
-    "Đang đóng gói",
+    "Đang gói hàng",
     "Đang giao hàng",
-    "Hoàn tất",
+    "Đã giao",
 ];
 
 type OrderState = {
@@ -24,31 +22,9 @@ const OrderSuccess = () => {
     const location = useLocation();
     const state = location.state as OrderState | null;
 
-    const hasSaved = useRef(false);
-    useEffect(() => {
-        if (!state || hasSaved.current) return;
-        hasSaved.current = true;
+    if (!state) return <Navigate to="/" replace/>;
 
-        saveOrder({
-            user_id: null,
-            recipient_name: "Khách hàng",
-            recipient_phone: "0000000000",
-            full_address: state.address,
-            payment_method_id:
-                state.paymentMethod === "Thanh toán Online" ? 1 : 2,
-            payment_status: "paid",
-            subtotal: state.total,
-            shipping_fee: 0,
-            discount_amount: 0,
-            total_amount: state.total,
-            status: "pending",
-            created_at: new Date().toISOString(),
-        });
-    }, [state]);
-
-    if (!state) return <Navigate to="/" replace />;
-
-    const { orderId, total, paymentMethod, address, currentStep = 0 } = state;
+    const {orderId, total, paymentMethod, address, currentStep = 0} = state;
 
     return (
         <div className={styles.page}>
@@ -61,13 +37,14 @@ const OrderSuccess = () => {
                     <div className={styles.summary}>
                         <div className={styles.icon}>
                             <svg width="80" height="80" viewBox="0 0 24 24" fill="none">
-                                <circle cx="12" cy="12" r="12" fill="#3B823E" />
-                                <path d="M16 9l-5 5-3-3" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                                <circle cx="12" cy="12" r="12" fill="#3B823E"/>
+                                <path d="M16 9l-5 5-3-3" stroke="white" strokeWidth="3" strokeLinecap="round"
+                                      strokeLinejoin="round"/>
                             </svg>
                         </div>
+
                         <p className={styles.sub}>Cảm ơn bạn đã mua sắm tại cửa hàng</p>
 
-                        {/* Thông tin đơn hàng */}
                         <div className={styles.row}>
                             <span>Mã đơn hàng:</span><span>{orderId}</span>
                         </div>
@@ -81,20 +58,19 @@ const OrderSuccess = () => {
                             <span>Địa chỉ:</span><span>{address}</span>
                         </div>
 
-                        {/* Timeline */}
                         <h3 className={styles.subTitle}>Tiến trình đơn hàng</h3>
                         <div className={styles.timeline}>
                             {ORDER_STEPS.map((step, index) => (
                                 <div
                                     key={step}
-                                    className={`${styles.step} ${index <= currentStep ? styles.active : ""}`}>
+                                    className={`${styles.step} ${index <= currentStep ? styles.active : ""}`}
+                                >
                                     <div className={styles.dot}></div>
                                     <span>{step}</span>
                                 </div>
                             ))}
                         </div>
 
-                        {/* Actions */}
                         <div className={styles.actions}>
                             <button
                                 className={styles.btnOutline}
@@ -111,7 +87,7 @@ const OrderSuccess = () => {
                     </div>
                 </div>
 
-                <div className={styles.right} />
+                <div className={styles.right}/>
             </div>
         </div>
     );

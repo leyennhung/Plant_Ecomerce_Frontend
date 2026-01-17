@@ -9,7 +9,7 @@ const Register = () => {
     const navigate = useNavigate();
     const [error, setError] = useState<string>("");
 
-    // 1. Thêm State để bật tắt Modal thông báo
+    // State bật tắt Modal thông báo
     const [showSuccessModal, setShowSuccessModal] = useState(false);
 
     const [formData, setFormData] = useState<RegisterRequest>({
@@ -29,10 +29,6 @@ const Register = () => {
 
         try {
             await AuthService.register(formData);
-
-            // 2. Thay thế alert() bằng việc bật Modal
-            // alert("Đăng ký thành công!..."); -> XÓA DÒNG NÀY
-            // navigate("/auth/login"); -> XÓA DÒNG NÀY (để user tự bấm)
 
             setShowSuccessModal(true); // Hiện Modal lên
 
@@ -85,7 +81,7 @@ const Register = () => {
                 </button>
             </form>
 
-            {/* 3. Phần giao diện Modal (Chỉ hiện khi showSuccessModal = true) */}
+            {/*Popup Đăng ký thành công (Chỉ hiện khi showSuccessModal = true) */}
             {showSuccessModal && (
                 <div className={styles.overlay}>
                     <div className={styles.modal}>

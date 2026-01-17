@@ -65,7 +65,7 @@
 
 /*Thông báo*/
 
-/* Lớp phủ màn hình (làm mờ background) */
+/* Lớp phủ làm mờ background */
 .overlay {
     position: fixed;
     top: 0;
@@ -91,20 +91,19 @@
 }
 
 .modalTitle {
-    margin-top: 0;
+    margin-bottom: 30px;
     color: #28a745;
     font-size: 20px;
-    margin-bottom: 20px;
 }
 
 .modalActions {
     display: flex;
     justify-content: space-between;
-    gap: 15px;
+    gap: 10px;
 }
 
 .btnStay {
-    flex: 0.4;
+    flex: 0.45;
     background: #333;
     color: white;
     border: 1px solid #333;
@@ -121,7 +120,7 @@
 }
 
 .btnLogin {
-    flex: 0.4;
+    flex: 0.45;
     background-color: #3B823E;
     color: white;
     border: none;

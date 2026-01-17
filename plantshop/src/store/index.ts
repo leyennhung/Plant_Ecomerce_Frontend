@@ -1,6 +1,8 @@
-import { configureStore } from "@reduxjs/toolkit";
+import {configureStore} from "@reduxjs/toolkit";
 import cartReducer from "./cartSlice";
 import wishlistReducer from "./wishlistSlice";
+import productReducer from "./productSlice";
+import authReducer from "./authSlice";
 
 // load cart từ localStorage khi app start
 const loadCart = () => {
@@ -12,6 +14,8 @@ export const store = configureStore({
     reducer: {
         cart: cartReducer,
         wishlist: wishlistReducer,
+        product: productReducer,
+        auth: authReducer,
     },
     preloadedState: {
         cart: {

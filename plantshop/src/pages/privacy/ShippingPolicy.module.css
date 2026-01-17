@@ -18,6 +18,10 @@
     margin-bottom: 16px;
 }
 
+h3::after {
+    background: none;
+}
+
 .title {
     text-align: center;
     font-size: 32px;

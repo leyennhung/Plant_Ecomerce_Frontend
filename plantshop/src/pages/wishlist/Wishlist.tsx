@@ -1,130 +1,98 @@
-import { useEffect, useState } from "react";
 import styles from "./Wishlist.module.css";
-import type { Product } from "../../types/product.type";
-import type { WishlistItem } from "../../types/wishlist.type";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../../store/cartSlice";
+import {useDispatch, useSelector} from "react-redux";
+import type {RootState} from "../../store";
+import {removeFromWishlist} from "../../store/wishlistSlice";
+import {addToCart} from "../../store/cartSlice";
+import type {PotVariant, Product} from "../../types/product.type";
+import {useNavigate} from "react-router-dom";
 
+type ProductWithVariants = Product & { variants?: PotVariant[] };
+
+const hasVariants = (p: Product): p is ProductWithVariants =>
+    "variants" in p && Array.isArray((p as ProductWithVariants).variants);
 
 const Wishlist = () => {
-    // Danh sách wishlist
-    const [items, setItems] = useState<WishlistItem[]>([]);
-    // Danh sách toàn bộ sản phẩm
-    const [products, setProducts] = useState<Product[]>([]);
-    // Trạng thái loading
-    const [loading, setLoading] = useState(true);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const wishlistItems = useSelector(
+        (state: RootState) => state.wishlist.items
+    );
 
-    // Load wishlist và product khi vào trang
-    useEffect(() => {
-        Promise.all([
-            // Lấy wishlist
-            fetch("/api/wishlist").then(res => res.json()),
-            // Lấy danh sách sản phẩm
-            fetch("/api/products").then(res => res.json())
-        ])
-            .then(([wishlistData, productData]) => {
-                setItems(wishlistData.wishlist);
-                setProducts(productData);
+    const products = useSelector(
+        (state: RootState) => state.product.items
+    );
+
+    const handleAddToCart = (product: Product, variant?: PotVariant) => {
+        if (hasVariants(product) && !variant) {
+            navigate(`/products/${product.slug}`);
+            return;
+        }
+
+        dispatch(
+            addToCart({
+                productId: product.id,
+                quantity: 1,
+                variant: variant
+                    ? {
+                        id: variant.id,
+                        name: `${variant.color} ${variant.size}`,
+                        price: variant.price,
+                        image: variant.image,
+                    }
+                    : undefined,
             })
-            .finally(() => setLoading(false));
-    }, []);
-
-    // Xóa sản phẩm khỏi wishlist
-    const handleRemove = async (productId: number) => {
-        await fetch(`/api/wishlist/${productId}`, { method: "DELETE" });
-        setItems(prev => prev.filter(i => i.product_id !== productId));
+        );
     };
-
-    // Hiển thị khi đang loading
-    if (loading) {
-        return <div className={styles.container}>Đang tải...</div>;
-    }
 
     return (
         <div className={styles.container}>
             <h1 className={styles.title}>Sản phẩm yêu thích</h1>
 
-            {/* Wishlist trống */}
-            {items.length === 0 ? (
+            {wishlistItems.length === 0 ? (
                 <p className={styles.empty}>Danh sách yêu thích trống</p>
             ) : (
                 <div className={styles.tableWrapper}>
                     <div className={styles.table}>
-
-                        {/* HEADER */}
-                        <div className={`${styles.row} ${styles.header}`}>
-                            <div className={styles.headerRemove}></div>
-                            <div>TÊN SẢN PHẨM</div>
-                            <div>GIÁ TIỀN</div>
-                            <div>TÌNH TRẠNG HÀNG</div>
-                            <div></div>
-                        </div>
-
-                        {/* ITEMS */}
-                        {items.map(item => {
-                            const product = products.find(
-                                p => p.id === item.product_id
-                            );
+                        {wishlistItems.map(item => {
+                            const product = products.find(p => p.id === item.product_id);
                             if (!product) return null;
 
+                            const variant = hasVariants(product)
+                                ? product.variants?.find(v => v.id === item.variant_id)
+                                : undefined;
+
                             return (
-                                <div key={item.id} className={styles.row}>
+                                <div
+                                    key={`${item.product_id}-${item.variant_id ?? "base"}`}
+                                    className={styles.row}
+                                >
                                     <button
                                         className={styles.removeBtn}
-                                        onClick={() => handleRemove(item.product_id)}
+                                        onClick={() =>
+                                            dispatch(
+                                                removeFromWishlist({
+                                                    productId: item.product_id,
+                                                    variantId: item.variant_id,
+                                                })
+                                            )
+                                        }
                                     >
                                         ✕
                                     </button>
 
-                                    {/* Tên sản phẩm */}
                                     <div className={styles.product}>
-                                        <img
-                                            src={product.image}
-                                            alt={product.name}
-                                        />
-                                        <span>{product.name}</span>
+                                        <img src={variant?.image ?? product.image}/>
+                                        <span>{product.name} {variant && ` (${variant.color} - ${variant.size})`}</span>
+
                                     </div>
 
-                                    {/* Giá sản phẩm */}
                                     <div className={styles.price}>
-                                        {product.price.toLocaleString()}đ
+                                        {(variant?.price ?? product.price).toLocaleString()}đ
                                     </div>
 
-                                    {/* Trạng thái tồn kho */}
-                                    <div
-                                        className={
-                                            product.stock > 0
-                                                ? styles.inStock
-                                                : styles.outOfStock
-                                        }
-                                    >
-                                        {product.stock > 0
-                                            ? "Còn hàng"
-                                            : "Hết hàng"}
-                                    </div>
-
-                                    {/* Thêm sản phẩm vào giỏ hàng */}
                                     <button
                                         className={styles.addCart}
-                                        disabled={product.stock === 0}
-                                        onClick={async () => {
-                                            try {
-                                                dispatch(addToCart({
-                                                    id: Date.now(),
-                                                    productId: product.id,
-                                                    name: product.name,
-                                                    image: product.image,
-                                                    price: product.price,
-                                                    quantity: 1,
-                                                }));
-
-                                                alert("Đã thêm vào giỏ hàng");
-
-                                            } catch {
-                                                alert("Sản phẩm đã hết hàng");
-                                            }
-                                        }}
+                                        onClick={() => handleAddToCart(product, variant)}
                                     >
                                         Thêm vào giỏ hàng
                                     </button>

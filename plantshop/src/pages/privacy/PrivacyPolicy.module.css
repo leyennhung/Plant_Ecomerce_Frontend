@@ -1,5 +1,5 @@
 .page {
-    background:  #fff;
+    background: #fff;
 }
 
 .container {
@@ -8,6 +8,10 @@
     padding: 32px 36px;
     line-height: 1.7;
     color: #213547;
+}
+
+h3::after {
+    background: none;
 }
 
 h1 {

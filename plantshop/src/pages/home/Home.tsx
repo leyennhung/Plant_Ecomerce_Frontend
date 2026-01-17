@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { productService } from "../../services/product.service";
-import type { Product } from "../../types/product.type";
+import {useEffect, useState} from "react";
+import {productService} from "../../services/product.service";
+import type {Product} from "../../types/product.type";
 // import Button from "../../components/common/Button";
 import styles from "./Home.module.css";
 import banner from "../../assets/images/banner.png"
@@ -12,7 +12,9 @@ import ComboImg from "../../assets/images/CayPhuQuy.jpg";
 import HatGiongImg from "../../assets/images/HatGiong.jpg";
 import GiaSiImg from "../../assets/images/CayGiongGiaSi.png";
 import vuonImg from "../../assets/images/vuon.jpg";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {addToCart} from "../../store/cartSlice";
 
 //Function component Home (khai báo, tạo)
 const Home = () => {
@@ -22,7 +24,7 @@ const Home = () => {
     // setProducts: hàm cập nhật danh sách
     // Product[]: mảng các sản phẩm
     // Giá trị ban đầu: [] (mảng rỗng)
-
+    const dispatch = useDispatch();
     // const [products, setProducts] = useState<Product[]>([]);
     const [newProducts, setNewProducts] = useState<Product[]>([]);
     const [trendingProducts, setTrendingProducts] = useState<Product[]>([]);
@@ -64,6 +66,10 @@ const Home = () => {
 
     if (loading) return <p>Loading products...</p>;  //Xử lý khi đang loading
 
+    const handleAddToCart = (productId: number) => {
+        dispatch(addToCart({productId, quantity: 1}));
+    };
+
     //Trả về JSX - giao diện
     return (
         <div className={styles.container}>
@@ -73,32 +79,32 @@ const Home = () => {
             </div>
             {/*2.CONTENT*/}
             <div className={styles.content}>
-            {/*    2.1 CHOICE*/}
+                {/*    2.1 CHOICE*/}
                 <section className={styles.choiceSection}>
                     <div className={styles.choiceList}>
 
                         <Link to="/products?type=plant" className={styles.choiceItem}>
-                            <img src={CayTrongImg} alt="CayTrong" />
+                            <img src={CayTrongImg} alt="CayTrong"/>
                             <span>Cây trồng</span>
                         </Link>
 
                         <Link to="/products?type=pot" className={styles.choiceItem}>
-                            <img src={ChauCayImg} alt="ChauCay" />
+                            <img src={ChauCayImg} alt="ChauCay"/>
                             <span>Chậu cây</span>
                         </Link>
 
                         <Link to="/products?type=combo" className={styles.choiceItem}>
-                            <img src={ComboImg} alt="Combo" />
+                            <img src={ComboImg} alt="Combo"/>
                             <span>Combo</span>
                         </Link>
 
                         <Link to="/products?type=seed" className={styles.choiceItem}>
-                            <img src={HatGiongImg} alt="HatGiong" />
+                            <img src={HatGiongImg} alt="HatGiong"/>
                             <span>Hạt gống</span>
                         </Link>
 
                         <Link to="/products?type=bulk" className={styles.choiceItem}>
-                            <img src={GiaSiImg} alt="UuDaiSi" />
+                            <img src={GiaSiImg} alt="UuDaiSi"/>
                             <span>Ưu đãi sĩ</span>
                         </Link>
                     </div>
@@ -108,99 +114,104 @@ const Home = () => {
                         </Link>
                     </div>
                 </section>
-                    {/*2.2 SẢN PHẨM MỚI*/}
+                {/*2.2 SẢN PHẨM MỚI*/}
                 <section className={styles.productSection}>
                     <h2 className={styles.title}> Sản phẩm mới nhất</h2>
                     <div className={styles.divider}></div>
                     <div className={styles.productList}>
-
-                        {/*Duyệt qua từng sản phẩm trong products
-                            map → render nhiều card*/}
                         {newProducts.map(np => (
-                            // Mỗi sp là 1 card
-                            // <div key={product.id} className={styles.card}>
-                            //     <img
-                            //         src={product.image}
-                            //         alt={product.name}
-                            //         className={styles.image}
-                            //     />
-                            //     <h3 className={styles.name}>{product.name}</h3>
-                            //     <p className={styles.price}>
-                            //         {formatPrice(product.price)}
-                            //     </p>
-                            // </div>
-                            <ProductCard key={np.id} product={np} isNew={true} />
+                            <ProductCard
+                                key={np.id}
+                                product={np}
+                                isNew
+                                onAddToCart={() => handleAddToCart(np.id)}
+                            />
                         ))}
                     </div>
                 </section>
-                {/*2.3 SẢN PHẨM TRENDING*/}
+                {/*2.3 SẢN PHẨM TRENDING*/
+                }
                 <section className={styles.productSection}>
                     <h2 className={styles.title}>🌱 Sản phẩm Trending</h2>
                     <div className={styles.divider}></div>
                     <div className={styles.productList}>
-
-                        {/*Duyệt qua từng sản phẩm trong products
-                            map → render nhiều card*/}
                         {trendingProducts.map(tp => (
-                            // Mỗi sp là 1 card
-                            <ProductCard key={tp.id} product={tp} isTrending={true}/>
+                            <ProductCard
+                                key={tp.id}
+                                product={tp}
+                                isTrending
+                                onAddToCart={() => handleAddToCart(tp.id)}
+
+                            />
                         ))}
                     </div>
                 </section>
-                {/*2.4 SẢN PHẨM GIẢM GIÁ*/}
+                {/*2.4 SẢN PHẨM GIẢM GIÁ*/
+                }
                 <section className={styles.productSection}>
                     <h2 className={styles.title}> Sản phẩm khuyến mãi</h2>
                     <div className={styles.divider}></div>
                     <div className={styles.productList}>
-
-                        {/*Duyệt qua từng sản phẩm trong products
-                            map → render nhiều card*/}
                         {saleProducts.map(sp => (
-                            // Mỗi sp là 1 card
-                            <ProductCard key={sp.id} product={sp} isSale={true} />
+                            <ProductCard
+                                key={sp.id}
+                                product={sp}
+                                isSale
+                                onAddToCart={() => handleAddToCart(sp.id)}
+                            />
                         ))}
                     </div>
                 </section>
-                {/* 2.5 COMBO HẤP DẪN */}
+                {/* 2.5 COMBO HẤP DẪN */
+                }
                 <section className={styles.productSection}>
                     <h2 className={styles.title}>Combo hấp dẫn</h2>
                     <div className={styles.divider}></div>
                     <div className={styles.productListCombo}>
-                        {comboProducts.map((cbp) => (
-                            <ProductCardCombo key={cbp.id} product={cbp} />
+                        {comboProducts.map(cbp => (
+                            <ProductCardCombo
+                                key={cbp.id}
+                                product={cbp}
+                                onAddToCart={() => handleAddToCart(cbp.id)}
+
+                            />
                         ))}
                     </div>
                 </section>
-                {/*2.6 CÂY GIỐNG*/}
+                {/*2.6 CÂY GIỐNG*/
+                }
                 <section className={styles.productSection}>
                     <h2 className={styles.title}>Ưu đãi giá sĩ cây giống</h2>
                     <div className={styles.divider}></div>
                     <div className={styles.productList}>
-
-                        {/*Duyệt qua từng sản phẩm trong products
-                            map → render nhiều card*/}
                         {wholesaleProducts.map(wsp => (
-                            // Mỗi sp là 1 card
-                            <ProductCard key={wsp.id} product={wsp} />
+                            <ProductCard
+                                key={wsp.id}
+                                product={wsp}
+                                onAddToCart={() => handleAddToCart(wsp.id)}
+
+                            />
                         ))}
                     </div>
                 </section>
-                {/*2.7 DỤNG CỤ */}
+                {/*2.7 DỤNG CỤ */
+                }
                 <section className={styles.productSection}>
                     <h2 className={styles.title}>Vật tư cây trồng</h2>
                     <div className={styles.divider}></div>
                     <div className={styles.productList}>
-
-                        {/*Duyệt qua từng sản phẩm trong products
-                            map → render nhiều card*/}
                         {suppliesProducts.map(slp => (
-                            // Mỗi sp là 1 card
-                            <ProductCard key={slp.id} product={slp} />
+                            <ProductCard
+                                key={slp.id}
+                                product={slp}
+                                onAddToCart={() => handleAddToCart(slp.id)}
+                            />
                         ))}
                     </div>
                 </section>
             </div>
-            {/* 3. GIỚI THIỆU */}
+            {/* 3. GIỚI THIỆU */
+            }
             <section className={styles.introSection}>
                 <div className={styles.introContainer}>
                     {/* Ảnh bên trái */}
@@ -259,19 +270,27 @@ const Home = () => {
                 </div>
             </section>
 
-                {/*4.  BLOG*/}
+            {/*4.  BLOG*/
+            }
             <div>
 
             </div>
-                {/*<Button onClick={() => alert("Clicked!")}>*/}
-                {/*    Thêm vào giỏ hàng*/}
-                {/*</Button>*/}
+            {/*<Button onClick={() => alert("Clicked!")}>*/
+            }
+            {/*    Thêm vào giỏ hàng*/
+            }
+            {/*</Button>*/
+            }
 
-                {/*<Button variant="outline">*/}
-                {/*    Xem chi tiết*/}
-                {/*</Button>*/}
+            {/*<Button variant="outline">*/
+            }
+            {/*    Xem chi tiết*/
+            }
+            {/*</Button>*/
+            }
         </div>
-    );
+    )
+        ;
 };
 
 // Export component

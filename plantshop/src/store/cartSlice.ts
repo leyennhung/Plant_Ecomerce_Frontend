@@ -1,5 +1,23 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { CartViewItem } from "../types/cart.type";
+import { getFinalPrice } from "../utils/getFinalPrice";
+import products from "../mocks/data/products.json";
+import type { ProductApi } from "../types/product-api.type";
+
+const productList = products.products as ProductApi[];
+
+interface VariantPayload {
+    id: number;
+    name: string;
+    price: number;
+    image?: string;
+}
+
+interface AddToCartPayload {
+    productId: number;
+    quantity: number;
+    variant?: VariantPayload;
+}
 
 interface CartState {
     items: CartViewItem[];
@@ -13,53 +31,132 @@ const cartSlice = createSlice({
     name: "cart",
     initialState,
     reducers: {
-        // Set toàn bộ danh sách cart items
         setCartItems: (state, action: PayloadAction<CartViewItem[]>) => {
             state.items = action.payload;
+            localStorage.setItem(getCartStorageKey(), JSON.stringify(state.items));
         },
 
-        // Thêm sản phẩm vào cart
-        addToCart: (state, action: PayloadAction<CartViewItem>) => {
-            // Kiểm tra sản phẩm đã tồn tại trong cart chưa
-            const existing = state.items.find(
-                item => item.productId === action.payload.productId
-            );
+        addToCart: (state, action: PayloadAction<AddToCartPayload>) => {
+            const { productId, quantity, variant } = action.payload;
 
-            // Nếu đã tồn tại, cộng thêm số lượng
-            if (existing) {
-                existing.quantity += action.payload.quantity;
-            } else {
-                // Nếu chưa tồn tại, thêm mới
-                state.items.push(action.payload);
+            const product = productList.find(p => p.id === productId);
+            if (!product) return;
+
+            // CHẶN tuyệt đối nếu sản phẩm có variant mà không truyền variant
+            if (product.type === "pot" && !variant) {
+
+                console.warn("Must select variant before adding to cart");
+                return;
             }
-        },
 
-        // Xóa sản phẩm khỏi cart theo productId
-        removeFromCart: (state, action: PayloadAction<number>) => {
-            state.items = state.items.filter(
-                item => item.productId !== action.payload
+            const result = getFinalPrice(product, quantity);
+            const basePrice = variant ? variant.price : result.price;
+
+            const existing = state.items.find(
+                i =>
+                    i.productId === productId &&
+                    (variant ? i.variantId === variant.id : i.variantId == null)
             );
+
+            if (existing) {
+                existing.quantity += quantity;
+
+                const updated = getFinalPrice(product, existing.quantity);
+
+                // Chỉ áp wholesale cho product thường (không variant)
+                if (!variant) {
+                    existing.price = updated.price;
+                }
+
+                existing.isWholesale = updated.isWholesale;
+                existing.wholesaleMin = updated.wholesaleMin;
+            } else {
+                state.items.push({
+                    id: Date.now(),
+                    productId,
+                    name: variant ? `${product.name} (${variant.name})` : product.name,
+                    image:
+                        variant?.image ||
+                        product.images?.[0]?.url ||
+                        product.image ||
+                        "",
+                    price: basePrice,
+                    original_price: product.price,
+                    quantity,
+                    isWholesale: result.isWholesale,
+                    wholesaleMin: result.wholesaleMin,
+                    variantId: variant?.id,
+                    variantName: variant?.name,
+                });
+            }
+
+            localStorage.setItem(getCartStorageKey(), JSON.stringify(state.items));
         },
 
-        // Cập nhật số lượng sản phẩm trong cart
+        removeFromCart: (
+            state,
+            action: PayloadAction<{ productId: number; variantId?: number }>
+        ) => {
+            state.items = state.items.filter(
+                i =>
+                    !(
+                        i.productId === action.payload.productId &&
+                        i.variantId === action.payload.variantId
+                    )
+            );
+            localStorage.setItem(getCartStorageKey(), JSON.stringify(state.items));
+        },
+
         updateQuantity: (
             state,
-            action: PayloadAction<{ productId: number; quantity: number }>
+            action: PayloadAction<{
+                productId: number;
+                quantity: number;
+                variantId?: number;
+            }>
         ) => {
+            const { productId, quantity, variantId } = action.payload;
+
             const item = state.items.find(
-                i => i.productId === action.payload.productId
+                i => i.productId === productId && i.variantId === variantId
             );
-            if (item) {
-                item.quantity = action.payload.quantity;
+            if (!item) return;
+
+            item.quantity = quantity;
+
+            const product = productList.find(p => p.id === productId);
+            if (!product) return;
+
+            const updated = getFinalPrice(product, quantity);
+
+            if (!item.variantId) {
+                item.price = updated.price;
             }
+
+            item.isWholesale = updated.isWholesale;
+            item.wholesaleMin = updated.wholesaleMin;
+
+            localStorage.setItem(getCartStorageKey(), JSON.stringify(state.items));
         },
 
-        // Xóa toàn bộ cart
-        clearCart: (state) => {
+        clearCart: state => {
             state.items = [];
+            localStorage.setItem(getCartStorageKey(), JSON.stringify([]));
         },
     },
 });
+
+function getCartStorageKey() {
+    const stored = localStorage.getItem("user");
+    if (!stored) return "cart_guest";
+
+    try {
+        const { user } = JSON.parse(stored);
+        return user?.id ? `cart_user_${user.id}` : "cart_guest";
+    } catch {
+        return "cart_guest";
+    }
+}
 
 export const {
     setCartItems,

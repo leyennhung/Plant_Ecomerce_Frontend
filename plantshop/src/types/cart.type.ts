@@ -9,13 +9,15 @@ export interface Cart {
 
 export interface CartItemEntity {
     id: number;
-    cart_id: number;
+    order_id: string;
     product_id: number;
     quantity: number;
     price: number;            // giá đã áp sale
     original_price?: number;  // giá gốc (optional)
     created_at: string;
     updated_at: string;
+    name: string;
+    image: string;
 }
 
 export interface CartResponse {
@@ -34,4 +36,9 @@ export interface CartViewItem {
     price: number;            // giá đã áp sale
     original_price?: number;  // giá gốc (optional)
     quantity: number;
+    isWholesale?: boolean;
+    wholesaleMin?: number;
+    // thêm cho variant (chậu)
+    variantId?: number;
+    variantName?: string;
 }

@@ -21,6 +21,9 @@ body {
     color: #213547;
 }
 
+h3::after {
+    background: none;
+}
 
 .tableWrapper {
     width: 100%;
@@ -33,13 +36,12 @@ body {
     background: #fff;
     border-radius: 12px;
     overflow: hidden;
-    /*border: 1.5px solid #213547;*/
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .row {
     display: grid;
-    grid-template-columns: 60px 1fr 200px 180px 160px 80px;
+    grid-template-columns: 60px 1fr 220px 180px 160px 80px;
     align-items: center;
     padding: 24px 12px;
     border-bottom: 1px solid rgba(33, 53, 71, 0.25);
@@ -96,6 +98,7 @@ body {
     display: flex;
     align-items: center;
     gap: 16px;
+    padding-right: 24px;
 }
 
 .product img {
@@ -127,21 +130,35 @@ body {
     font-weight: 600;
 }
 
-
 .summary {
-    margin-top: 32px;
-    padding-top: 20px;
-    border-top: 2px solid #213547;
+    border-radius: 6px;
+    position: sticky;
+    bottom: 0;
+    inset-inline: 0;
+    background: white;
+    padding: 20px 32px;
+    box-shadow: 0 -6px 16px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    color: #2f6331;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-sizing: border-box;
+    margin-top: 32px;
+    border: 2px solid #2f6331;
+}
+
+.checkoutWrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .subtotal {
     font-size: 18px;
     font-weight: bold;
+    color: #2f6331;
 }
-
 
 .empty {
     font-size: 16px;
@@ -156,9 +173,9 @@ Button {
 }
 
 .checkoutWrapper Button:hover, .quantity Button:hover {
-    background: #2f6331;
-    color: #fff;
+    color: white;
     border: 2px solid #2f6331;
+    background-color: #2f6331;
 }
 
 .row:not(.header):hover .removeBtn {
@@ -189,8 +206,82 @@ Button {
 .errorMessage {
     position: absolute;
     top: 100%;
-    left: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 6px;
     font-size: 13px;
-    color: #d32f2f;
-    margin-top: 4px;
+    color: crimson;
+    white-space: nowrap;
+}
+
+.emptyCart {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 14px;
+    margin-top: 32px;
+}
+
+.emptyIcon {
+    font-size: 100px;
+    opacity: 0.4;
+    margin-bottom: 8px;
+}
+
+.emptyTitle {
+    font-size: 22px;
+    font-weight: 600;
+    color: #213547;
+}
+
+.emptyDesc {
+    font-size: 15px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.emptyCart Button {
+    background: #ffffff;
+    color: #2f6331;
+    border: 2px solid #2f6331;
+    padding: 10px 22px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.25s ease;
+}
+
+.emptyCart Button:hover {
+    background: #2f6331;
+    color: #ffffff;
+    border-color: #2f6331;
+}
+
+.oldPrice {
+    text-decoration: line-through;
+    color: #999;
+    margin-right: 6px;
+    font-size: 13px;
+}
+
+.newPrice {
+    font-weight: 600;
+}
+
+.wholesaleBadge {
+    background: red;
+    color: white;
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 6px;
+}
+
+.tooltip {
+    margin-left: 6px;
+    cursor: help;
+    color: #888;
 }
