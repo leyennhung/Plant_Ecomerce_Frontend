@@ -1,5 +1,5 @@
 import {useEffect, useState, useRef} from "react";
-import {useParams, useNavigate} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {productService} from "../../../services/product.service";
 import type {PotVariant, ProductDetail, ProductImage} from "../../../types/product.type";
 import styles from "./ProductDetail.module.css";
@@ -20,7 +20,6 @@ import {addToCart} from "../../../store/cartSlice";
 
 const Productdetail = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     // const { id } = useParams<{ id: string }>();
     const {slug} = useParams<{ slug: string }>();
@@ -91,7 +90,7 @@ const Productdetail = () => {
             }
         } else {
             if (isFavorite) {
-                dispatch(removeFromWishlist({ productId: product.id }));
+                dispatch(removeFromWishlist({productId: product.id}));
             } else {
                 dispatch(
                     addToWishlist({
@@ -176,7 +175,7 @@ const Productdetail = () => {
                 })
             );
         } else {
-            dispatch(addToCart({ productId: product.id, quantity }));
+            dispatch(addToCart({productId: product.id, quantity}));
         }
     };
 
@@ -330,10 +329,6 @@ const Productdetail = () => {
                             <strong>Danh mục: </strong>
                             {categoryTags.join(", ")}
                         </p>
-                        <p>
-                            <strong>Danh mục: </strong>
-                            {categoryTags.join(", ")}
-                        </p>
                         {/* CHỌN BIẾN THỂ CHẬU */}
                         {product.type === "pot" && product.variants && (
                             <div className={styles.variantBox}>
@@ -399,24 +394,15 @@ const Productdetail = () => {
                     {/* COMBO*/}
                     {product.type === "combo" ? (
                         <div className={styles.comboList}>
-                            {product.comboItems?.map((item, index) => (
-                                <div key={index} className={styles.comboItem}
-                                     onClick={() => navigate(`/products/${item.slug}`)}>
-                                    <img
-                                        src={item.image}
-                                        alt={item.name}
-                                        className={styles.comboImage}
-                                    />
-
+                            {product.comboItems?.map(item => (
+                                <Link key={item.id} to={`/products/${item.slug}`} className={styles.comboItem}>
+                                <img src={item.image} alt={item.name} className={styles.comboImage}/>
                                     <div className={styles.comboInfo}>
-                                        <p className={styles.comboName}>
-                                            {item.name}
-                                        </p>
-                                        <p className={styles.comboQty}>
-                                            Số lượng: x{item.quantity}
-                                        </p>
+                                        <p className={styles.comboName}>{item.name}</p>
+                                        <p className={styles.comboQty}>Số lượng: x{item.quantity}</p>
                                     </div>
-                                </div>
+                                </Link>
+
                             ))}
                         </div>
                     ) : (

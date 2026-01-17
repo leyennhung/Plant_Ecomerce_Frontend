@@ -41,4 +41,12 @@ export interface CartViewItem {
     // thêm cho variant (chậu)
     variantId?: number;
     variantName?: string;
+    comboItems?: ComboItem[];
 }
+
+export type ComboItem = {
+    productId: number;
+    name: string;
+    image: string;
+    quantity: number;
+};

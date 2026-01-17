@@ -1,6 +1,6 @@
 .footer {
-    background-color: #01370C;
-    color: #fff;
+    background-color: #CAE0BC;
+    color: #000000;
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -23,7 +23,7 @@
     font-size: 14px;
     line-height: 1.6;
     max-width: 320px;
-    color: aliceblue;
+    color: #000000;
 }
 .imgintro img{
     width: 300px;
@@ -59,7 +59,7 @@ ul li {
 }
 
 ul li a {
-    color: #fff;
+    color: #000000;
     text-decoration: none;
     font-size: 14px;
     transition: 0.3s;
@@ -80,7 +80,7 @@ ul li a:hover {
 .col3 p {
     font-size: 14px;
     margin-bottom: 12px;
-    color: #ffffff;
+    color: #000000;
 }
 
 /* COL 4 */
@@ -89,10 +89,10 @@ ul li a:hover {
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    border: 1px solid #8bc34a;
+    border: 1px solid #003c1e;
     align-items: center;
     justify-content: center;
-    color: #8bc34a;
+    color: #003c1e;
     text-decoration: none;
     margin-right: 10px;
     transition: 0.3s;

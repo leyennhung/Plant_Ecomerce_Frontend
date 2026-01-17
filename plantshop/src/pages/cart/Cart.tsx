@@ -97,8 +97,23 @@ const Cart = () => {
                                     </div>
                                     {/* Tên sản phẩm */}
                                     <div className={styles.product}>
-                                        <img src={item.image} alt={item.name}/>
-                                        <span>{item.name}</span>
+                                        <div className={styles.productLeft}>
+                                            <img src={item.image} alt={item.name}/>
+                                            {item.comboItems && item.comboItems.length > 0 && (
+                                                <div className={styles.comboList}>
+                                                    {item.comboItems.map((ci, index) => (
+                                                        <div key={index} className={styles.comboItem}>
+                                                            <img src={ci.image} alt={ci.name}/>
+                                                            <span>{ci.name} x{ci.quantity}</span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        <div className={styles.productInfo}>
+                                            <span>{item.name}</span>
+                                        </div>
                                     </div>
 
                                     {/* Giá sản phẩm */}
@@ -196,16 +211,14 @@ const Cart = () => {
                             >
                                 Thanh toán
                             </Button>
-
-
-                            {/* Thông báo lỗi */}
-                            {showError && (
-                                <p className={styles.errorMessage}>
-                                    ⚠ Vui lòng chọn ít nhất 1 sản <br/> phẩm để thanh toán
-                                </p>
-                            )}
                         </div>
                     </div>
+                    {/* Thông báo lỗi */}
+                    {showError && (
+                        <p className={styles.errorMessage}>
+                            ⚠ Vui lòng chọn ít nhất 1 sản phẩm để thanh toán
+                        </p>
+                    )}
                 </>
             )}
         </div>

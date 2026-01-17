@@ -494,68 +494,248 @@
   ],
   "combo_products": [
     {
-      "id": 48,
-      "name": "Combo Cây kim ngân + chậu sứ gấu BearBrick",
-      "price": 350000,
+      "id": 100,
+      "name": "Combo Trồng Rau Ban Công",
+      "slug": "combo-trong-rau-ban-cong",
       "type": "combo",
-      "categoryId": 11,
-      "attributeIds": [85, 86],
-      "comboItems": [
+      "description": "Combo đầy đủ giúp bạn bắt đầu trồng rau sạch tại ban công hoặc sân thượng.",
+      "price": 317000,
+      "salePrice": 280000,
+      "stock": 10,
+      "status": "active",
+      "image": "https://mowgarden.com/wp-content/uploads/2022/02/Chau-nhua-trong-cay-Monrovia.jpg",
+
+      "infor": {
+        "content": "Combo phù hợp cho người mới bắt đầu, đầy đủ vật tư cơ bản để trồng rau tại nhà.",
+        "features": "Tiết kiệm chi phí so với mua lẻ,Dễ sử dụng, phù hợp ban công nhỏ, Rau sạch, an toàn cho gia đình",
+        "careGuide": "Đặt chậu nơi có nắng 4–6 giờ/ngày, tưới nước đều mỗi sáng."
+      },
+
+      "dimensions": {
+        "weight": "6 kg",
+        "totalHeight": "60 cm",
+        "canopyWidth": "40 cm",
+        "potWidth": "38 cm",
+        "potHeight": "40 cm"
+      },
+
+      "images": [
         {
-          "productId": 46,
-          "name": "Cây kim ngân",
-          "image": "https://mowgarden.com/wp-content/uploads/2022/09/cay-kim-ngan-mot-than-co-thu-chau-su-3.jpg",
-          "quantity": 1
+          "id": 200,
+          "url": "https://trongraudothi.com/Uploads/rausach/rausachimages/bai39/6.jpg",
+          "order": 1
         },
         {
-          "productId": 47,
-          "name": "Chậu sứ gấu BearBrick",
-          "image": "https://mowgarden.com/wp-content/uploads/2023/07/cay-kim-ngan-3-than-mowgarden.jpg",
-          "quantity": 1
+          "id": 201,
+          "url": "https://mowgarden.com/wp-content/uploads/2022/02/Chau-nhua-trong-cay-Monrovia.jpg",
+          "order": 2
+        },
+        {
+          "id": 202,
+          "url": "https://cdn2.fptshop.com.vn/unsafe/800x0/rau_xa_lach_7_f08f610940.jpg",
+          "order": 3
+        }
+      ],
+
+      "categories": [
+        {
+          "id": 12,
+          "name": "Combo Trồng Cây",
+          "slug": "combo-trong-cay"
+        }
+      ],
+
+      "comboItems": [
+        {
+          "id": 60,
+          "slug": "chau-nhua-morovia-gallon",
+          "name": "Chậu Nhựa Monrovia Gallon",
+          "product_type": "pot",
+          "quantity": 1,
+          "price": 160000,
+          "image": "https://mowgarden.com/wp-content/uploads/2022/02/Chau-nhua-trong-cay-Monrovia-cao-cap-1.jpg"
+        },
+        {
+          "product_id": 56,
+          "slug": "dat-trong-cay-da-dung-sach-benh",
+          "name": "Đất trồng cây đa dụng sạch bệnh",
+          "product_type": "supplies",
+          "quantity": 1,
+          "price": 145000,
+          "image": "https://pos.nvncdn.com/852a10-72624/ps/20230909_rFiFwhpfNi.jpeg?v=1694273014"
+        },
+        {
+          "id": 27,
+          "slug": "rau-xa-lach",
+          "name": "Rau xà lách",
+          "product_type": "seed",
+          "quantity": 1,
+          "price": 12000,
+          "image": "https://bizweb.dktcdn.net/thumb/1024x1024/100/521/346/products/hat-giong-rau-xa-lach-1.png?v=1723089261877"
         }
       ]
     },
     {
-      "id": 50,
-      "name": "Combo Cây trầu bà thanh xuân cỡ lớn + chậu đá mài",
-      "price": 1200000,
+      "id": 101,
+      "name": "Combo Trồng Rau Ban Công",
+      "slug": "combo-trong-rau-ban-cong",
       "type": "combo",
-      "categoryId": 4,
-      "attributeIds": [23, 31,36,70,73,79,80],
-      "comboItems": [
+      "description": "Combo đầy đủ giúp bạn bắt đầu trồng rau sạch tại ban công hoặc sân thượng.",
+      "price": 317000,
+      "salePrice": 280000,
+      "stock": 10,
+      "status": "active",
+      "image": "https://mowgarden.com/wp-content/uploads/2022/02/Chau-nhua-trong-cay-Monrovia.jpg",
+
+      "infor": {
+        "content": "Combo phù hợp cho người mới bắt đầu, đầy đủ vật tư cơ bản để trồng rau tại nhà.",
+        "features": "Tiết kiệm chi phí so với mua lẻ,Dễ sử dụng, phù hợp ban công nhỏ, Rau sạch, an toàn cho gia đình",
+        "careGuide": "Đặt chậu nơi có nắng 4–6 giờ/ngày, tưới nước đều mỗi sáng."
+      },
+
+      "dimensions": {
+        "weight": "6 kg",
+        "totalHeight": "60 cm",
+        "canopyWidth": "40 cm",
+        "potWidth": "38 cm",
+        "potHeight": "40 cm"
+      },
+
+      "images": [
         {
-          "productId": 49,
-          "name": "Cây trầu bà",
-          "image": "https://mowgarden.com/wp-content/uploads/2022/08/trau-ba-thanh-xuan-chau-su-trang-2.jpg",
-          "quantity": 1
+          "id": 200,
+          "url": "https://trongraudothi.com/Uploads/rausach/rausachimages/bai39/6.jpg",
+          "order": 1
         },
         {
-          "productId": 47,
-          "name": "Chậu Xi Măng Đá Mài",
-          "image": "https://mowgarden.com/wp-content/uploads/2022/02/chau-xi-mang-da-mai-tron-ong-cao-30x50-1.jpg",
-          "quantity": 1
+          "id": 201,
+          "url": "https://mowgarden.com/wp-content/uploads/2022/02/Chau-nhua-trong-cay-Monrovia.jpg",
+          "order": 2
+        },
+        {
+          "id": 202,
+          "url": "https://cdn2.fptshop.com.vn/unsafe/800x0/rau_xa_lach_7_f08f610940.jpg",
+          "order": 3
+        }
+      ],
+
+      "categories": [
+        {
+          "id": 12,
+          "name": "Combo Trồng Cây",
+          "slug": "combo-trong-cay1"
+        }
+      ],
+
+      "comboItems": [
+        {
+          "id": 60,
+          "slug": "chau-nhua-morovia-gallon",
+          "name": "Chậu Nhựa Monrovia Gallon",
+          "product_type": "pot",
+          "quantity": 1,
+          "price": 160000,
+          "image": "https://mowgarden.com/wp-content/uploads/2022/02/Chau-nhua-trong-cay-Monrovia-cao-cap-1.jpg"
+        },
+        {
+          "product_id": 56,
+          "slug": "dat-trong-cay-da-dung-sach-benh",
+          "name": "Đất trồng cây đa dụng sạch bệnh",
+          "product_type": "supplies",
+          "quantity": 1,
+          "price": 145000,
+          "image": "https://pos.nvncdn.com/852a10-72624/ps/20230909_rFiFwhpfNi.jpeg?v=1694273014"
+        },
+        {
+          "id": 27,
+          "slug": "rau-xa-lach",
+          "name": "Rau xà lách",
+          "product_type": "seed",
+          "quantity": 1,
+          "price": 12000,
+          "image": "https://bizweb.dktcdn.net/thumb/1024x1024/100/521/346/products/hat-giong-rau-xa-lach-1.png?v=1723089261877"
         }
       ]
     },
     {
-      "id": 52,
-      "name": "Combo Cây hạnh phúc để sàn 2 tầng + chậu sứ hoa văn",
-      "price": 900000,
+      "id": 102,
+      "name": "Combo Trồng Rau Ban Công",
+      "slug": "combo-trong-rau-ban-cong",
       "type": "combo",
-      "categoryId": 4,
-      "attributeIds": [23, 31,36,41,70,75,78],
-      "comboItems": [
+      "description": "Combo đầy đủ giúp bạn bắt đầu trồng rau sạch tại ban công hoặc sân thượng.",
+      "price": 317000,
+      "salePrice": 280000,
+      "stock": 10,
+      "status": "active",
+      "image": "https://mowgarden.com/wp-content/uploads/2022/02/Chau-nhua-trong-cay-Monrovia.jpg",
+
+      "infor": {
+        "content": "Combo phù hợp cho người mới bắt đầu, đầy đủ vật tư cơ bản để trồng rau tại nhà.",
+        "features": "Tiết kiệm chi phí so với mua lẻ,Dễ sử dụng, phù hợp ban công nhỏ, Rau sạch, an toàn cho gia đình",
+        "careGuide": "Đặt chậu nơi có nắng 4–6 giờ/ngày, tưới nước đều mỗi sáng."
+      },
+
+      "dimensions": {
+        "weight": "6 kg",
+        "totalHeight": "60 cm",
+        "canopyWidth": "40 cm",
+        "potWidth": "38 cm",
+        "potHeight": "40 cm"
+      },
+
+      "images": [
         {
-          "productId": 51,
-          "name": "Cây hạnh phúc",
-          "image": "https://mowgarden.com/wp-content/uploads/2022/10/cay-hanh-phuc-adermachera-Sinica.jpg",
-          "quantity": 1
+          "id": 200,
+          "url": "https://trongraudothi.com/Uploads/rausach/rausachimages/bai39/6.jpg",
+          "order": 1
         },
         {
-          "productId": 33,
-          "name": "Chậu gốm sứ hình trụ họa tiết Geometric",
-          "image": "https://mowgarden.com/wp-content/uploads/2023/04/chau-su-hinh-tru-hoa-tiet-geo-4.jpg",
-          "quantity": 1
+          "id": 201,
+          "url": "https://mowgarden.com/wp-content/uploads/2022/02/Chau-nhua-trong-cay-Monrovia.jpg",
+          "order": 2
+        },
+        {
+          "id": 202,
+          "url": "https://cdn2.fptshop.com.vn/unsafe/800x0/rau_xa_lach_7_f08f610940.jpg",
+          "order": 3
+        }
+      ],
+
+      "categories": [
+        {
+          "id": 12,
+          "name": "Combo Trồng Cây",
+          "slug": "combo-trong-cay2"
+        }
+      ],
+
+      "comboItems": [
+        {
+          "id": 60,
+          "slug": "chau-nhua-morovia-gallon",
+          "name": "Chậu Nhựa Monrovia Gallon",
+          "product_type": "pot",
+          "quantity": 1,
+          "price": 160000,
+          "image": "https://mowgarden.com/wp-content/uploads/2022/02/Chau-nhua-trong-cay-Monrovia-cao-cap-1.jpg"
+        },
+        {
+          "product_id": 56,
+          "slug": "dat-trong-cay-da-dung-sach-benh",
+          "name": "Đất trồng cây đa dụng sạch bệnh",
+          "product_type": "supplies",
+          "quantity": 1,
+          "price": 145000,
+          "image": "https://pos.nvncdn.com/852a10-72624/ps/20230909_rFiFwhpfNi.jpeg?v=1694273014"
+        },
+        {
+          "id": 27,
+          "slug": "rau-xa-lach",
+          "name": "Rau xà lách",
+          "product_type": "seed",
+          "quantity": 1,
+          "price": 12000,
+          "image": "https://bizweb.dktcdn.net/thumb/1024x1024/100/521/346/products/hat-giong-rau-xa-lach-1.png?v=1723089261877"
         }
       ]
     }

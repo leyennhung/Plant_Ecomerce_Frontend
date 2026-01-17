@@ -5,7 +5,7 @@ import type {Product} from "../../types/product.type";
 import styles from "./Home.module.css";
 import banner from "../../assets/images/banner.png"
 import ProductCard from "../../components/common/product/single/ProductCard";
-import ProductCardCombo from "../../components/common/product/combo/ProductCardCombo";
+// import ProductCardCombo from "../../components/common/product/combo/ProductCardCombo";
 import CayTrongImg from "../../assets/images/CayTrauBaDeVuong.jpg";
 import ChauCayImg from "../../assets/images/ChauCayDatNung.jpg";
 import ComboImg from "../../assets/images/CayPhuQuy.jpg";
@@ -13,8 +13,6 @@ import HatGiongImg from "../../assets/images/HatGiong.jpg";
 import GiaSiImg from "../../assets/images/CayGiongGiaSi.png";
 import vuonImg from "../../assets/images/vuon.jpg";
 import {Link} from "react-router-dom";
-import {useDispatch} from "react-redux";
-import {addToCart} from "../../store/cartSlice";
 
 //Function component Home (khai báo, tạo)
 const Home = () => {
@@ -24,7 +22,6 @@ const Home = () => {
     // setProducts: hàm cập nhật danh sách
     // Product[]: mảng các sản phẩm
     // Giá trị ban đầu: [] (mảng rỗng)
-    const dispatch = useDispatch();
     // const [products, setProducts] = useState<Product[]>([]);
     const [newProducts, setNewProducts] = useState<Product[]>([]);
     const [trendingProducts, setTrendingProducts] = useState<Product[]>([]);
@@ -65,10 +62,6 @@ const Home = () => {
     }, []);  // kết thúc quá trình loading
 
     if (loading) return <p>Loading products...</p>;  //Xử lý khi đang loading
-
-    const handleAddToCart = (productId: number) => {
-        dispatch(addToCart({productId, quantity: 1}));
-    };
 
     //Trả về JSX - giao diện
     return (
@@ -124,7 +117,6 @@ const Home = () => {
                                 key={np.id}
                                 product={np}
                                 isNew
-                                onAddToCart={() => handleAddToCart(np.id)}
                             />
                         ))}
                     </div>
@@ -140,8 +132,6 @@ const Home = () => {
                                 key={tp.id}
                                 product={tp}
                                 isTrending
-                                onAddToCart={() => handleAddToCart(tp.id)}
-
                             />
                         ))}
                     </div>
@@ -157,7 +147,6 @@ const Home = () => {
                                 key={sp.id}
                                 product={sp}
                                 isSale
-                                onAddToCart={() => handleAddToCart(sp.id)}
                             />
                         ))}
                     </div>
@@ -169,11 +158,9 @@ const Home = () => {
                     <div className={styles.divider}></div>
                     <div className={styles.productListCombo}>
                         {comboProducts.map(cbp => (
-                            <ProductCardCombo
+                            <ProductCard
                                 key={cbp.id}
                                 product={cbp}
-                                onAddToCart={() => handleAddToCart(cbp.id)}
-
                             />
                         ))}
                     </div>
@@ -188,8 +175,6 @@ const Home = () => {
                             <ProductCard
                                 key={wsp.id}
                                 product={wsp}
-                                onAddToCart={() => handleAddToCart(wsp.id)}
-
                             />
                         ))}
                     </div>
@@ -204,7 +189,6 @@ const Home = () => {
                             <ProductCard
                                 key={slp.id}
                                 product={slp}
-                                onAddToCart={() => handleAddToCart(slp.id)}
                             />
                         ))}
                     </div>

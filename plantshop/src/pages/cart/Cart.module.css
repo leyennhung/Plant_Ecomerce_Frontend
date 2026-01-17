@@ -41,7 +41,7 @@ h3::after {
 
 .row {
     display: grid;
-    grid-template-columns: 60px 1fr 220px 180px 160px 80px;
+    grid-template-columns: 60px 2fr 180px 180px 180px 60px;
     align-items: center;
     padding: 24px 12px;
     border-bottom: 1px solid rgba(33, 53, 71, 0.25);
@@ -131,6 +131,7 @@ h3::after {
 }
 
 .summary {
+    height:100px;
     border-radius: 6px;
     position: sticky;
     bottom: 0;
@@ -204,14 +205,10 @@ Button {
 }
 
 .errorMessage {
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    margin-top: 6px;
-    font-size: 13px;
-    color: crimson;
-    white-space: nowrap;
+    margin-top: 8px;
+    color: #e53935;
+    font-size: 14px;
+    text-align: right;
 }
 
 .emptyCart {
@@ -284,4 +281,68 @@ Button {
     margin-left: 6px;
     cursor: help;
     color: #888;
+}
+
+.productInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.comboList {
+    margin-top: 4px;
+    padding-left: 10px;
+    border-left: 2px solid #e5e7eb;
+}
+
+.comboItem {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #555;
+}
+
+.comboItem img {
+    width: 28px;
+    height: 28px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.product {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.productLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.comboList {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 16px;
+    padding-left: 24px;
+    border-left: none;
+}
+
+.comboItem {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 12px;
+    color: #555;
+}
+
+.comboItem img {
+    width: 26px;
+    height: 26px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-right: 8px;
 }

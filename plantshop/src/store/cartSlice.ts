@@ -1,9 +1,10 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { CartViewItem } from "../types/cart.type";
-import { getFinalPrice } from "../utils/getFinalPrice";
+import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
+import type {CartViewItem} from "../types/cart.type";
+import {getFinalPrice} from "../utils/getFinalPrice";
 import products from "../mocks/data/products.json";
-import type { ProductApi } from "../types/product-api.type";
+import type {ProductApi} from "../types/product-api.type";
 
+//ds product dùng để lấy thông tin product khi add vào cart
 const productList = products.products as ProductApi[];
 
 interface VariantPayload {
@@ -31,25 +32,61 @@ const cartSlice = createSlice({
     name: "cart",
     initialState,
     reducers: {
+        // Set toàn bộ cart (dùng khi load cart từ localStorage lên Redux)
         setCartItems: (state, action: PayloadAction<CartViewItem[]>) => {
             state.items = action.payload;
             localStorage.setItem(getCartStorageKey(), JSON.stringify(state.items));
         },
 
+        // addTocart product thường, pot(có variant, combo)
         addToCart: (state, action: PayloadAction<AddToCartPayload>) => {
-            const { productId, quantity, variant } = action.payload;
+            const {productId, quantity, variant} = action.payload;
 
+            // Tìm product tương ứng theo id
             const product = productList.find(p => p.id === productId);
             if (!product) return;
 
-            // CHẶN tuyệt đối nếu sản phẩm có variant mà không truyền variant
+            // Pot bắt buộc phải chọn variant (chậu size, màu, ...)
             if (product.type === "pot" && !variant) {
-
-                console.warn("Must select variant before adding to cart");
                 return;
             }
 
-            const result = getFinalPrice(product, quantity);
+            // COMBO
+            if (product.type === "combo") {
+                const existing = state.items.find(i => i.productId === productId);
+
+                if (existing) {
+                    existing.quantity += quantity;
+                } else {
+                    // Nếu chưa có → push item mới
+                    state.items.push({
+                        id: Date.now(),
+                        productId,
+                        name: product.name,
+                        image: product.images?.[0]?.url || product.image || "",
+                        price: product.salePrice ?? product.price,
+                        original_price: product.price,
+                        quantity,
+                        // Lưu danh sách item con trong combo
+                        comboItems:
+                            product.comboItems?.map(ci => ({
+                                productId: ci.id,
+                                name: ci.name,
+                                image: ci.image,
+                                quantity: ci.quantity,
+                            })) || [],
+                    });
+                }
+
+                localStorage.setItem(getCartStorageKey(), JSON.stringify(state.items));
+                return;
+            }
+
+            // PRODUCT THƯỜNG
+            const result = getFinalPrice(product, quantity);//tính giá dựa trên salePrice,wholsale(mua sỉ)
+
+            // Nếu có variant (pot) thì lấy giá từ variant
+            // Nếu không thì lấy giá đã tính từ getFinalPrice
             const basePrice = variant ? variant.price : result.price;
 
             const existing = state.items.find(
@@ -63,11 +100,10 @@ const cartSlice = createSlice({
 
                 const updated = getFinalPrice(product, existing.quantity);
 
-                // Chỉ áp wholesale cho product thường (không variant)
                 if (!variant) {
                     existing.price = updated.price;
                 }
-
+// Update trạng thái wholesale
                 existing.isWholesale = updated.isWholesale;
                 existing.wholesaleMin = updated.wholesaleMin;
             } else {
@@ -93,6 +129,7 @@ const cartSlice = createSlice({
             localStorage.setItem(getCartStorageKey(), JSON.stringify(state.items));
         },
 
+
         removeFromCart: (
             state,
             action: PayloadAction<{ productId: number; variantId?: number }>
@@ -115,15 +152,17 @@ const cartSlice = createSlice({
                 variantId?: number;
             }>
         ) => {
-            const { productId, quantity, variantId } = action.payload;
+            const {productId, quantity, variantId} = action.payload;
 
             const item = state.items.find(
                 i => i.productId === productId && i.variantId === variantId
             );
             if (!item) return;
 
+            // Update quantity
             item.quantity = quantity;
 
+            // Lấy product gốc để tính lại giá
             const product = productList.find(p => p.id === productId);
             if (!product) return;
 
@@ -151,7 +190,7 @@ function getCartStorageKey() {
     if (!stored) return "cart_guest";
 
     try {
-        const { user } = JSON.parse(stored);
+        const {user} = JSON.parse(stored);
         return user?.id ? `cart_user_${user.id}` : "cart_guest";
     } catch {
         return "cart_guest";
